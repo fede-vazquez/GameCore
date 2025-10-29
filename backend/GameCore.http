@@ -1,6 +1,0 @@
-@GameCore_HostAddress = http://localhost:5104
-
-GET {{GameCore_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
