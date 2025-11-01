@@ -3,7 +3,7 @@ using System;
 namespace GameCore.Models.Discount;
 
 using GameCore.Models.Game;
-using GameCore.Models.Percentege;
+using GameCore.Models.Percentage;
 public class Discount
 {
     public int Id { get; set; }

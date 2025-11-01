@@ -1,6 +1,7 @@
 using System;
 
-namespace GameCore.Models.Percentege;
+namespace GameCore.Models.Percentage;
+
 using GameCore.Models.Discount;
 public class Percentage
 {

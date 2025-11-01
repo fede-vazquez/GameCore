@@ -7,7 +7,7 @@ using GameCore.Models.Achievement;
 using GameCore.Models.AchievementUser;
 using GameCore.Models.Genre;
 using GameCore.Models.Discount;
-using GameCore.Models.Percentege;
+using GameCore.Models.Percentage;
 using GameCore.Models.GameUser;
 using GameCore.Models.Order;
 using GameCore.Models.PaymentMethod;
