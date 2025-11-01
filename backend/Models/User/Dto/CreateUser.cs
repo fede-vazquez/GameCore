@@ -1,3 +1,3 @@
-namespace GameCore.Models.User.Dto{
+namespace GameCore.Models{
     
 }
