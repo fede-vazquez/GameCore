@@ -6,10 +6,10 @@ using GameCore.Models.AchievementUser;
 using GameCore.Config;
 public interface IAchievementUserRepository : IRepository<AchievementUser> { }
 
-public class AchievementUser : Repository<AchievementUser>, IAchievementUserRepository
+public class AchievementUserRepository : Repository<AchievementUser>, IAchievementUserRepository
 {
     private readonly ApplicationDbContext _db;
-    public AchievementUser(ApplicationDbContext db) : base(db)
+    public AchievementUserRepository(ApplicationDbContext db) : base(db)
     {
         _db = db;
     }
