@@ -137,6 +137,14 @@ namespace GameCore.Config
                 .Property(p => p.Name)
                 .HasMaxLength(32)
                 .IsRequired();
+
+            //------------------------------------
+            //El usuario contiene un rol
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Rol)
+                .WithMany()
+                .HasForeignKey(u => u.RolId);
+
             //------------------------------------
             //------------------------------------
             //Seed a Rol con enum ROLE

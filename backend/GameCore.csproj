@@ -26,7 +26,6 @@
     <Folder Include="Models/Discount /DTO/" />
     <Folder Include="Models/Game/DTO/" />
     <Folder Include="Models/GameUser /DTO/" />
-    <Folder Include="Models/Genre/DTO/" />
     <Folder Include="Models/Order /DTO/" />
     <Folder Include="Models/PaymentMethod /DTO/" />
     <Folder Include="Models/Percentage/DTO/" />

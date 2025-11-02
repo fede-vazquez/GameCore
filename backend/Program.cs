@@ -54,6 +54,7 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<AuthServices>();
 builder.Services.AddScoped<IEncoderServices, EncoderServices>();
 builder.Services.AddScoped<RolServices>();
+builder.Services.AddScoped<GenreServices>();
 //registro de repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IGameRepository, GameRepository>();
