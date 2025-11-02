@@ -8,6 +8,8 @@ using GameCore.Models.User.DTO;
 using GameCore.Models.User;
 using GameCore.Models.Genre;
 using GameCore.Models.Genre.DTO;
+using GameCore.Models.Developer.DTO;
+using GameCore.Models.Developer;
 
 public class Mapping : Profile
 {
@@ -23,5 +25,9 @@ public class Mapping : Profile
         //Genre
         CreateMap<CreateGenreDTO, Genre>();
         CreateMap<Genre, CreateGenreResponseDTO>();
+
+        //Developer
+        CreateMap<CreateDeveloperDTO, Developer>();
+        CreateMap<Developer, CreateDeveloperResponseDTO>();
     }
 }
