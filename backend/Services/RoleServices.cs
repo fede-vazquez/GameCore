@@ -13,9 +13,9 @@ public class RolServices
     {
         _roleRepository = roleRepository;
     }
-    public Task<Rol> GetOneByName(string name)
+    public Task<Rol> GetOneByNameAsync(string name)
     {
-        var rol = _roleRepository.GetOne(r => r.Name == name);
+        var rol = _roleRepository.GetOneAsync(r => r.Name == name);
         if (rol == null)
         {
             throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "Rol no encontrado");

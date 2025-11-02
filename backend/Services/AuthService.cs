@@ -30,27 +30,27 @@ public class AuthServices
         _mapper = mapper;
     }
 
-    async public Task<List<UserWithoutPassDTO>> GetUsers()
+    async public Task<List<UserWithoutPassDTO>> GetUsersAsync()
     {
-        return await _userServices.GetAll();
+        return await _userServices.GetAllAsync();
     }
 
-    async public Task<UserWithoutPassDTO> Register(RegisterDTO register)
+    async public Task<UserWithoutPassDTO> RegisterAsync(RegisterDTO register)
     {
-        var user = await _userServices.GetOneByUsername(register.Username);
+        var user = await _userServices.GetOneByUsernameAsync(register.Username);
         if (user != null)
         {
             throw new HttpResponseError(HttpStatusCode.BadRequest, "User already exists");
         }
 
-        var created = await _userServices.CreateOne(register);
+        var created = await _userServices.CreateOneAsync(register);
         return created;
     }
 
-    async public Task<LoginResponseDTO> Login(LoginDTO login, HttpContext context)
+    async public Task<LoginResponseDTO> LoginAsync(LoginDTO login, HttpContext context)
     {
         string datum = login.Username;
-        var user = await _userServices.GetOneByUsername(datum);
+        var user = await _userServices.GetOneByUsernameAsync(datum);
 
         if (user == null)
         {
@@ -64,7 +64,7 @@ public class AuthServices
             throw new HttpResponseError(HttpStatusCode.BadRequest, "Invalid credentials");
         }
 
-        await SetCookie(user, context);
+        await SetCookieAsync(user, context);
 
         string token = GenerateJwt(user);
 
@@ -75,12 +75,12 @@ public class AuthServices
         };
     }
 
-    async public Task Logout(HttpContext context)
+    async public Task LogoutAsync(HttpContext context)
     {
         await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
-    async public Task SetCookie(User user, HttpContext context)
+    async public Task SetCookieAsync(User user, HttpContext context)
     {
         var claims = new List<Claim>
             {

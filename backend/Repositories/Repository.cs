@@ -16,25 +16,25 @@ public class Repository<T> : IRepository<T> where T : class
         dbSet = _db.Set<T>();
     }
 
-    async public Task CreateOne(T entity)
+    async public Task CreateOneAsync(T entity)
     {
         await dbSet.AddAsync(entity);
-        await Save();
+        await SaveAsync();
     }
 
-    async public Task DeleteOne(T entity)
+    async public Task DeleteOneAsync(T entity)
     {
         dbSet.Remove(entity);
-        await Save();
+        await SaveAsync();
     }
 
-    async public Task UpdateOne(T entity)
+    async public Task UpdateOneAsync(T entity)
     {
         dbSet.Update(entity);
-        await Save();
+        await SaveAsync();
     }
 
-    async public Task<T> GetOne(Expression<Func<T, bool>>? filter = null)
+    async public Task<T> GetOneAsync(Expression<Func<T, bool>>? filter = null)
     {
         IQueryable<T> query = dbSet;
         if (filter != null)
@@ -44,7 +44,7 @@ public class Repository<T> : IRepository<T> where T : class
         return await query.FirstOrDefaultAsync();
     }
 
-    async public Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null)
+    async public Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
     {
         IQueryable<T> query = dbSet;
         if (filter != null)
@@ -54,6 +54,6 @@ public class Repository<T> : IRepository<T> where T : class
         return await query.ToListAsync();
     }
 
-    async public Task Save() => await _db.SaveChangesAsync();
+    async public Task SaveAsync() => await _db.SaveChangesAsync();
 
 }
