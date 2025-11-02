@@ -114,9 +114,7 @@ namespace GameCore.Config
                 .Property(a => a.Name)
                 .IsRequired();
             // ------------------------------------
-            // La EndDate del Discount debe ser mayor a la StartDate y debe ser no nula
-            modelBuilder.Entity<Discount>()
-                .HasCheckConstraint("CK_Discount_EndDate_GreaterThan_StartDate", "[EndDate] > [StartDate]");
+            // La EndDate del Discount  debe ser no nula
             modelBuilder.Entity<Discount>()
                 .Property(d => d.EndDate)
                 .IsRequired();
