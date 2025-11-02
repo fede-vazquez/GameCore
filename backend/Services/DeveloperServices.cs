@@ -17,9 +17,9 @@ namespace GameCore.Services
             _mapper = mapper;
         }
 
-        public async Task<List<Developer>> GetAll()
+        public async Task<List<Developer>> GetAllAsync()
         {
-            var developers = await _developerRepository.GetAll();
+            var developers = await _developerRepository.GetAllAsync();
             if(developers == null)
             {
                 throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "Developers not found");
@@ -27,21 +27,21 @@ namespace GameCore.Services
             return _mapper.Map<List<Developer>>(developers);
         }
 
-        public async Task<CreateDeveloperResponseDTO> Create(CreateDeveloperDTO developerDTO)
+        public async Task<CreateDeveloperResponseDTO> CreateAsync(CreateDeveloperDTO developerDTO)
         {
             if (string.IsNullOrEmpty(developerDTO.Name))
             {
                 throw new HttpResponseError(System.Net.HttpStatusCode.BadRequest, "Developer name is required");
             }
 
-            var existingDeveloper = await _developerRepository.GetOne(d => d.Name.ToLower() == developerDTO.Name.ToLower());
+            var existingDeveloper = await _developerRepository.GetOneAsync(d => d.Name.ToLower() == developerDTO.Name.ToLower());
             if (existingDeveloper != null)
             {
                 throw new HttpResponseError(System.Net.HttpStatusCode.BadRequest, $"A developer with the name {developerDTO.Name} already exists");
             }
 
             var developer = _mapper.Map<Developer>(developerDTO);
-            await _developerRepository.CreateOne(developer);
+            await _developerRepository.CreateOneAsync(developer);
 
             return _mapper.Map<CreateDeveloperResponseDTO>(developer);
         }

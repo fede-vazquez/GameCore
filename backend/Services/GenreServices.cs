@@ -16,9 +16,9 @@ namespace GameCore.Services
             _genreRepository = genreRepository;
             _mapper = mapper;
         }
-        async public Task<Genre> GetOneByName(string name)
+        async public Task<Genre> GetOneByNameAsync(string name)
         {
-            var genre = await _genreRepository.GetOne(g => g.Name == name);
+            var genre = await _genreRepository.GetOneAsync(g => g.Name.ToLower() == name.ToLower());
             if (genre == null)
             {
                 throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, $"The genre {name} was not found");
@@ -26,7 +26,7 @@ namespace GameCore.Services
             return genre;
         }
 
-        async public Task<CreateGenreResponseDTO> CreateOne(CreateGenreDTO genreDTO)
+        async public Task<CreateGenreResponseDTO> CreateOneAsync(CreateGenreDTO genreDTO)
         {
             if (string.IsNullOrEmpty(genreDTO.Name))
             {
@@ -37,21 +37,21 @@ namespace GameCore.Services
 
             var genre = _mapper.Map<Genre>(genreDTO);
 
-            var existingGenre = await _genreRepository.GetOne(g => g.Name == genre.Name);
+            var existingGenre = await _genreRepository.GetOneAsync(g => g.Name == genre.Name);
 
             if (existingGenre != null)
             {
                 throw new HttpResponseError(System.Net.HttpStatusCode.BadRequest, $"The genre {genreDTO.Name} already exists");
             }
             
-            await _genreRepository.CreateOne(genre);
+            await _genreRepository.CreateOneAsync(genre);
 
             return _mapper.Map<CreateGenreResponseDTO>(genre);
         }
 
-        async public Task<List<Genre>> GetAll()
+        async public Task<List<Genre>> GetAllAsync()
         {
-            var genres = await _genreRepository.GetAll();
+            var genres = await _genreRepository.GetAllAsync();
             
             return genres.Select(g => new Genre
             {

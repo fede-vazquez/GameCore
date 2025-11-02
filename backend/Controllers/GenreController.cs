@@ -28,7 +28,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var genres = await _genreServices.GetAll();
+                var genres = await _genreServices.GetAllAsync();
                 return Ok(genres);
             }
             catch (HttpResponseError ex)
@@ -58,7 +58,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var genre = await _genreServices.CreateOne(genreDTO);
+                var genre = await _genreServices.CreateOneAsync(genreDTO);
 
                 return Created("created", genre);
             }

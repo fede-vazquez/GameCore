@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var created = await _authServices.Register(register);
+            var created = await _authServices.RegisterAsync(register);
             return Created("Register", created);
         }
         catch (HttpResponseError ex)
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var res = await _authServices.Login(login, HttpContext);
+            var res = await _authServices.LoginAsync(login, HttpContext);
             return Ok(res);
         }
         catch (HttpResponseError ex)
@@ -87,7 +87,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _authServices.Logout(HttpContext);
+            await _authServices.LogoutAsync(HttpContext);
             return Ok();
         }
         catch (Exception ex)
@@ -113,7 +113,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var users = await _authServices.GetUsers();
+            var users = await _authServices.GetUsersAsync();
             return Ok(users);
         }
         catch (HttpResponseError ex)

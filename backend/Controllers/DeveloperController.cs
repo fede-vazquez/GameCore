@@ -28,7 +28,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var developers = await _developerServices.GetAll();
+                var developers = await _developerServices.GetAllAsync();
                 return Ok(developers);
             }
             catch (HttpResponseError ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -58,7 +58,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var developer = await _developerServices.Create(developerDTO);
+                var developer = await _developerServices.CreateAsync(developerDTO);
                 return Created("created", developer);
             }
             catch (HttpResponseError ex) when (ex.StatusCode == HttpStatusCode.Conflict)
