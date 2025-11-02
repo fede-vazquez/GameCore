@@ -1,5 +1,18 @@
-function App() {
-  return <h1>GameCore</h1>
-}
+import { Route, Switch } from 'wouter'
+import { AsideBar } from './components/asidebar'
+import { LibraryPage } from './pages/library/libraryPage'
 
-export default App
+export function App() {
+	return (
+		<main className="flex flex-row w-dvw h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
+			<AsideBar />
+			<Switch>
+				<Route path="/library" nest>
+					<Route path="/" component={LibraryPage} />
+				</Route>
+
+				<Route>404</Route>
+			</Switch>
+		</main>
+	)
+}

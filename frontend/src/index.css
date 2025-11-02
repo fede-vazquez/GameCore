@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+@theme {
+	/* foreground + background */
+	--color-darkFG: #282628;
+	--color-darkBG: #161316;
+
+	--color-primaryBlue: #0a5aac;
+	--color-primaryWhite: #f7f9fb;
+
+	--color-textOff: #686868;
+	--color-textMedium: #a2a2a2;
+}
+
+* {
+	box-sizing: border-box;
+}
