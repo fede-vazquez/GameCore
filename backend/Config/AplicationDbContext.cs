@@ -54,10 +54,10 @@ namespace GameCore.Config
             modelBuilder.Entity<User>()
                 .Property(u => u.Email)
                 .IsRequired();
-            // la contraseña debe tener un maximo de 32 caracteres y no ser nula
+            // la contraseña debe tener un maximo de 64 caracteres y no ser nula
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
-                .HasMaxLength(32)
+                .HasMaxLength(64)
                 .IsRequired();
 
             //------------------------------------
