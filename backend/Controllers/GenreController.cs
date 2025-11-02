@@ -13,12 +13,10 @@ namespace GameCore.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly AuthServices _authServices;
         private readonly GenreServices _genreServices;
 
         public GenreController(AuthServices authServices, GenreServices genreServices)
         {
-            _authServices = authServices;
             _genreServices = genreServices;
         }
 
