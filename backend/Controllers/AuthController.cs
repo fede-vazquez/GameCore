@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UserWithoutPassDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
     async public Task<ActionResult<User>> Register([FromBody] RegisterDTO register)

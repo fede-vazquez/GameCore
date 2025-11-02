@@ -31,7 +31,7 @@ public class UserServices
         return _mapper.Map<List<UserWithoutPassDTO>>(users);
     }
 
-    async public Task<User> GetOneByUsername(string? username)
+    async public Task<User> GetOneByUsername(string username)
     {
         if (string.IsNullOrEmpty(username))
         {

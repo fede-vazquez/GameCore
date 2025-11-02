@@ -8,13 +8,17 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using GameCore.Services;
 using GameCore.Utils;
-
+using GameCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(/*options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+    options.Filters.Add<LoggingFilter>();
+}*/);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
