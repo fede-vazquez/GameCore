@@ -16,7 +16,7 @@ export function AsideBar() {
 				`}
 			</style>
 
-			<aside className="flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-white divide-solid *:px-2">
+			<aside className="fixed flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-white divide-solid *:px-2">
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
 						<img src="generic_logo.png" className="aspect-square object-contain w-full h-20" />
