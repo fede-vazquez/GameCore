@@ -2,6 +2,7 @@ import type { GameModel } from '@/types'
 
 interface gameSideCardProps {
 	game: Pick<GameModel, 'title' | 'id' | 'description' | 'price' | 'imageUrl'>
+	className: string
 }
 
 const fallback: gameSideCardProps['game'] = {
@@ -12,11 +13,11 @@ const fallback: gameSideCardProps['game'] = {
 	imageUrl: './fallback_image.png'
 }
 
-export function GameSideCard({ game }: gameSideCardProps) {
+export function GameSideCard({ game, className }: gameSideCardProps) {
 	const testing = fallback
 
 	return (
-		<span className="flex flex-row gap-x-">
+		<span className={`flex flex-row ${className}`}>
 			<img
 				src={testing.imageUrl}
 				alt={`Image of the game: ${testing.title}`}
