@@ -33,11 +33,11 @@ namespace GameCore.Controllers
         [HttpGet("games")]
         [ProducesResponseType(typeof(List<GetGameDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<GetGameDTO>>> GetGames()
+        public async Task<ActionResult<List<GetGameDTO>>> GetGames([FromQuery] GameListParametersDTO parameters)
         {
             try
             {
-                var res = await _gameServices.GetAllAsync();
+                var res = await _gameServices.GetAllAsync(parameters);
                 return Ok(res);
             }
             catch (HttpResponseError ex)
