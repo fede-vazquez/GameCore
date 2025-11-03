@@ -1,10 +1,12 @@
-import type { RefObject } from 'react'
+import { type RefObject } from 'react'
 
 export interface SVGInterface {
 	className?: string
-	ref?: RefObject<SVGSVGElement>
+	onClick?: (...args: any[]) => void
+	ref?: RefObject<SVGSVGElement | null>
 }
 
+export * from './caretSvg'
 export * from './consoleSvg'
 export * from './controllerSvg'
 export * from './searchSvg'

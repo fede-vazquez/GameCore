@@ -1,8 +1,9 @@
 import type { SVGInterface } from './'
 
-export function SearchSVG({ className, ref }: SVGInterface) {
+export function SearchSVG({ className, ref, onClick }: SVGInterface) {
 	return (
 		<svg
+			onClick={onClick}
 			width="24"
 			height="24"
 			viewBox="0 0 24 24"

@@ -12,6 +12,11 @@
 	--color-textMedium: #a2a2a2;
 }
 
+@utility no-scrollbars {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
 * {
 	box-sizing: border-box;
 }

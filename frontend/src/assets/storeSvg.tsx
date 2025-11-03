@@ -1,8 +1,9 @@
 import type { SVGInterface } from './'
 
-export function StoreSVG({ className, ref }: SVGInterface) {
+export function StoreSVG({ className, ref, onClick }: SVGInterface) {
 	return (
 		<svg
+			onClick={onClick}
 			width="24"
 			height="24"
 			viewBox="0 0 24 24"
