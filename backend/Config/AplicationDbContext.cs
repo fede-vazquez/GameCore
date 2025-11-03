@@ -15,6 +15,7 @@ using GameCore.Models.PaymentMethod;
 using static GameCore.Enums.ROLE;
 using static GameCore.Enums.PAYMENT_METHOD;
 using static GameCore.Enums.PERCENTAGE;
+using static GameCore.Enums.GENRE;
 
 
 namespace GameCore.Config
@@ -57,7 +58,7 @@ namespace GameCore.Config
             // la contraseña debe tener un maximo de 32 caracteres y no ser nula
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
-                .HasMaxLength(32)
+                .HasMaxLength(100)
                 .IsRequired();
 
             //------------------------------------
@@ -157,6 +158,19 @@ namespace GameCore.Config
                 new Percentage { Id = 3, Value = THIRTY },
                 new Percentage { Id = 4, Value = FORTY },
                 new Percentage { Id = 5, Value = FIFTY }
+            );
+            //seed en Genre algunos generos basicos con enum GENRE
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre { Id = 1, Name = ACTION },
+                new Genre { Id = 2, Name = ADVENTURE },
+                new Genre { Id = 3, Name = RPG },
+                new Genre { Id = 4, Name = STRATEGY },
+                new Genre { Id = 5, Name = SIMULATION },
+                new Genre { Id = 6, Name = SPORTS },
+                new Genre { Id = 7, Name = PUZZLE },
+                new Genre { Id = 8, Name = HORROR },
+                new Genre { Id = 9, Name = RACING },
+                new Genre { Id = 10, Name = FPS }
             );
             //------------------------------------
             //-----------------------------------

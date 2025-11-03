@@ -22,5 +22,14 @@ public class RolServices
         }
         return rol;
     }
+    public Task<Rol> GetOneByIdAsync(int id)
+    {
+        var rol = _roleRepository.GetOneAsync(r => r.Id == id);
+        if (rol == null)
+        {
+            throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "Rol no encontrado");
+        }
+        return rol;
+    }
 
 }

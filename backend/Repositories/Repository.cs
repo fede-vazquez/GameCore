@@ -2,6 +2,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using GameCore.Config;
+using GameCore.Utils;
+using System.Net;
+
 
 namespace GameCore.Repositories;
 
@@ -34,17 +37,18 @@ public class Repository<T> : IRepository<T> where T : class
         await SaveAsync();
     }
 
-    async public Task<T> GetOneAsync(Expression<Func<T, bool>>? filter = null)
+    async public virtual Task<T> GetOneAsync(Expression<Func<T, bool>>? filter = null)
     {
         IQueryable<T> query = dbSet;
         if (filter != null)
         {
             query = query.Where(filter);
         }
-        return await query.FirstOrDefaultAsync();
+        var res = await query.FirstOrDefaultAsync();
+        return res;
     }
 
-    async public Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
+    async public virtual Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
     {
         IQueryable<T> query = dbSet;
         if (filter != null)

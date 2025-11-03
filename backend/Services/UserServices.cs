@@ -10,6 +10,7 @@ using AutoMapper;
 using System.Net;
 using GameCore.Enums;
 
+
 public class UserServices
 {
     private readonly IUserRepository _repo;
@@ -55,4 +56,17 @@ public class UserServices
 
         return _mapper.Map<UserWithoutPassDTO>(user);
     }
+
+    // actualizar un usuario
+    async public Task<UserWithoutPassDTO> UpdateRoleByUsernameAsync(string username, UpdateUserRoleDTO updateDTO)
+    {
+        var user = await GetOneByUsernameAsync(username);
+
+        _mapper.Map(updateDTO, user);
+
+        await _repo.UpdateOneAsync(user);
+
+        return _mapper.Map<UserWithoutPassDTO>(user);
+    }
+
 }

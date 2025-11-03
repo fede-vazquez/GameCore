@@ -13,17 +13,25 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using GameCore.Enums;
+using GameCore.Models.Rol;
+
 public class AuthServices
 {
     private readonly UserServices _userServices;
     private readonly IEncoderServices _encoderServices;
+    private readonly RolServices _rolServices;
+
     private readonly IMapper _mapper;
     private readonly IConfiguration _config;
     internal readonly string _secret;
 
-    public AuthServices(UserServices userServices, IEncoderServices encoderServices, IConfiguration config, IMapper mapper)
+
+    public AuthServices(UserServices userServices,
+    RolServices rolServices, IEncoderServices encoderServices, IConfiguration config, IMapper mapper)
     {
         _userServices = userServices;
+        _rolServices = rolServices;
         _encoderServices = encoderServices;
         _config = config;
         _secret = _config.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
@@ -66,7 +74,7 @@ public class AuthServices
 
         await SetCookieAsync(user, context);
 
-        string token = GenerateJwt(user);
+        string token = await GenerateJwt(user);
 
         return new LoginResponseDTO
         {
@@ -108,7 +116,7 @@ public class AuthServices
         );
     }
 
-    public string GenerateJwt(User user)
+    async public Task<string> GenerateJwt(User user)
     {
         var key = Encoding.UTF8.GetBytes(_secret);
         var symmetricKey = new SymmetricSecurityKey(key);
@@ -117,6 +125,9 @@ public class AuthServices
             symmetricKey,
             SecurityAlgorithms.HmacSha256Signature
         );
+        // buscamos el rol a traves del atributo RolId de User
+        var rol = await _rolServices.GetOneByIdAsync(user.RolId);
+
 
         var claims = new ClaimsIdentity();
         claims.AddClaim(new Claim("id", user.Id.ToString()));
@@ -124,9 +135,13 @@ public class AuthServices
         if (user.Rol != null)
         {
 
-            var claim = new Claim(ClaimTypes.Role, user.Rol.Name);
+            var claim = new Claim(ClaimTypes.Role, rol.Name);
             claims.AddClaim(claim);
 
+        }
+        else
+        {
+            throw new Exception("User has no role");
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor()

@@ -10,6 +10,7 @@ using GameCore.Services;
 using GameCore.Utils;
 using GameCore.Filters;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -52,6 +53,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Services
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<AuthServices>();
+builder.Services.AddScoped<GameServices>();
+builder.Services.AddScoped<GenreServices>();
+builder.Services.AddScoped<DeveloperServices>();
 builder.Services.AddScoped<IEncoderServices, EncoderServices>();
 builder.Services.AddScoped<RolServices>();
 //registro de repositorios
@@ -72,13 +76,27 @@ builder.Services.AddScoped<IAchievementUserRepository, AchievementUserRepository
 //JWT
 // Configuración de JWT
 var secret = builder.Configuration.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
+if (string.IsNullOrEmpty(secret) || secret.Length < 32)
+{
+    // Esto fuerza la detención y te avisa que la clave es inválida
+    throw new InvalidOperationException("La clave secreta JWT es nula, vacía o demasiado corta (requiere al menos 32 caracteres). Verifique appsettings.json.");
+}
 var key = Encoding.UTF8.GetBytes(secret);
+
 
 builder.Services.AddAuthentication(options =>
 {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    // Establece JWT como el esquema a usar cuando una acción falla por falta de credenciales (Challenge)
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    // Establece JWT como el esquema predeterminado general
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    /*
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;*/
 })
 .AddJwtBearer(opts =>
 {
@@ -103,6 +121,12 @@ builder.Services.AddAuthentication(options =>
 
 
 var app = builder.Build();
+app.UseCors(opts =>
+{
+    opts.AllowAnyMethod();
+    opts.AllowAnyHeader();
+    opts.AllowAnyOrigin();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
