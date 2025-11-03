@@ -1,5 +1,4 @@
-import { ConsoleSVG, ControllerSVG, StoreSVG } from '@/assets'
-import { UserSVG } from '@/assets/userSvg'
+import { ConsoleSVG, ControllerSVG, StoreSVG, UserSVG } from '@/assets'
 import type { GameModel } from '@/types'
 import type { ReactElement } from 'react'
 import { Link } from 'wouter'

@@ -1,4 +1,4 @@
-import type { SVGInterface } from './types'
+import type { SVGInterface } from './'
 
 export function ControllerSVG({ className, ref }: SVGInterface) {
 	return (

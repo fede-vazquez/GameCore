@@ -1,15 +1,13 @@
 import type { GameModel } from '@/types'
 
 interface gameSideCardProps {
-	game: Pick<GameModel, 'title' | 'id' | 'description' | 'price' | 'imageUrl'>
-	className: string
+	game: Pick<GameModel, 'title' | 'id' | 'imageUrl'>
+	className?: string
 }
 
 const fallback: gameSideCardProps['game'] = {
 	title: 'Factorio',
 	id: Math.floor(Math.random() * 100),
-	description: 'The factory must grow.',
-	price: 17.99,
 	imageUrl: './fallback_image.png'
 }
 

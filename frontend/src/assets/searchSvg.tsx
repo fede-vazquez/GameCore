@@ -1,6 +1,6 @@
 import type { SVGInterface } from './'
 
-export function ConsoleSVG({ className, ref }: SVGInterface) {
+export function SearchSVG({ className, ref }: SVGInterface) {
 	return (
 		<svg
 			width="24"
@@ -15,9 +15,8 @@ export function ConsoleSVG({ className, ref }: SVGInterface) {
 			ref={ref}
 		>
 			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-			<path d="M8 9l3 3l-3 3" />
-			<path d="M13 15h3" />
-			<path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
+			<path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+			<path d="M21 21l-6 -6" />
 		</svg>
 	)
 }

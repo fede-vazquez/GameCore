@@ -6,13 +6,15 @@ export function App() {
 	return (
 		<main className="flex flex-row w-dvw h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
 			<AsideBar />
-			<Switch>
-				<Route path="/library" nest>
-					<Route path="/" component={LibraryPage} />
-				</Route>
+			<article className="pt-2.5 w-full h-full px-3">
+				<Switch>
+					<Route path="/library" nest>
+						<Route path="/" component={LibraryPage} />
+					</Route>
 
-				<Route>404</Route>
-			</Switch>
+					<Route>404</Route>
+				</Switch>
+			</article>
 		</main>
 	)
 }
