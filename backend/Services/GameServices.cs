@@ -80,9 +80,10 @@ public class GameServices
                 {
                     query = query.OrderByDescending(g => g.Title);
                 }
-                //paginar
-                query = query.Skip((parameters.PageNumber - 1) * parameters.PageSize).Take(parameters.PageSize);
+
             }
+            //paginar
+            query = query.Skip((parameters.PageNumber - 1) * parameters.PageSize).Take(parameters.PageSize);
             //incluimos la lista de generos
             query = query.Include(g => g.Genres);
 
