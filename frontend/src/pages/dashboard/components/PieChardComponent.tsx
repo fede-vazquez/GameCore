@@ -1,5 +1,4 @@
 import type { PieChardComponentProps } from '@/types'
-import { numberParser } from '@/utils'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
 import type { NameType, ValueType, Payload } from 'recharts/types/component/DefaultTooltipContent'
 
@@ -22,7 +21,7 @@ export function PieChardComponent({ data }: PieChardComponentProps) {
 	}
 
 	return (
-		<ResponsiveContainer aspect={1.5}>
+		<ResponsiveContainer width="100%" aspect={1.5} initialDimension={{ width: 320, height: 200 }}>
 			<PieChart>
 				<Pie
 					data={data}
