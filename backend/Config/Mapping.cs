@@ -12,6 +12,11 @@ using GameCore.Models.Developer.DTO;
 using GameCore.Models.Developer;
 using GameCore.Models.Game.DTO;
 using GameCore.Models.Game;
+using GameCore.Models.Order;
+using GameCore.Models.Order.DTO;
+using GameCore.Models.GameUser;
+using GameCore.Models.GameUser.DTO;
+
 
 public class Mapping : Profile
 {
@@ -41,6 +46,11 @@ public class Mapping : Profile
             );
         CreateMap<GetGameDTO, Game>();
         CreateMap<UpdateUserRoleDTO, User>();
+        //Order
+        CreateMap<CreateOrderDTO, Order>().ReverseMap();
+        CreateMap<Order, GetOrderDTO>().ReverseMap();
+        //UserGame
+        CreateMap<GameUser, GetGameUserDTO>().ReverseMap();
     }
 
 }

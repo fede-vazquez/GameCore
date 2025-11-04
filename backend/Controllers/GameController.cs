@@ -2,8 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using GameCore.Models.Game.DTO;
 using GameCore.Utils;
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using GameCore.Services;
+using GameCore.Models.Order.DTO;
+using Microsoft.AspNetCore.Authorization;
+using GameCore.Enums;
+using System.Security.Claims;
+
 
 
 namespace GameCore.Controllers;
@@ -11,16 +15,18 @@ namespace GameCore.Controllers;
 [ApiController]
 
 [Route("api/[controller]")]
-public class GameController : ControllerBase
+public class GamesController : ControllerBase
 {
 
     private readonly GameServices _gameServices;
-    public GameController(GameServices gameServices)
+    private readonly OrderServices _orderServices;
+    public GamesController(GameServices gameServices, OrderServices orderServices)
     {
         _gameServices = gameServices;
+        _orderServices = orderServices;
     }
     // GET ALL
-    [HttpGet("games")]
+    [HttpGet("/")]
     [ProducesResponseType(typeof(List<GetGameDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<List<GetGameDTO>>>
@@ -48,7 +54,7 @@ public class GameController : ControllerBase
         }
     }
     // GET BY ID
-    [HttpGet("games/{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetGameDTO), StatusCodes.Status200OK)]
     public async Task<ActionResult<GetGameDTO>> GetGameById([FromRoute] int id)
     {
@@ -73,6 +79,45 @@ public class GameController : ControllerBase
             );
         }
 
+    }
+    // Compramos un juego
+    [HttpPut("{gameId}/buy")]
+    [Authorize(Roles = $"{ROLE.USER}, {ROLE.ADMIN}")]
+    [ProducesResponseType(typeof(GetOrderDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<GetOrderDTO>> BuyGame([FromRoute] int gameId, [FromBody] CreateOrderDTO orderDTO)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst("id");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim no encontrado en el token.");
+            }
+            int userId;
+
+            if (!int.TryParse(userIdClaim.Value, out userId))
+            {
+                return Unauthorized("Formato User ID invalido en el token.");
+            }
+            var res = await _orderServices.CreateOneAsync(gameId, userId, orderDTO);
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
     }
 
 }

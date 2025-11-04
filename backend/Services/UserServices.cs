@@ -42,6 +42,11 @@ public class UserServices
         var user = await _repo.GetOneAsync(x => x.Username == username);
         return user;
     }
+    async public Task<UserWithoutPassDTO> GetOneByIdAsync(int id)
+    {
+        var user = await _repo.GetOneAsync(x => x.Id == id);
+        return _mapper.Map<UserWithoutPassDTO>(user);
+    }
 
     async public Task<UserWithoutPassDTO> CreateOneAsync(RegisterDTO register)
     {

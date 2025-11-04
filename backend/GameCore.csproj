@@ -23,8 +23,6 @@
     <Folder Include="Models/Achievement /DTO/" />
     <Folder Include="Models/AchievementUser /DTO/" />
     <Folder Include="Models/Discount /DTO/" />
-    <Folder Include="Models/GameUser /DTO/" />
-    <Folder Include="Models/Order /DTO/" />
     <Folder Include="Models/PaymentMethod /DTO/" />
     <Folder Include="Models/Percentage/DTO/" />
     <Folder Include="Models/Rol/DTO/" />

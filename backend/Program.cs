@@ -58,6 +58,9 @@ builder.Services.AddScoped<GenreServices>();
 builder.Services.AddScoped<DeveloperServices>();
 builder.Services.AddScoped<IEncoderServices, EncoderServices>();
 builder.Services.AddScoped<RolServices>();
+builder.Services.AddScoped<PaymentMethodService>();
+builder.Services.AddScoped<GameUserServices>();
+builder.Services.AddScoped<OrderServices>();
 //registro de repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IGameRepository, GameRepository>();
