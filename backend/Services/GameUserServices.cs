@@ -8,6 +8,7 @@ using GameCore.Models.GameUser.DTO;
 using GameCore.Utils;
 using AutoMapper;
 using System.Net;
+using GameCore.Models.Game.DTO;
 
 public class GameUserServices
 {
@@ -51,13 +52,12 @@ public class GameUserServices
         var gameUsers = await _repo.GetAllAsync(g => g.GameId == gameId);
         return _mapper.Map<List<GetGameUserDTO>>(gameUsers);
     }
-    // devolver una lista de GameUser por id de usuario
     async public Task<List<GetGameUserDTO>> GetGameUsersByUserIdAsync(int userId)
     {
         var gameUsers = await _repo.GetAllAsync(g => g.UserId == userId);
+
         return _mapper.Map<List<GetGameUserDTO>>(gameUsers);
     }
-    // devolver la cantidad de usuario que tienen un juego
     async public Task<int> GetGameUsersCountByGameIdAsync(int gameId)
     {
         var gameUsers = await _repo.GetAllAsync(g => g.GameId == gameId);
@@ -76,8 +76,7 @@ public class GameUserServices
         await _userServices.GetOneByIdAsync(userId);
         if (game == null)
         {
-            // Lanza una excepción específica que tu controlador pueda manejar (HTTP 404/400)
-            throw new KeyNotFoundException($"El Juego con ID {gameId} no se encontró. No se puede crear la orden.");
+            throw new KeyNotFoundException($"El Juego con ID {gameId} no se encontro");
         }
         var gameUser = new GameUser();
         gameUser.GameId = gameId;

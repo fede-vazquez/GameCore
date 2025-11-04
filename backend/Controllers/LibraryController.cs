@@ -14,11 +14,13 @@ namespace GameCore.Controllers
     public class LibraryController : ControllerBase
     {
         private readonly GameUserServices _gameUserServices;
-        public LibraryController(GameUserServices gameUserServices)
+        private readonly GameServices _gameServices;
+        public LibraryController(GameUserServices gameUserServices, GameServices gameServices)
         {
             _gameUserServices = gameUserServices;
+            _gameServices = gameServices;
         }
-        [HttpGet("library/")]
+        [HttpGet("")]
         [ProducesResponseType(typeof(List<GetGameUserDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<GetGameUserDTO>>> GetLibrary()
@@ -36,7 +38,7 @@ namespace GameCore.Controllers
                 {
                     return Unauthorized("Formato User ID invalido en el token.");
                 }
-                var res = await _gameUserServices.GetGameUsersByUserIdAsync(userId);
+                var res = await _gameServices.GetGamesByUserIdAsync(userId);
                 return Ok(res);
             }
             catch (HttpResponseError ex)
@@ -55,7 +57,7 @@ namespace GameCore.Controllers
             }
         }
         //obtenemos la cantidad de juegos que tiene un usuario
-        [HttpGet("library/count")]
+        [HttpGet("count")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<int>> GetLibraryCount()

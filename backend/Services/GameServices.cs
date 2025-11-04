@@ -9,10 +9,7 @@ using System.Net;
 using AutoMapper;
 using GameCore.Utils;
 using GameCore.Repositories;
-using GameCore.Models.Genre;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using GameCore.Services;
 using GameCore.Enums;
 
 
@@ -105,6 +102,12 @@ public class GameServices
     {
         var game = await GetOneByIdOrException(id);
         return _mapper.Map<GetGameDTO>(game);
+    }
+    //obtenemos una lista de juegos que tiene un usuario por id
+    async public Task<List<GetGameDTO>> GetGamesByUserIdAsync(int userId)
+    {
+        var games = await _repo.GetGamesByUserIdAsync(userId);
+        return _mapper.Map<List<GetGameDTO>>(games);
     }
 
     async public Task<GetGameDTO> CreateOneAsync(CreateGameDTO createGameDTO)

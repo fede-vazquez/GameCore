@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 public interface IGameRepository : IRepository<Game>
 {
     public Task<IQueryable<Game>> GetGameQueryAsync();
+    public Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId);
+
 }
 public class GameRepository : Repository<Game>, IGameRepository
 {
@@ -33,7 +35,6 @@ public class GameRepository : Repository<Game>, IGameRepository
         return await query.ToListAsync();
     }
 
-    //public async GetAllFiltered()
 
     public override async Task<Game> GetOneAsync(Expression<Func<Game, bool>>? filter = null)
     {
@@ -45,27 +46,17 @@ public class GameRepository : Repository<Game>, IGameRepository
         query = query.Include(g => g.Genres);
         return await query.FirstOrDefaultAsync();
     }
+    // traemos los juegos que tenga un usuario a traves de la tabla intermedia GameUser
+    public async Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId)
+    {
+        IQueryable<Game> query = _db.Games;
+        query = query.Where(g => g.GameUsers.Any(gu => gu.UserId == userId));
+        return await query.ToListAsync();
+    }
+
     //devuelve un query de games para manejarla consulta en el servicio
     public async Task<IQueryable<Game>> GetGameQueryAsync()
     {
         return _db.Games;
     }
-
-    //aca devuelvo una query para seguir manejando la consulta en el servicio de Game
-    /*public async Task<IQueryable<Game>> GetFilteredAsync(List<Expression<Func<Game, bool>>>? filters = null)
-    {
-        IQueryable<Game> query = _db.Games;
-        if (filters != null)
-        {
-            foreach (var filter in filters)
-            {
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
-            }
-        }
-        query = query.Include(g => g.Genres);
-        return query;
-    }*/
 }

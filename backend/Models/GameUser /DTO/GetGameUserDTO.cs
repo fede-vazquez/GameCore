@@ -1,7 +1,9 @@
 using System;
 using GameCore.Models.Game.DTO;
 
+
 namespace GameCore.Models.GameUser.DTO;
+
 
 public class GetGameUserDTO
 {
