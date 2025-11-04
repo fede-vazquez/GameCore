@@ -38,10 +38,14 @@ public class GameServices
         return game;
     }
     // TODO: refactorizar usando el patron especificacion
-    async public Task<GameListPagedResultDTO> GetAllAsync(GameListParametersDTO? parameters)
+    async public Task<GameListPagedResultDTO> GetAllAsync(GameListParametersDTO? parameters, int? userId)
     {
         //obtenemos del repo la query para trabajar con ella
         var query = await _repo.GetGameQueryAsync();
+        if (userId != null)
+        {
+            query = query.Where(g => g.GameUsers.Any(gu => gu.UserId == userId));
+        }
         GameListPagedResultDTO result = new GameListPagedResultDTO();
         if (parameters != null)
         {
@@ -95,6 +99,7 @@ public class GameServices
         {
             throw new HttpResponseError(HttpStatusCode.BadRequest, "Parametros invalidos");
         }
+
         return result;
     }
 
@@ -104,11 +109,7 @@ public class GameServices
         return _mapper.Map<GetGameDTO>(game);
     }
     //obtenemos una lista de juegos que tiene un usuario por id
-    async public Task<List<GetGameDTO>> GetGamesByUserIdAsync(int userId)
-    {
-        var games = await _repo.GetGamesByUserIdAsync(userId);
-        return _mapper.Map<List<GetGameDTO>>(games);
-    }
+    async public Task<GameListPagedResultDTO> GetGamesByUserIdAsync(int userId) => await GetAllAsync(null, userId);
 
     async public Task<GetGameDTO> CreateOneAsync(CreateGameDTO createGameDTO)
     {

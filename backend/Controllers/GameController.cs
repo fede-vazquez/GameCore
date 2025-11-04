@@ -38,7 +38,7 @@ public class GamesController : ControllerBase
     {
         try
         {
-            var res = await _gameServices.GetAllAsync(parameters);
+            var res = await _gameServices.GetAllAsync(parameters, null);
             return Ok(res);
         }
         catch (HttpResponseError ex)

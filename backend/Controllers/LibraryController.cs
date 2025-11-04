@@ -6,6 +6,8 @@ using GameCore.Utils;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using GameCore.Enums;
+using GameCore.Models.Game.DTO;
+
 namespace GameCore.Controllers
 {
     [Route("api/[controller]")]
@@ -21,9 +23,9 @@ namespace GameCore.Controllers
             _gameServices = gameServices;
         }
         [HttpGet("")]
-        [ProducesResponseType(typeof(List<GetGameUserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GameListPagedResultDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<GetGameUserDTO>>> GetLibrary()
+        public async Task<ActionResult<GameListPagedResultDTO>> GetLibrary([FromQuery] GameListParametersDTO parameters)
         {
             try
             {
@@ -33,12 +35,13 @@ namespace GameCore.Controllers
                 {
                     return Unauthorized("User ID claim no encontrado en eltoken.");
                 }
+                int userId;
 
-                if (!int.TryParse(userIdClaim.Value, out int userId))
+                if (!int.TryParse(userIdClaim.Value, out userId))
                 {
                     return Unauthorized("Formato User ID invalido en el token.");
                 }
-                var res = await _gameServices.GetGamesByUserIdAsync(userId);
+                var res = await _gameServices.GetAllAsync(parameters, userId);
                 return Ok(res);
             }
             catch (HttpResponseError ex)

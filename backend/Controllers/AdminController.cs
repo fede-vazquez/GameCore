@@ -37,7 +37,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var res = await _gameServices.GetAllAsync(parameters);
+                var res = await _gameServices.GetAllAsync(parameters, null);
                 return Ok(res);
             }
             catch (HttpResponseError ex)
