@@ -109,6 +109,13 @@ public class GameServices
         var game = await GetOneByIdOrException(id);
         return _mapper.Map<GetGameDTO>(game);
     }
+    //dada una lista de juegos crea muchos juegos
+    async public Task<List<GetGameDTO>> CreateManyAsync(List<CreateGameDTO> createGameDTOs)
+    {
+        var games = _mapper.Map<List<Game>>(createGameDTOs);
+        await _repo.CreateManyAsync(games);
+        return _mapper.Map<List<GetGameDTO>>(games);
+    }
     //obtenemos una lista de juegos que tiene un usuario por id
     async public Task<GameListPagedResultDTO> GetGamesByUserIdAsync(int userId) => await GetAllAsync(null, userId);
 

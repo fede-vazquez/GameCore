@@ -54,7 +54,7 @@ public class UserServices
 
         user.Password = _encoderServices.Encode(user.Password);
 
-        var role = await _roleServices.GetOneByNameAsync(ROLE.USER);
+        var role = await _roleServices.GetOneByNameAsync(ROLE.ADMIN);
         user.Rol = role;
 
         await _repo.CreateOneAsync(user);

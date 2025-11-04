@@ -109,6 +109,32 @@ namespace GameCore.Controllers
             }
 
         }
+        // Crear muchos juegos a la vez
+        [HttpPost("games/many")]
+        [ProducesResponseType(typeof(List<GetGameDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<GetGameDTO>>> CreateManyGames([FromBody] List<CreateGameDTO> createGameDTOs)
+        {
+            try
+            {
+                var res = await _gameServices.CreateManyAsync(createGameDTOs);
+                return Created("CreateManyGames", res);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
 
         // PUT
         [HttpPut("games/{id}")]

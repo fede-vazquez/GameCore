@@ -14,6 +14,7 @@ public interface IGameRepository : IRepository<Game>
 {
     public Task<IQueryable<Game>> GetGameQueryAsync();
     public Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId);
+    public Task CreateManyAsync(List<Game> games);
 
 }
 public class GameRepository : Repository<Game>, IGameRepository
@@ -45,6 +46,11 @@ public class GameRepository : Repository<Game>, IGameRepository
         }
         query = query.Include(g => g.Genres);
         return await query.FirstOrDefaultAsync();
+    }
+    public async Task CreateManyAsync(List<Game> games)
+    {
+        await _db.Games.AddRangeAsync(games);
+        await _db.SaveChangesAsync();
     }
     // traemos los juegos que tenga un usuario a traves de la tabla intermedia GameUser
     public async Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId)
