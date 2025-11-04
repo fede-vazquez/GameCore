@@ -1,2 +1,2 @@
-export * from './InfoCard'
-export * from './SalesPerMonth'
+export * from './generalInfo/InfoCard'
+export * from './salesPerMonth/SalesPerMonthChart'

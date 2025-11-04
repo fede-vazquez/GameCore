@@ -6,7 +6,12 @@ interface SalesPerMonthProps {
 }
 
 export function SalesPerMonth({ data }: SalesPerMonthProps) {
-	if (data.length === 0) return <div className="p-5">No hay datos de ventas</div>
+	if (data.length === 0)
+		return (
+			<div className="p-5">
+				<h2 className="text-2xl font-bold">No hay datos de ventas</h2>
+			</div>
+		)
 
 	return (
 		<div className="p-5">
@@ -14,7 +19,14 @@ export function SalesPerMonth({ data }: SalesPerMonthProps) {
 				<CartesianGrid strokeDasharray="5" strokeOpacity={0.5} />
 				<XAxis dataKey="month" />
 				<YAxis width="auto" domain={[0, (dataMax: number) => dataMax * 1.2]} />
-				<Tooltip contentStyle={{ backgroundColor: '#333', color: '#f0f0f0', borderRadius: '10px', padding: '10px' }} />
+				<Tooltip
+					contentStyle={{
+						backgroundColor: '#333',
+						color: '#f0f0f0',
+						borderRadius: '10px',
+						padding: '10px'
+					}}
+				/>
 				<Legend />
 				<Bar
 					dataKey="totalSales"
