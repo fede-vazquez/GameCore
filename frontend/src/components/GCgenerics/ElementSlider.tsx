@@ -1,4 +1,4 @@
-import type { GameModel } from '@/types'
+import type { GameModel } from '@/models'
 import { Heading } from '@radix-ui/themes'
 import { useCallback, useRef } from 'react'
 import { GameCard } from '../game'

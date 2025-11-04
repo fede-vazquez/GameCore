@@ -1,5 +1,5 @@
 import { ConsoleSVG, ControllerSVG, StoreSVG, UserSVG } from '@/assets'
-import type { GameModel } from '@/types'
+import type { GameModel } from '@/models'
 import type { ReactElement } from 'react'
 import { Link } from 'wouter'
 import { GameSideCard } from '../game'

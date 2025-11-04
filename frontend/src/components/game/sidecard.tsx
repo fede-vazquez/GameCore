@@ -1,4 +1,4 @@
-import type { GameModel } from '@/types'
+import type { GameModel } from '@/models'
 
 interface gameSideCardProps {
 	game: Pick<GameModel, 'title' | 'id' | 'imageUrl'>

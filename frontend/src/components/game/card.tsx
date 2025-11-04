@@ -1,4 +1,4 @@
-import type { GameModel } from '@/types'
+import type { GameModel } from '@/models'
 import { numberParser } from '@/utils'
 
 interface gameCardProps {
