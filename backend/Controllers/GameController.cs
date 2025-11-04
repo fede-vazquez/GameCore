@@ -20,10 +20,13 @@ public class GamesController : ControllerBase
 
     private readonly GameServices _gameServices;
     private readonly OrderServices _orderServices;
-    public GamesController(GameServices gameServices, OrderServices orderServices)
+    private readonly GameUserServices _gameUserServices;
+
+    public GamesController(GameServices gameServices, OrderServices orderServices, GameUserServices gameUserServices)
     {
         _gameServices = gameServices;
         _orderServices = orderServices;
+        _gameUserServices = gameUserServices;
     }
     // GET ALL
     [HttpGet("/")]
@@ -102,6 +105,31 @@ public class GamesController : ControllerBase
                 return Unauthorized("Formato User ID invalido en el token.");
             }
             var res = await _orderServices.CreateOneAsync(gameId, userId, orderDTO);
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
+    //obtener la catidad de usuario que tiene un juego
+    [HttpGet("{gameId}/users")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    public async Task<ActionResult<int>> GetGameUsersCountByGameId([FromRoute] int gameId)
+    {
+        try
+        {
+            var res = await _gameUserServices.GetGameUsersCountByGameIdAsync(gameId);
             return Ok(res);
         }
         catch (HttpResponseError ex)
