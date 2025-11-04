@@ -2,6 +2,7 @@ import { type RefObject } from 'react'
 
 export interface SVGInterface {
 	className?: string
+	strokeColor?: 'white' | 'black'
 	onClick?: (...args: any[]) => void
 	ref?: RefObject<SVGSVGElement | null>
 }

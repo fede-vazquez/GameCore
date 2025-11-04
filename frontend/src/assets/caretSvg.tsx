@@ -4,7 +4,7 @@ type CaretProps = {
 	position?: 'left' | 'right'
 } & SVGInterface
 
-export function CaretSVG({ className, ref, onClick, position = 'right' }: CaretProps) {
+export function CaretSVG({ className, ref, onClick, position = 'right', strokeColor = 'black' }: CaretProps) {
 	return (
 		<svg
 			onClick={onClick}
@@ -12,7 +12,7 @@ export function CaretSVG({ className, ref, onClick, position = 'right' }: CaretP
 			height="24"
 			viewBox="0 0 24 24"
 			fill="none"
-			stroke="#000000"
+			stroke={strokeColor}
 			strokeWidth="2"
 			strokeLinecap="round"
 			strokeLinejoin="round"

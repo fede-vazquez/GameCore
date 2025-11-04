@@ -3,8 +3,8 @@ export const numberParser = (numb: number): string => {
 	return new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
-		maximumSignificantDigits: 4,
-		minimumSignificantDigits: 4,
+		maximumFractionDigits: 2,
+		minimumFractionDigits: 2,
 		roundingMode: 'floor' // 93.12% of browsers supports this
 	}).format(numb)
 

@@ -16,7 +16,7 @@ export function AsideBar() {
 				`}
 			</style>
 
-			<aside className="fixed flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-white divide-solid *:px-2">
+			<aside className="fixed flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-neutral-700 divide-solid *:px-2">
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
 						<img src="generic_logo.png" className="aspect-square object-contain w-full h-20" />
@@ -32,9 +32,9 @@ export function AsideBar() {
 					<span className="flex flex-col flex-1 overflow-hidden">
 						{/* or just use css... */}
 						<div className="flex items-center">
-							<div className="grow border-t border-gray-400"></div>
+							<div className="grow border-t border-neutral-800"></div>
 							<h4 className="shrink mx-1 font-semibold">Installed Games</h4>
-							<div className="grow border-t border-gray-400"></div>
+							<div className="grow border-t border-neutral-800"></div>
 						</div>
 
 						<div className="flex flex-col mt-2 overflow-y-auto *">

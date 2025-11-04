@@ -11,7 +11,6 @@ interface ElementSliderProps {
 	pixelMovement?: number
 	removeHeadings?: boolean
 }
-
 export function ElementSlider({
 	className,
 	pixelMovement = 200,
