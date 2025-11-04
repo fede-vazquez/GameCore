@@ -3,6 +3,7 @@ import { Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
 import { LibraryPage } from './pages/library/libraryPage'
 import { makeApiCall } from './services/apiCall'
+import { DashboardPage } from './pages/dashboard/dashboardPage'
 
 export function App() {
 	useEffect(() => {
@@ -18,6 +19,10 @@ export function App() {
 				<Switch>
 					<Route path="/library" nest>
 						<Route path="/" component={LibraryPage} />
+					</Route>
+
+					<Route path="/admin" nest>
+						<Route path="/dashboard" component={DashboardPage} />
 					</Route>
 
 					<Route>404</Route>

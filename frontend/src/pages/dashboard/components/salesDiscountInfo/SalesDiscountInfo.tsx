@@ -17,11 +17,11 @@ export default function SalesDiscountInfoController() {
 	}, [])
 	return (
 		<>
-			<h2 className="text-2xl font-bold mb-4">Ventas con y sin descuento</h2>
+			<h2 className="text-2xl font-bold mb-4">Comparativa ventas</h2>
 			<PieChardComponent
 				data={[
-					{ name: 'Ventas sin descuento', value: salesData.salesWhitDiscount, color: '#0088FE' },
-					{ name: 'Ventas con descuento', value: salesData.totalSales, color: '#00C49F' }
+					{ name: 'Ventas sin descuento', value: salesData.totalSales, color: '#00C49F' },
+					{ name: 'Ventas con descuento', value: salesData.salesWhitDiscount, color: '#0088FE' }
 				]}
 			/>
 		</>

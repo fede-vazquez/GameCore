@@ -9,7 +9,7 @@ export function DashboardPage() {
 				<GeneralInfo />
 			</article>
 			<div className="w-full flex flex-col lg:flex-row gap-4">
-				<article className="w-full p-5">
+				<article className="w-full">
 					<SalesPerMonthController />
 				</article>
 				<article className="w-full p-5">
