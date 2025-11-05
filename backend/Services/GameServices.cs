@@ -64,7 +64,7 @@ public class GameServices
             //filtrar por el ultimo descuento
             if (parameters.PercentageId != null)
             {
-                query = query.Where(g => g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault() != null && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().PercentageId == parameters.PercentageId);
+                query = query.Where(g => g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault() != null && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().PercentageId == parameters.PercentageId && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().EndDate > DateTime.Now && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().StartDate < DateTime.Now);
             }
             //ordenar 
             if (parameters.SortBy != null)
