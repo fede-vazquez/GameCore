@@ -66,6 +66,10 @@ public class GameServices
             {
                 query = query.Where(g => g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault() != null && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().PercentageId == parameters.PercentageId && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().EndDate > DateTime.Now && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().StartDate < DateTime.Now);
             }
+            if (parameters.Year != null)
+            {
+                query = query.Where(g => g.ReleaseDate.Year == parameters.Year);
+            }
             //ordenar 
             if (parameters.SortBy != null)
             {
@@ -87,6 +91,7 @@ public class GameServices
                 }
 
             }
+            result.TotalCount = await query.CountAsync();
             //paginar
             query = query.Skip((parameters.PageNumber - 1) * parameters.PageSize).Take(parameters.PageSize);
             //incluimos la lista de generos
@@ -99,7 +104,6 @@ public class GameServices
             result.Items = _mapper.Map<List<GetGameDTO>>(games);
             result.PageNumber = parameters.PageNumber;
             result.PageSize = parameters.PageSize;
-            result.TotalCount = await query.CountAsync();
         }
         else
         {

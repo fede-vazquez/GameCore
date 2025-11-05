@@ -38,9 +38,9 @@ public class AuthServices
         _mapper = mapper;
     }
 
-    async public Task<List<UserWithoutPassDTO>> GetUsersAsync()
+    async public Task<UserListPagedResultDTO> GetUsersAsync(UserListParametersDTO? parameters)
     {
-        return await _userServices.GetAllAsync();
+        return await _userServices.GetAllAsync(parameters);
     }
 
     async public Task<UserWithoutPassDTO> RegisterAsync(RegisterDTO register)

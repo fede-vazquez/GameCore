@@ -29,7 +29,7 @@ public class GamesController : ControllerBase
         _gameUserServices = gameUserServices;
     }
     // GET ALL
-    [HttpGet("/")]
+    [HttpGet("")]
     [ProducesResponseType(typeof(List<GetGameDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<List<GetGameDTO>>>

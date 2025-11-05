@@ -9,6 +9,7 @@ public class GameListParametersDTO
     public string? Name { get; set; }
     public int? DeveloperId { get; set; }
     public int? PercentageId { get; set; }
+    public int? Year { get; set; }
 
     //ordenar por
     public string? SortBy { get; set; }

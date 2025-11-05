@@ -109,11 +109,13 @@ public class AuthController : ControllerBase
 
     [HttpGet("users")]
     [Authorize(Roles = $"{ROLE.USER}, {ROLE.ADMIN}")]
-    async public Task<ActionResult<List<UserWithoutPassDTO>>> GetUsers()
+    [ProducesResponseType(typeof(UserListPagedResultDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+    async public Task<ActionResult<UserListPagedResultDTO>> GetUsers([FromQuery] UserListParametersDTO parameters)
     {
         try
         {
-            var users = await _authServices.GetUsersAsync();
+            var users = await _authServices.GetUsersAsync(parameters);
             return Ok(users);
         }
         catch (HttpResponseError ex)
