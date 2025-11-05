@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using GameCore.Enums;
 using GameCore.Utils;
 using System.Net;
-using GameCore.Models.User;
 using GameCore.Models.User.DTO;
-using GameCore.Models.Developer;
 using GameCore.Models.Developer.DTO;
+using GameCore.Models.Discount.DTO;
+
 
 
 namespace GameCore.Controllers
@@ -23,11 +23,14 @@ namespace GameCore.Controllers
         private readonly GameServices _gameServices;
         private readonly UserServices _userServices;
         private readonly DeveloperServices _devServices;
-        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices)
+        private readonly DiscountServices _discountServices;
+
+        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices, DiscountServices discountServices)
         {
             _gameServices = gameServices;
             _userServices = userServices;
             _devServices = devServices;
+            _discountServices = discountServices;
         }
         // GET ALL
         [HttpGet("games")]
@@ -239,6 +242,33 @@ namespace GameCore.Controllers
                     new HttpMessage(ex.Message));
             }
         }
+        // creamos un descuento a un juego
+        [HttpPost("games/{gameId}/discounts")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateDiscount([FromBody] CreateDiscountDTO createDiscountDTO, [FromRoute] int gameId)
+        {
+            try
+            {
+                await _discountServices.CreateOneAsync(gameId, createDiscountDTO);
+                return Created("CreateDiscount", null);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
+
     }
 }
 

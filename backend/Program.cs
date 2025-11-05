@@ -61,6 +61,10 @@ builder.Services.AddScoped<RolServices>();
 builder.Services.AddScoped<PaymentMethodService>();
 builder.Services.AddScoped<GameUserServices>();
 builder.Services.AddScoped<OrderServices>();
+builder.Services.AddScoped<DiscountServices>();
+builder.Services.AddScoped<PercentageService>();
+
+
 //registro de repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IGameRepository, GameRepository>();
@@ -75,6 +79,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IAchievementUserRepository, AchievementUserRepository>();
+
 
 //JWT
 // Configuración de JWT

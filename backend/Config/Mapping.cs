@@ -16,6 +16,8 @@ using GameCore.Models.Order;
 using GameCore.Models.Order.DTO;
 using GameCore.Models.GameUser;
 using GameCore.Models.GameUser.DTO;
+using GameCore.Models.Discount;
+using GameCore.Models.Discount.DTO;
 
 
 public class Mapping : Profile
@@ -51,6 +53,7 @@ public class Mapping : Profile
         CreateMap<Order, GetOrderDTO>().ReverseMap();
         //UserGame
         CreateMap<GameUser, GetGameUserDTO>().ReverseMap();
+        CreateMap<Discount, CreateDiscountDTO>().ReverseMap();
     }
 
 }
