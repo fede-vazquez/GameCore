@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
 import { AuthPage } from './pages/auth/authPage'
@@ -10,14 +11,21 @@ export function App() {
 				<Route path="/auth" component={AuthPage} />
 
 				<Route>
-					<AsideBar />
-					<article className="grow ml-[225px] pt-2.5 h-full px-10">
-						<Route path="/library" nest>
-							<Route path="/" component={LibraryPage} />
-						</Route>
-					</article>
+					<Route path="/library" component={() => <AsideBarWrapper children={<LibraryPage />} />} />
+
+					<Route component={() => <>404</>} />
 				</Route>
 			</Switch>
 		</main>
+	)
+}
+
+//! if you have a better idea (like installing react dom) go ahead. do it.
+function AsideBarWrapper({ children }: { children: ReactNode }) {
+	return (
+		<>
+			<AsideBar />
+			<article className="grow ml-[225px] pt-2.5 h-full px-10">{children}</article>
+		</>
 	)
 }

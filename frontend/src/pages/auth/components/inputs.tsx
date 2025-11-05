@@ -9,7 +9,7 @@ interface InputProps extends InputPasswordProps {
 	type: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>['type']
 }
 
-const INPUT_CLASSNAME = 'border border-zinc-600 rounded-lg py-2 px-10'
+const INPUT_CLASSNAME = 'border border-zinc-600 rounded-lg py-2 px-10 w-full'
 export function InputLayout({ formFieldName, children, label, type, placeholder, isRequired }: InputProps) {
 	return (
 		<Form.Field className="flex flex-col gap-y-1" name={formFieldName}>
@@ -25,14 +25,12 @@ export function InputLayout({ formFieldName, children, label, type, placeholder,
 					{type === 'password' ? (
 						<InputPassword className={INPUT_CLASSNAME} placeholder={placeholder} isRequired={isRequired} />
 					) : (
-						<>
-							<input
-								className={INPUT_CLASSNAME}
-								type={type}
-								placeholder={placeholder}
-								{...(isRequired && { required: true })}
-							/>
-						</>
+						<input
+							className={INPUT_CLASSNAME}
+							type={type}
+							placeholder={placeholder}
+							{...(isRequired && { required: true })}
+						/>
 					)}
 				</Form.Control>
 			</span>

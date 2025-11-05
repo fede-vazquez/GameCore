@@ -2,6 +2,7 @@ import { EmailSVG, LockSVG, UserSVG } from '@/assets'
 import { GCButton } from '@/components/GCgenerics'
 import { Form } from 'radix-ui'
 import { InputLayout } from './inputs'
+import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
 	USERNAME: 'username',
@@ -21,6 +22,8 @@ export function RegisterForm() {
 			}}
 			className="flex flex-col gap-3"
 		>
+			<SaludationText title="New in here?" paragraph="Register for manage your games anytime and anywhere." />
+
 			<InputLayout formFieldName={FIELDS_FORM.USERNAME} label="Username" type="text" placeholder="Jane Doe" isRequired>
 				<UserSVG className={SVG_CLASS} />
 			</InputLayout>
