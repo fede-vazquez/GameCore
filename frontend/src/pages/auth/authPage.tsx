@@ -1,6 +1,6 @@
 import { Tabs } from 'radix-ui'
 import { useState } from 'react'
-import { LoginForm, RegisterForm } from './components'
+import { LogInForm, RegisterForm } from './components'
 
 const TABS_PAGES = {
 	LOGIN: 'LogIn',
@@ -35,7 +35,7 @@ export function AuthPage() {
 					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value={TABS_PAGES.LOGIN}>
-					<LoginForm />
+					<LogInForm />
 				</Tabs.Content>
 				<Tabs.Content value={TABS_PAGES.REGISTER}>
 					<RegisterForm />
