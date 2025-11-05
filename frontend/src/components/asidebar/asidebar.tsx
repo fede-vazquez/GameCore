@@ -19,7 +19,7 @@ export function AsideBar() {
 			<aside className="fixed flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-neutral-700 divide-solid *:px-2">
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
-						<img src="generic_logo.png" className="aspect-square object-contain w-full h-20" />
+						<img src="/generic_logo.png" className="aspect-square object-contain w-full h-20" />
 					</Link>
 				</header>
 				<main className="flex flex-col flex-1 gap-y-4 overflow-hidden px-0!">

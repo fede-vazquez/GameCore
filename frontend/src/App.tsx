@@ -1,20 +1,23 @@
 import { Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
+import { AuthPage } from './pages/auth/authPage'
 import { LibraryPage } from './pages/library/libraryPage'
 
 export function App() {
 	return (
-		<main className="flex flex-row w-screen h-dvh overflow-x-auto text-primaryWhite bg-darkBG ">
-			<AsideBar />
-			<article className="grow ml-[225px] overflow-x-hidden pt-2.5 h-full px-10">
-				<Switch>
-					<Route path="/library" nest>
-						<Route path="/" component={LibraryPage} />
-					</Route>
+		<main className="w-screen h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
+			<Switch>
+				<Route path="/auth" component={AuthPage} />
 
-					<Route>404</Route>
-				</Switch>
-			</article>
+				<Route>
+					<AsideBar />
+					<article className="grow ml-[225px] pt-2.5 h-full px-10">
+						<Route path="/library" nest>
+							<Route path="/" component={LibraryPage} />
+						</Route>
+					</article>
+				</Route>
+			</Switch>
 		</main>
 	)
 }

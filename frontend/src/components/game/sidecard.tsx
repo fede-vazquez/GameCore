@@ -8,7 +8,7 @@ interface gameSideCardProps {
 const fallback: gameSideCardProps['game'] = {
 	title: 'Factorio',
 	id: Math.floor(Math.random() * 100),
-	imageUrl: './fallback_image.png'
+	imageUrl: '/fallback_image.png'
 }
 
 export function GameSideCard({ game, className }: gameSideCardProps) {

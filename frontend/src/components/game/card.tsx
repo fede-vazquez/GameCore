@@ -13,7 +13,7 @@ const fallback: gameCardProps['game'] = {
 	id: Math.floor(Math.random() * 100),
 	description: 'The factory must grow.',
 	price: 17.99,
-	imageUrl: './fallback_image.png'
+	imageUrl: '/fallback_image.png'
 }
 
 export function GameCard({ game, discountPercentage, className }: gameCardProps) {

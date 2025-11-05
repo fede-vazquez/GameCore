@@ -3,6 +3,7 @@
 @theme {
 	/* foreground + background */
 	--color-darkFG: #0e0e0f;
+	--color-darkFGAlt: #181818;
 	--color-darkBG: #0c0b0d;
 
 	--color-primaryBlue: #0a5aac;

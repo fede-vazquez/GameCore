@@ -8,7 +8,7 @@ const THEMES = {
 
 const props: Record<GCButtonProps['theme'], string> = {
 	ghost: 'bg-transparent border-1!',
-	primary: 'bg-primaryBlue border-primaryBlue',
+	primary: 'bg-primaryBlue border-blue-400/30 ',
 	secondary: 'bg-[#a3a3a3] border-[#a3a3a3]'
 }
 
