@@ -4,8 +4,13 @@ export type Versioning = 'v1' // | "v2" | "v3" ...
 
 type removeQuestionChar<T extends string> = T extends `${infer S}?` ? S : T
 
+/* //! cool if implemented:
+ * requiredFields: object that contains its fields and inputs values. its validated in makeApiCall
+ * JWTRequired: looses it values when you know its going to be store in a cookie
+ * adapter: parses json to its corresponding model. using nulls for empty values.
+ */
 export type FetchArguments = {
-	requiredFields: any // supuestamente aqui van los parametros del body... pero ni idea como lo hare aun
+	requiredFields: any
 	JWTRequired: boolean
 	adapter?: (...args: any[]) => ResponsesTypes
 }

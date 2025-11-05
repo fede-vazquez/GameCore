@@ -12,7 +12,7 @@ import {
 	type AllGenresRoutes,
 	type AllLibraryRoutes
 } from './routes'
-import type { FetchArguments, Versioning } from './types'
+import type { Versioning } from './types'
 
 export const queryClient = new QueryClient()
 
@@ -20,7 +20,7 @@ interface ApiCallParams {
 	httpMethod: HTTPMethods
 	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllGenresRoutes | AllLibraryRoutes
 
-	body?: any
+	body?: Record<string, Array<unknown> | string | number>
 	opts?: {
 		filters?: Record<string, string>
 		version?: Versioning
@@ -57,20 +57,16 @@ export async function makeApiCall({ httpMethod, endpoint, body, opts }: ApiCallP
 
 	if (!validFetchArgs) throw new Error('invalid httpmethod or version')
 
-	const { JWTRequired, adapter, requiredFields } = validFetchArgs as FetchArguments
-
 	const filters = opts?.filters ?? {}
 	const headers = {
-		...(body != null && { 'Content-Type': 'application/json' }),
-		...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
+		...(body != null && { 'Content-Type': 'application/json' })
+		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
 	} as const
 
-	const data = await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
+	return await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
 		headers: {
 			...headers
 		},
-		...(body != null && { body: body })
+		...(body != null && { body: JSON.stringify(body) })
 	})
-
-	return adapter != null ? adapter(data) : data
 }
