@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using GameCore.Services;
 using GameCore.Utils;
 using GameCore.Filters;
+using GameCore.Repositories.DashboardRepository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,7 @@ builder.Services.AddScoped<GameUserServices>();
 builder.Services.AddScoped<OrderServices>();
 builder.Services.AddScoped<DiscountServices>();
 builder.Services.AddScoped<PercentageService>();
+builder.Services.AddScoped<DashboardService>();
 
 
 //registro de repositorios
@@ -79,6 +81,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IAchievementUserRepository, AchievementUserRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 
 //JWT
