@@ -129,6 +129,17 @@ namespace GameCore.Config
             modelBuilder.Entity<Order>()
                 .Property(o => o.BasePrice)
                 .IsRequired();
+            //si se elimina un juego o usuario  no se elimina la orden
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Game)
+                .WithMany(g => g.Orders)
+                .HasForeignKey(o => o.GameId)
+                .OnDelete(DeleteBehavior.SetNull);
             //------------------------------------
             //EL nombre de PaymentMethod debe ser unico, no nulo y tener un maximo de 32 caracteres
             modelBuilder.Entity<PaymentMethod>()

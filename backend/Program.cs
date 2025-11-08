@@ -8,7 +8,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using GameCore.Services;
 using GameCore.Utils;
-using GameCore.Filters;
+using GameCore.Specifications;
+using GameCore.Models.Game;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,10 @@ builder.Services.AddScoped<GameUserServices>();
 builder.Services.AddScoped<OrderServices>();
 builder.Services.AddScoped<DiscountServices>();
 builder.Services.AddScoped<PercentageService>();
+//specification
+// builder.Services.AddScoped<GameFilterSpecification>();
+builder.Services.AddScoped<IGameSpecificationFactory, GameSpecificationFactory>();
+
 
 
 //registro de repositorios

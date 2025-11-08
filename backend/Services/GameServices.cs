@@ -1,5 +1,3 @@
-using System;
-using GameCore.Repositories;
 
 namespace GameCore.Services;
 
@@ -9,24 +7,25 @@ using System.Net;
 using AutoMapper;
 using GameCore.Utils;
 using GameCore.Repositories;
-using Microsoft.EntityFrameworkCore;
-using GameCore.Enums;
-
+using GameCore.Specifications;
 
 public class GameServices
 {
     private readonly IGameRepository _repo;
     private readonly DeveloperServices _developerServices;
     private readonly GenreServices _genreServices;
+    private readonly IGameSpecificationFactory _gameSpecificationFactory;
+    // private readonly ISpecification<Game> _gameSpecification;
 
 
     private readonly IMapper _mapper;
-    public GameServices(IGameRepository repo, IMapper mapper, DeveloperServices developerServices, GenreServices genreServices)
+    public GameServices(IGameRepository repo, IMapper mapper, DeveloperServices developerServices, GenreServices genreServices, IGameSpecificationFactory gameSpecificationFactory)
     {
         _repo = repo;
         _mapper = mapper;
         _developerServices = developerServices;
         _genreServices = genreServices;
+        _gameSpecificationFactory = gameSpecificationFactory;
     }
     async private Task<Game> GetOneByIdOrException(int id)
     {
@@ -37,79 +36,18 @@ public class GameServices
         }
         return game;
     }
-    // TODO: refactorizar usando el patron especificacion
     async public Task<GameListPagedResultDTO> GetAllAsync(GameListParametersDTO? parameters, int? userId)
     {
-        //obtenemos del repo la query para trabajar con ella
-        var query = await _repo.GetGameQueryAsync();
-        if (userId != null)
-        {
-            query = query.Where(g => g.GameUsers.Any(gu => gu.UserId == userId));
-        }
-        GameListPagedResultDTO result = new GameListPagedResultDTO();
+        var spec = _gameSpecificationFactory.CreateGameFilterSpecification(parameters, userId);
+        var games = await _repo.GetAllAsync(spec);
+        var result = new GameListPagedResultDTO();
+        result.Items = _mapper.Map<List<GetGameDTO>>(games);
+        result.TotalCount = games.Count();
         if (parameters != null)
         {
-            if (parameters.Name != null)
-            {
-                query = query.Where(g => g.Title.Contains(parameters.Name));
-            }
-            if (parameters.GenreId != null)
-            {
-                query = query.Where(g => g.Genres.Any(gg => gg.Id == parameters.GenreId));
-            }
-            if (parameters.DeveloperId != null)
-            {
-                query = query.Where(g => g.DeveloperId == parameters.DeveloperId);
-            }
-            //filtrar por el ultimo descuento
-            if (parameters.PercentageId != null)
-            {
-                query = query.Where(g => g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault() != null && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().PercentageId == parameters.PercentageId && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().EndDate > DateTime.Now && g.Discounts.OrderByDescending(d => d.Id).FirstOrDefault().StartDate < DateTime.Now);
-            }
-            if (parameters.Year != null)
-            {
-                query = query.Where(g => g.ReleaseDate.Year == parameters.Year);
-            }
-            //ordenar 
-            if (parameters.SortBy != null)
-            {
-                switch (parameters.SortBy)
-                {
-                    case SORT_BY.TITLE:
-                        query = query.OrderBy(g => g.Title);
-                        break;
-                    case SORT_BY.RELEASE_DATE:
-                        query = query.OrderBy(g => g.ReleaseDate);
-                        break;
-                    default:
-                        query = query.OrderBy(g => g.Title);
-                        break;
-                }
-                if (!parameters.Ascending)
-                {
-                    query = query.OrderByDescending(g => g.Title);
-                }
-
-            }
-            result.TotalCount = await query.CountAsync();
-            //paginar
-            query = query.Skip((parameters.PageNumber - 1) * parameters.PageSize).Take(parameters.PageSize);
-            //incluimos la lista de generos
-            query = query.Include(g => g.Genres);
-
-            //ahora obtenemos los juegos con la query
-            var games = await query.ToListAsync();
-            //armamos el dto de retorno
-            //transformamos la lista de juegos en una lista de dtos
-            result.Items = _mapper.Map<List<GetGameDTO>>(games);
             result.PageNumber = parameters.PageNumber;
             result.PageSize = parameters.PageSize;
         }
-        else
-        {
-            throw new HttpResponseError(HttpStatusCode.BadRequest, "Parametros invalidos");
-        }
-
         return result;
     }
 

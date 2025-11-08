@@ -8,13 +8,15 @@ using GameCore.Utils;
 using System.Net;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-
+using GameCore.Specifications;
 
 public interface IGameRepository : IRepository<Game>
 {
     public Task<IQueryable<Game>> GetGameQueryAsync();
     public Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId);
     public Task CreateManyAsync(List<Game> games);
+
+    public Task<IEnumerable<Game>> GetAllAsync(ISpecification<Game> spec);
 
 }
 public class GameRepository : Repository<Game>, IGameRepository
@@ -25,17 +27,10 @@ public class GameRepository : Repository<Game>, IGameRepository
         _db = db;
     }
 
-    public override async Task<IEnumerable<Game>> GetAllAsync(Expression<Func<Game, bool>>? filter = null)
+    public async Task<IEnumerable<Game>> GetAllAsync(ISpecification<Game> filter = null)
     {
-        IQueryable<Game> query = _db.Games;
-        if (filter != null)
-        {
-            query = query.Where(filter);
-        }
-        query = query.Include(g => g.Genres);
-        return await query.ToListAsync();
+        return await SpecificationEvaluator.GetQuery(_db.Games, filter).ToListAsync();
     }
-
 
     public override async Task<Game> GetOneAsync(Expression<Func<Game, bool>>? filter = null)
     {
@@ -52,6 +47,7 @@ public class GameRepository : Repository<Game>, IGameRepository
         await _db.Games.AddRangeAsync(games);
         await _db.SaveChangesAsync();
     }
+    //ELIMNAR
     // traemos los juegos que tenga un usuario a traves de la tabla intermedia GameUser
     public async Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId)
     {
