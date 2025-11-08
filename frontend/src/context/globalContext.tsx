@@ -1,3 +1,4 @@
+import { CLIENT_ERROR, CustomError } from '@/errors'
 import { useContext, useState, type ReactNode } from 'react'
 import { GlobalContext, type globalContextArgs } from '.'
 
@@ -22,7 +23,7 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
 export function useGlobalContext() {
 	const ctx = useContext(GlobalContext)
 
-	if (!ctx) throw new Error('globalContext must be used inside a consumer :P')
+	if (!ctx) throw new CustomError(CLIENT_ERROR.CONTEXT_BADUSE)
 
 	return ctx
 }

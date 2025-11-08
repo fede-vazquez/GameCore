@@ -1,11 +1,13 @@
 import { EmailSVG, LockSVG, UserSVG } from '@/assets'
 import { GCButton, GCInput } from '@/components/GCgenerics'
+import type { RegisterModel } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
-import type { RegisterAndLoginProps } from '.'
+import { type RegisterAndLoginProps } from '.'
+import { useAuthContext } from '../context'
 import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
@@ -27,7 +29,9 @@ const registerValidator = z
 		error: 'Passwords must match'
 	})
 
-export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
+export function RegisterForm({ SVG_CLASS }: RegisterAndLoginProps) {
+	const { startTransition, registerUser, changeTabToLogin, isPending } = useAuthContext()
+
 	const {
 		register,
 		handleSubmit,
@@ -38,15 +42,20 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 
 	return (
 		<Form.Root
-			onSubmit={handleSubmit(async (e) => {
-				const data = await makeApiCall({ httpMethod: 'POST', endpoint: '/auth/register', body: e })
-				addUser(data)
+			onSubmit={handleSubmit((e) => {
+				startTransition(async () => {
+					const data = await makeApiCall<RegisterModel>({ httpMethod: 'POST', endpoint: '/auth/register', body: e })
+					if (!data) return
+					registerUser(data)
+					changeTabToLogin()
+				})
 			})}
 			className="flex flex-col gap-3"
 		>
 			<SaludationText title="New in here?" paragraph="Register for manage your games anytime and anywhere." />
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.USERNAME]}
 				register={register(FIELDS_FORM.USERNAME)}
 				formFieldName={FIELDS_FORM.USERNAME}
@@ -59,6 +68,7 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 			</GCInput>
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.EMAIL]}
 				register={register(FIELDS_FORM.EMAIL)}
 				formFieldName={FIELDS_FORM.EMAIL}
@@ -71,6 +81,7 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 			</GCInput>
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.PASSWORD]}
 				register={register(FIELDS_FORM.PASSWORD)}
 				formFieldName={FIELDS_FORM.PASSWORD}
@@ -83,6 +94,7 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 			</GCInput>
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.CONFIRM_PASSWORD]}
 				register={register(FIELDS_FORM.CONFIRM_PASSWORD)}
 				formFieldName={FIELDS_FORM.CONFIRM_PASSWORD}

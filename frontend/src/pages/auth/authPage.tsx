@@ -1,31 +1,20 @@
-import { useGlobalContext } from '@/context'
-import type { RegisterModel } from '@/models'
 import { FUN_FACTS_STRINGS } from '@/utils'
 import { Tabs } from 'radix-ui'
-import { useCallback, useState } from 'react'
-import { LogInForm, RegisterForm } from './components'
-
-const TABS_PAGES = {
-	LOGIN: 'LogIn',
-	REGISTER: 'Register'
-} as const
+import { LogInForm, RegisterForm, TABS_PAGES, type ALL_TABS_PAGES } from './components'
+import { useAuthContext } from './context'
 
 const tabsClass = 'border-b-2 px-1 border-b-neutral-300'
 const SVG_CLASS = 'absolute left-1.5 top-2 *:text-zinc-500'
 
 export function AuthPage() {
-	const [activeTab, setActiveTab] = useState<(typeof TABS_PAGES)[keyof typeof TABS_PAGES]>(TABS_PAGES.LOGIN)
-	const { setClientUser } = useGlobalContext()
-
-	const registerUser = useCallback((client: RegisterModel) => {
-		setClientUser(client)
-	}, [])
+	//todo: there's a isPending prop, use it as a spinner/throbber
+	const { setActiveTab, activeTab, error } = useAuthContext()
 
 	return (
 		<section className="w-screen h-screen flex justify-center items-center gap-5 p-10 overflow-hidden">
 			<Tabs.Root
-				onValueChange={(val) => setActiveTab(val as (typeof TABS_PAGES)[keyof typeof TABS_PAGES])}
-				defaultValue={TABS_PAGES.LOGIN}
+				onValueChange={(val) => setActiveTab(val as ALL_TABS_PAGES)}
+				value={activeTab}
 				className="flex flex-col gap-7 border border-zinc-800 border-t-zinc-700 bg-darkFGAlt py-5 px-8 rounded-lg shadow-xl shadow-neutral-900
 				h-full p-20 md:p-6 min-w-[50%] justify-center items-center relative"
 			>
@@ -47,17 +36,16 @@ export function AuthPage() {
 					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.LOGIN}>
-					<LogInForm addUser={registerUser} SVG_CLASS={SVG_CLASS} />
+					<LogInForm SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.REGISTER}>
-					<RegisterForm addUser={registerUser} SVG_CLASS={SVG_CLASS} />
+					<RegisterForm SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
-
 				<p
-					className="absolute bottom-5
-				 flex flex-col justify-center items-center text-center text-sm text-neutral-500"
+					className={`absolute bottom-5
+				 flex flex-col justify-center items-center text-center text-sm ${error ? ' text-red-500 font-bold text-lg!' : 'text-neutral-500'}`}
 				>
-					{FUN_FACTS_STRINGS[Math.floor(Math.random() * FUN_FACTS_STRINGS.length)]}
+					{error != null ? error.message : FUN_FACTS_STRINGS[Math.floor(Math.random() * FUN_FACTS_STRINGS.length)]}
 				</p>
 			</Tabs.Root>
 

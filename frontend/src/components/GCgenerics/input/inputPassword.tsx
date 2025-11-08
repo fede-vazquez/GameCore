@@ -4,13 +4,14 @@ import type { UseFormRegisterReturn } from 'react-hook-form'
 
 export interface InputPasswordProps {
 	register: UseFormRegisterReturn<any>
+	isDisabled?: boolean
 	className?: string
 	placeholder?: string
 	isRequired?: boolean
 }
 
 const EYES_CLASSNAME = 'absolute top-2 right-2 cursor-pointer hover:scale-110 transition-all'
-export function InputPassword({ className, register, placeholder, isRequired }: InputPasswordProps) {
+export function InputPassword({ className, isDisabled, register, placeholder, isRequired }: InputPasswordProps) {
 	const [seePassword, SetSeePassword] = useState<boolean>(false)
 
 	return (
@@ -22,6 +23,7 @@ export function InputPassword({ className, register, placeholder, isRequired }: 
 					type={!seePassword ? 'password' : 'text'}
 					placeholder={placeholder}
 					{...(isRequired && { required: true })}
+					disabled={isDisabled}
 				/>
 
 				{seePassword ? (

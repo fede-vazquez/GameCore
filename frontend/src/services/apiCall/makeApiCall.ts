@@ -1,3 +1,4 @@
+import { CLIENT_ERROR, CustomError, SERVER_ERROR } from '@/errors/customErrorMsg'
 import { MAX_FETCH_TIMEOUT, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
@@ -35,7 +36,7 @@ const MATCH_ROUTES_TO_OBJECT = {
 	'/games': GAMES_URLENDPOINTS
 } as const
 
-export async function makeApiCall({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
+export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'
@@ -46,16 +47,16 @@ export async function makeApiCall({ httpMethod = 'GET', endpoint, body, opts }: 
 			('/' + (hasFilter ? path.substring(0, path.length - 1) : path)) as keyof typeof MATCH_ROUTES_TO_OBJECT
 		]
 
-	if (!matchingRoute) throw new Error('wrong url')
+	if (!matchingRoute) throw new CustomError(CLIENT_ERROR.WRONG_URL)
 
 	const route = matchingRoute[endpoint as keyof typeof matchingRoute]
-	if (!route) throw new Error('invalid route')
+	if (!route) throw new CustomError(CLIENT_ERROR.INVALID_ROUTE)
 
 	const version = opts?.version ?? 'v1'
 
 	const validFetchArgs = route?.[version]?.[httpMethod]
 
-	if (!validFetchArgs) throw new Error('invalid httpmethod or version')
+	if (!validFetchArgs) throw new CustomError(CLIENT_ERROR.INVALID_HTTP_OR_VER)
 
 	const filters = opts?.filters ?? {}
 	const headers = {
@@ -73,10 +74,14 @@ export async function makeApiCall({ httpMethod = 'GET', endpoint, body, opts }: 
 			signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
 		})
 
-		if (!data.ok) throw new Error("couldn't reach the server")
+		if (!data.ok) throw new CustomError(data.status === 404 ? SERVER_ERROR.CANT_REACH : undefined)
 
-		return await data.json()
-	} catch (error) {
-		console.log(error)
+		return (await data.json()) as T
+	} catch (err) {
+		//todo: this is horrible, just to catch the AbortSignalErr. fix later
+		if (err instanceof DOMException) throw new CustomError(CLIENT_ERROR.TIMEOUT_FETCH)
+		if (err instanceof CustomError) throw new CustomError(err.message as any)
+
+		throw new CustomError()
 	}
 }

@@ -14,6 +14,7 @@ interface InputProps extends InputPasswordProps {
 
 export function GCInput({
 	formFieldName,
+	isDisabled = false,
 	error,
 	register,
 	children,
@@ -40,6 +41,7 @@ export function GCInput({
 							register={register}
 							placeholder={placeholder}
 							isRequired={isRequired}
+							isDisabled={isDisabled}
 						/>
 					) : (
 						<input
@@ -48,6 +50,7 @@ export function GCInput({
 							type={type}
 							placeholder={placeholder}
 							{...(isRequired && { required: true })}
+							disabled={isDisabled}
 						/>
 					)}
 				</Form.Control>

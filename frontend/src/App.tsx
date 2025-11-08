@@ -2,13 +2,21 @@ import type { ReactNode } from 'react'
 import { Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
 import { AuthPage } from './pages/auth/authPage'
+import { AuthContextProvider } from './pages/auth/context'
 import { LibraryPage } from './pages/library/libraryPage'
 
 export function App() {
 	return (
 		<main className="w-screen h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
 			<Switch>
-				<Route path="/auth" component={AuthPage} />
+				<Route
+					path="/auth"
+					component={() => (
+						<AuthContextProvider>
+							<AuthPage />
+						</AuthContextProvider>
+					)}
+				/>
 
 				<Route>
 					<Route path="/library" component={() => <AsideBarWrapper children={<LibraryPage />} />} />

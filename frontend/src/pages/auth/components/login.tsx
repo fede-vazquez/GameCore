@@ -1,12 +1,14 @@
 import { LockSVG, UserSVG } from '@/assets'
 import { GCButton, GCInput } from '@/components/GCgenerics'
+import type { LoginModel } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
-import { Link } from 'wouter'
+import { Link, useLocation } from 'wouter'
 import z from 'zod'
 import type { RegisterAndLoginProps } from '.'
+import { useAuthContext } from '../context'
 import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
@@ -19,7 +21,9 @@ const loginValidator = z.object({
 	[FIELDS_FORM.PASSWORD]: z.string().max(32).min(5).nonoptional()
 })
 
-export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
+export function LogInForm({ SVG_CLASS }: RegisterAndLoginProps) {
+	const { registerUser, isPending, startTransition } = useAuthContext()
+
 	const {
 		register,
 		handleSubmit,
@@ -28,11 +32,18 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 		resolver: zodResolver(loginValidator)
 	})
 
+	const [_, navigate] = useLocation()
+
 	return (
 		<Form.Root
-			onSubmit={handleSubmit(async (e) => {
-				const data = await makeApiCall({ httpMethod: 'POST', endpoint: '/auth/login', body: e })
-				addUser(data)
+			onSubmit={handleSubmit((e) => {
+				startTransition(async () => {
+					const data = await makeApiCall<LoginModel>({ httpMethod: 'POST', endpoint: '/auth/login', body: e })
+
+					if (!data?.User) return
+					registerUser(data.User)
+					navigate('/library')
+				})
 			})}
 			className="flex flex-col gap-3"
 		>
@@ -42,6 +53,7 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 			/>
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.USERNAME]}
 				register={register(FIELDS_FORM.USERNAME)}
 				formFieldName={FIELDS_FORM.USERNAME}
@@ -54,6 +66,7 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 			</GCInput>
 
 			<GCInput
+				isDisabled={isPending}
 				error={errors[FIELDS_FORM.PASSWORD]}
 				register={register(FIELDS_FORM.PASSWORD)}
 				formFieldName={FIELDS_FORM.PASSWORD}
