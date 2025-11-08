@@ -10,9 +10,7 @@ const FIELDS_FORM = {
 	PASSWORD: 'password'
 } as const
 
-const SVG_CLASS = 'absolute left-1.5 top-2 *:text-zinc-500'
-
-export function LogInForm() {
+export function LogInForm({ SVG_CLASS }: { SVG_CLASS?: string }) {
 	return (
 		<Form.Root
 			onSubmit={(e) => {

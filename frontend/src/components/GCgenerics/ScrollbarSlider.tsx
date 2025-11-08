@@ -13,8 +13,8 @@ export function ScrollBarSlider({ className, leftArrow, rightArrow }: ArrowProps
 		*:cursor-pointer *:border-2 *:border-neutral-800 *:rounded-md *:p-0.5 *:h-7 *:w-7 
 		*:hover:bg-neutral-700 *:transition-all ${className}`}
 		>
-			<CaretSVG onClick={leftArrow} position="left" strokeColor="white" />
-			<CaretSVG onClick={rightArrow} position="right" strokeColor="white" />
+			<CaretSVG onClick={leftArrow} position="left" />
+			<CaretSVG onClick={rightArrow} position="right" />
 		</div>
 	)
 }

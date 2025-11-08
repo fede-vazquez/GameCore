@@ -8,6 +8,8 @@ const TABS_PAGES = {
 } as const
 
 const tabsClass = 'border-b-2 px-1 border-b-neutral-300'
+const SVG_CLASS = 'absolute left-1.5 top-2 *:text-zinc-500'
+
 export function AuthPage() {
 	const [activeTab, setActiveTab] = useState<(typeof TABS_PAGES)[keyof typeof TABS_PAGES]>(TABS_PAGES.LOGIN)
 
@@ -37,10 +39,10 @@ export function AuthPage() {
 					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.LOGIN}>
-					<LogInForm />
+					<LogInForm SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.REGISTER}>
-					<RegisterForm />
+					<RegisterForm SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
 
 				<h4

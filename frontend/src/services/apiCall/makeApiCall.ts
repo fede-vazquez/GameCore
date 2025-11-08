@@ -1,4 +1,4 @@
-import type { HTTPMethods } from '@/utils'
+import { MAX_FETCH_TIMEOUT, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
 	ADMIN_URLENDPOINTS,
@@ -17,7 +17,7 @@ import type { Versioning } from './types'
 export const queryClient = new QueryClient()
 
 interface ApiCallParams {
-	httpMethod: HTTPMethods
+	httpMethod?: HTTPMethods
 	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllGenresRoutes | AllLibraryRoutes
 
 	body?: Record<string, Array<unknown> | string | number>
@@ -35,7 +35,7 @@ const MATCH_ROUTES_TO_OBJECT = {
 	'/games': GAMES_URLENDPOINTS
 } as const
 
-export async function makeApiCall({ httpMethod, endpoint, body, opts }: ApiCallParams) {
+export async function makeApiCall({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'
@@ -63,10 +63,13 @@ export async function makeApiCall({ httpMethod, endpoint, body, opts }: ApiCallP
 		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
 	} as const
 
-	return await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
-		headers: {
-			...headers
-		},
-		...(body != null && { body: JSON.stringify(body) })
-	})
+	return await (
+		await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
+			headers: {
+				...headers
+			},
+			...(body != null && { body: JSON.stringify(body) }),
+			signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
+		})
+	).json()
 }
