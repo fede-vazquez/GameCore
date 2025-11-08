@@ -1,5 +1,5 @@
 import { LockSVG, UserSVG } from '@/assets'
-import { GCButton } from '@/components/GCgenerics'
+import { GCButton, GCInput } from '@/components/GCgenerics'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'wouter'
 import z from 'zod'
 import type { RegisterAndLoginProps } from '.'
-import { InputLayout } from './inputs'
 import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
@@ -42,7 +41,7 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				paragraph="New games have been added since your last visit. Check them out!"
 			/>
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.USERNAME]}
 				register={register(FIELDS_FORM.USERNAME)}
 				formFieldName={FIELDS_FORM.USERNAME}
@@ -52,9 +51,9 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<UserSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.PASSWORD]}
 				register={register(FIELDS_FORM.PASSWORD)}
 				formFieldName={FIELDS_FORM.PASSWORD}
@@ -64,7 +63,7 @@ export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<LockSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
 			<Form.Submit asChild className="mt-3 ">
 				<GCButton theme="primary">Log In</GCButton>

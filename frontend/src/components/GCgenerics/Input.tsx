@@ -1,8 +1,8 @@
 import { Form } from 'radix-ui'
 import type { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from 'react'
 import type { FieldError } from 'react-hook-form'
-import { ErrorInputParagraph } from './errorText'
-import { InputPassword, type InputPasswordProps } from './inputPassword'
+import { ErrorInputParagraph } from './input/errorText'
+import { InputPassword, type InputPasswordProps } from './input/inputPassword'
 
 interface InputProps extends InputPasswordProps {
 	formFieldName: string
@@ -12,7 +12,7 @@ interface InputProps extends InputPasswordProps {
 	type: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>['type']
 }
 
-export function InputLayout({
+export function GCInput({
 	formFieldName,
 	error,
 	register,

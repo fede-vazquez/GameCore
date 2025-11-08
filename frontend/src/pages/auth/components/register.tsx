@@ -1,12 +1,11 @@
 import { EmailSVG, LockSVG, UserSVG } from '@/assets'
-import { GCButton } from '@/components/GCgenerics'
+import { GCButton, GCInput } from '@/components/GCgenerics'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import type { RegisterAndLoginProps } from '.'
-import { InputLayout } from './inputs'
 import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
@@ -47,7 +46,7 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 		>
 			<SaludationText title="New in here?" paragraph="Register for manage your games anytime and anywhere." />
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.USERNAME]}
 				register={register(FIELDS_FORM.USERNAME)}
 				formFieldName={FIELDS_FORM.USERNAME}
@@ -57,9 +56,9 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<UserSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.EMAIL]}
 				register={register(FIELDS_FORM.EMAIL)}
 				formFieldName={FIELDS_FORM.EMAIL}
@@ -69,9 +68,9 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<EmailSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.PASSWORD]}
 				register={register(FIELDS_FORM.PASSWORD)}
 				formFieldName={FIELDS_FORM.PASSWORD}
@@ -81,9 +80,9 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<LockSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
-			<InputLayout
+			<GCInput
 				error={errors[FIELDS_FORM.CONFIRM_PASSWORD]}
 				register={register(FIELDS_FORM.CONFIRM_PASSWORD)}
 				formFieldName={FIELDS_FORM.CONFIRM_PASSWORD}
@@ -93,7 +92,7 @@ export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 				isRequired
 			>
 				<LockSVG className={SVG_CLASS} />
-			</InputLayout>
+			</GCInput>
 
 			<Form.Submit asChild className="mt-3">
 				<GCButton theme="primary">Register</GCButton>
