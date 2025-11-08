@@ -63,13 +63,20 @@ export async function makeApiCall({ httpMethod = 'GET', endpoint, body, opts }: 
 		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
 	} as const
 
-	return await (
-		await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
+	try {
+		const data = await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
+			method: httpMethod,
 			headers: {
 				...headers
 			},
-			...(body != null && { body: JSON.stringify(body) }),
+			...(body != null && { body: JSON.stringify(body ?? {}) }),
 			signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
 		})
-	).json()
+
+		if (!data.ok) throw new Error("couldn't reach the server")
+
+		return await data.json()
+	} catch (error) {
+		console.log(error)
+	}
 }

@@ -1,11 +1,11 @@
 import { EmailSVG, LockSVG, UserSVG } from '@/assets'
 import { GCButton } from '@/components/GCgenerics'
-import { useGlobalContext } from '@/context'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
+import type { RegisterAndLoginProps } from '.'
 import { InputLayout } from './inputs'
 import { SaludationText } from './saludationText'
 
@@ -28,9 +28,7 @@ const registerValidator = z
 		error: 'Passwords must match'
 	})
 
-export function RegisterForm({ SVG_CLASS }: { SVG_CLASS?: string }) {
-	const { setClientUser } = useGlobalContext()
-
+export function RegisterForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
 	const {
 		register,
 		handleSubmit,
@@ -43,7 +41,7 @@ export function RegisterForm({ SVG_CLASS }: { SVG_CLASS?: string }) {
 		<Form.Root
 			onSubmit={handleSubmit(async (e) => {
 				const data = await makeApiCall({ httpMethod: 'POST', endpoint: '/auth/register', body: e })
-				setClientUser(data)
+				addUser(data)
 			})}
 			className="flex flex-col gap-3"
 		>

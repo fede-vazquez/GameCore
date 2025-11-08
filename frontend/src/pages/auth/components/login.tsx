@@ -1,7 +1,12 @@
 import { LockSVG, UserSVG } from '@/assets'
 import { GCButton } from '@/components/GCgenerics'
+import { makeApiCall } from '@/services/apiCall'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
+import { useForm } from 'react-hook-form'
 import { Link } from 'wouter'
+import z from 'zod'
+import type { RegisterAndLoginProps } from '.'
 import { InputLayout } from './inputs'
 import { SaludationText } from './saludationText'
 
@@ -10,13 +15,26 @@ const FIELDS_FORM = {
 	PASSWORD: 'password'
 } as const
 
-export function LogInForm({ SVG_CLASS }: { SVG_CLASS?: string }) {
+const loginValidator = z.object({
+	[FIELDS_FORM.USERNAME]: z.string().max(16).min(3).nonoptional(),
+	[FIELDS_FORM.PASSWORD]: z.string().max(32).min(5).nonoptional()
+})
+
+export function LogInForm({ SVG_CLASS, addUser }: RegisterAndLoginProps) {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm<z.infer<typeof loginValidator>>({
+		resolver: zodResolver(loginValidator)
+	})
+
 	return (
 		<Form.Root
-			onSubmit={(e) => {
-				e.preventDefault()
-				alert('yay')
-			}}
+			onSubmit={handleSubmit(async (e) => {
+				const data = await makeApiCall({ httpMethod: 'POST', endpoint: '/auth/login', body: e })
+				addUser(data)
+			})}
 			className="flex flex-col gap-3"
 		>
 			<SaludationText
@@ -24,11 +42,21 @@ export function LogInForm({ SVG_CLASS }: { SVG_CLASS?: string }) {
 				paragraph="New games have been added since your last visit. Check them out!"
 			/>
 
-			<InputLayout formFieldName={FIELDS_FORM.USERNAME} label="Username" type="text" placeholder="Jane Doe" isRequired>
+			<InputLayout
+				error={errors[FIELDS_FORM.USERNAME]}
+				register={register(FIELDS_FORM.USERNAME)}
+				formFieldName={FIELDS_FORM.USERNAME}
+				label="Username"
+				type="text"
+				placeholder="Jane Doe"
+				isRequired
+			>
 				<UserSVG className={SVG_CLASS} />
 			</InputLayout>
 
 			<InputLayout
+				error={errors[FIELDS_FORM.PASSWORD]}
+				register={register(FIELDS_FORM.PASSWORD)}
 				formFieldName={FIELDS_FORM.PASSWORD}
 				label="Password"
 				type="password"

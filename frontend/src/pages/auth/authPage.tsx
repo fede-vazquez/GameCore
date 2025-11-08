@@ -1,5 +1,7 @@
+import { useGlobalContext } from '@/context'
+import type { RegisterModel } from '@/models'
 import { Tabs } from 'radix-ui'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { LogInForm, RegisterForm } from './components'
 
 const TABS_PAGES = {
@@ -12,6 +14,11 @@ const SVG_CLASS = 'absolute left-1.5 top-2 *:text-zinc-500'
 
 export function AuthPage() {
 	const [activeTab, setActiveTab] = useState<(typeof TABS_PAGES)[keyof typeof TABS_PAGES]>(TABS_PAGES.LOGIN)
+	const { setClientUser } = useGlobalContext()
+
+	const registerUser = useCallback((client: RegisterModel) => {
+		setClientUser(client)
+	}, [])
 
 	return (
 		<section className="w-screen h-screen flex justify-center items-center gap-5 p-10 overflow-hidden">
@@ -39,19 +46,18 @@ export function AuthPage() {
 					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.LOGIN}>
-					<LogInForm SVG_CLASS={SVG_CLASS} />
+					<LogInForm addUser={registerUser} SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
 				<Tabs.Content className="min-h-[500px] max-w-[450px]" value={TABS_PAGES.REGISTER}>
-					<RegisterForm SVG_CLASS={SVG_CLASS} />
+					<RegisterForm addUser={registerUser} SVG_CLASS={SVG_CLASS} />
 				</Tabs.Content>
 
-				<h4
+				<p
 					className="absolute bottom-5
-				 flex flex-col justify-center items-center text-pretty text-sm text-neutral-500"
+				 flex flex-col justify-center items-center text-center text-sm text-neutral-500"
 				>
-					Fun Fact of the day:
-					<p>Coding Bugs were NOT named after an actual bug.</p>
-				</h4>
+					Coding Bugs were NOT named after an actual bug.
+				</p>
 			</Tabs.Root>
 
 			{/* random game image to alternate from the assets or /public */}

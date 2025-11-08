@@ -6,3 +6,4 @@ export interface UserModel {
 }
 
 export type RegisterModel = Pick<UserModel, 'Id' | 'Email' | 'Username'>
+export type LoginModel = { Token: string; User: RegisterModel }

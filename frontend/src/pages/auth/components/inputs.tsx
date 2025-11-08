@@ -12,7 +12,6 @@ interface InputProps extends InputPasswordProps {
 	type: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>['type']
 }
 
-const INPUT_CLASSNAME = 'border border-zinc-600 rounded-lg py-2 px-10 w-full'
 export function InputLayout({
 	formFieldName,
 	error,
@@ -23,6 +22,7 @@ export function InputLayout({
 	placeholder,
 	isRequired
 }: InputProps) {
+	const INPUT_CLASSNAME = `border border-zinc-600 rounded-lg py-2 px-10 w-full ${error != null ? 'border-red-500!' : ''}`
 	return (
 		<Form.Field className="flex flex-col gap-y-1" name={formFieldName}>
 			<Form.Label className="text-zinc-300 font-semibold">{label}</Form.Label>
