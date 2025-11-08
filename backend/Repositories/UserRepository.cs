@@ -1,12 +1,16 @@
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using GameCore.Specifications;
+using Microsoft.EntityFrameworkCore;
 namespace GameCore.Repositories;
 
 using GameCore.Models.User;
 using GameCore.Config;
 public interface IUserRepository : IRepository<User>
 {
-    public Task<IQueryable<User>> GetQueryAsync();
+    public Task<IEnumerable<User>> GetAllAsync(ISpecification<User> spec);
 }
 public class UserRepository : Repository<User>, IUserRepository
 {
@@ -15,8 +19,9 @@ public class UserRepository : Repository<User>, IUserRepository
     {
         _db = db;
     }
-    public async Task<IQueryable<User>> GetQueryAsync()
+    public async Task<IEnumerable<User>> GetAllAsync(ISpecification<User> spec = null)
     {
-        return _db.Users;
+        return await SpecificationEvaluator.GetQuery(_db.Users, spec).ToListAsync();
     }
+
 }

@@ -10,6 +10,8 @@ using AutoMapper;
 using System.Net;
 using GameCore.Enums;
 using Microsoft.EntityFrameworkCore;
+using GameCore.Specifications;
+
 public class UserServices
 {
     private readonly IUserRepository _repo;
@@ -17,73 +19,33 @@ public class UserServices
     private readonly IEncoderServices _encoderServices;
     private readonly RolServices _roleServices;
 
-    public UserServices(IUserRepository repo, IMapper mapper, IEncoderServices encoderServices, RolServices roleServices)
+    private readonly ISpecificationUserFactory _specFactory = new UserSpecificationFactory();
+
+    public UserServices(IUserRepository repo, IMapper mapper, IEncoderServices encoderServices, RolServices roleServices, ISpecificationUserFactory specFactory)
     {
         _repo = repo;
         _mapper = mapper;
         _encoderServices = encoderServices;
         _roleServices = roleServices;
+        _specFactory = specFactory;
     }
 
     async public Task<UserListPagedResultDTO> GetAllAsync(UserListParametersDTO? parameters)
     {
-        var query = await _repo.GetQueryAsync();
         var result = new UserListPagedResultDTO();
+
         if (parameters != null)
         {
-            if (parameters.Username != null)
-            {
-                query = query.Where(u => u.Username.Contains(parameters.Username));
-            }
-            if (parameters.Email != null)
-            {
-                query = query.Where(u => u.Email.Contains(parameters.Email));
-            }
-            if (parameters.RolId != null)
-            {
-                query = query.Where(u => u.RolId == parameters.RolId);
-            }
-            if (parameters.IsActive != null)
-            {
-                query = query.Where(u => u.IsActive == parameters.IsActive);
-            }
-            if (parameters.CreatedAfter != null)
-            {
-                query = query.Where(u => u.CreatedAt > parameters.CreatedAfter);
-            }
-            //ordenar
-            if (parameters.SortBy != null)
-            {
-                switch (parameters.SortBy)
-                {
-                    case SORT_BY.USERNAME:
-                        query = query.OrderBy(u => u.Username);
-                        break;
-                    case SORT_BY.EMAIL:
-                        query = query.OrderBy(u => u.Email);
-                        break;
-                    case SORT_BY.CREATED_AT:
-                        query = query.OrderBy(u => u.CreatedAt);
-                        break;
-                    default:
-                        query = query.OrderBy(u => u.Username);
-                        break;
-                }
-                if (!parameters.Ascending)
-                {
-                    query = query.OrderByDescending(u => u.Username);
+            var spec = _specFactory.CreateUserFilterSpecification(parameters);
 
-                }
-            }
-            result.TotalCount = await query.CountAsync();
-
-            //paginar
-            var skip = (parameters.PageNumber - 1) * parameters.PageSize;
-            query = query.Skip(skip).Take(parameters.PageSize);
-            var users = await query.ToListAsync();
+            var users = await _repo.GetAllAsync(spec);
             result.Users = _mapper.Map<List<UserWithoutPassDTO>>(users);
-            result.PageNumber = parameters.PageNumber;
-            result.PageSize = parameters.PageSize;
+            result.TotalCount = users.Count();
+            if (parameters != null)
+            {
+                result.PageNumber = parameters.PageNumber;
+                result.PageSize = parameters.PageSize;
+            }
         }
         else
         {

@@ -48,6 +48,7 @@ public class GameFilterSpecification : Specification<Game>
                 case SORT_BY.TITLE:
                     AddOrderBy(g => g.Title);
                     break;
+
                 case SORT_BY.RELEASE_DATE:
                     AddOrderBy(g => g.ReleaseDate);
                     break;
