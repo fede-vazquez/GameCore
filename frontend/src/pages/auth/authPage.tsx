@@ -1,5 +1,6 @@
 import { useGlobalContext } from '@/context'
 import type { RegisterModel } from '@/models'
+import { FUN_FACTS_STRINGS } from '@/utils'
 import { Tabs } from 'radix-ui'
 import { useCallback, useState } from 'react'
 import { LogInForm, RegisterForm } from './components'
@@ -25,11 +26,11 @@ export function AuthPage() {
 			<Tabs.Root
 				onValueChange={(val) => setActiveTab(val as (typeof TABS_PAGES)[keyof typeof TABS_PAGES])}
 				defaultValue={TABS_PAGES.LOGIN}
-				className="flex flex-col gap-5 border border-zinc-800 border-t-zinc-700 bg-darkFGAlt py-5 px-8 rounded-lg shadow-xl shadow-neutral-900
-				h-full min-w-[50%] justify-center items-center relative"
+				className="flex flex-col gap-7 border border-zinc-800 border-t-zinc-700 bg-darkFGAlt py-5 px-8 rounded-lg shadow-xl shadow-neutral-900
+				h-full p-20 md:p-6 min-w-[50%] justify-center items-center relative"
 			>
 				<img src="/generic_logo.png" alt="GameStore Logo" className="absolute w-56 top-7 left-7" />
-				<Tabs.List className="flex justify-evenly text-xl gap-5 font-semibold">
+				<Tabs.List className="flex justify-evenly text-xl gap-4 md:gap-10 font-semibold">
 					<Tabs.Trigger
 						aria-label="Access to your account"
 						className={`${activeTab === TABS_PAGES.LOGIN && tabsClass}`}
@@ -56,12 +57,15 @@ export function AuthPage() {
 					className="absolute bottom-5
 				 flex flex-col justify-center items-center text-center text-sm text-neutral-500"
 				>
-					Coding Bugs were NOT named after an actual bug.
+					{FUN_FACTS_STRINGS[Math.floor(Math.random() * FUN_FACTS_STRINGS.length)]}
 				</p>
 			</Tabs.Root>
 
 			{/* random game image to alternate from the assets or /public */}
-			<img src="/fallback_image.png" className="w-full h-full object-cover rounded-md" />
+			<img
+				src="/fallback_image.png"
+				className="hidden md:inline-block w-full h-full object-cover rounded-md shadow-xl shadow-neutral-900"
+			/>
 		</section>
 	)
 }
