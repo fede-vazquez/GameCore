@@ -1,5 +1,6 @@
 import SalesPerMonth from './components/salesPerMonth/SalesPerMonth'
 import GeneralInfo from './components/generalInfo/GeneralInfo'
+import { CategoryInfo } from './components'
 
 export function DashboardPage() {
 	return (
@@ -7,9 +8,12 @@ export function DashboardPage() {
 			<article className="w-full p-5">
 				<GeneralInfo />
 			</article>
-			<div className="w-full">
+			<article className="w-full">
 				<SalesPerMonth />
-			</div>
+			</article>
+			<article className="w-full">
+				<CategoryInfo />
+			</article>
 		</section>
 	)
 }

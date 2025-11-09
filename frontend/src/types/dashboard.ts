@@ -16,3 +16,8 @@ export interface InfoCardProps {
 	bgColor: string
 	extraStyles?: string
 }
+
+export interface BestSellingGames {
+	title: string
+	totalSales: number
+}

@@ -4,13 +4,17 @@ import { PieChardComponent } from '../PieChardComponent'
 import type { SalesMonthData } from '@/types/dashboard'
 
 export default function SalesPerMonth() {
-	const [salesData, setSalesData] = useState({
-		sales: [] as SalesMonthData[],
+	const [salesData, setSalesData] = useState<{
+		sales: SalesMonthData[]
+		firstYear: number
+		lastYear: number
+	}>({
+		sales: [],
 		firstYear: 0,
 		lastYear: 0
 	})
 
-	const [year, setYear] = useState<number>(0)
+	const [year, setYear] = useState<number>(new Date().getFullYear())
 
 	const handleYearChange = (year: number) => {
 		setYear(year)
@@ -33,7 +37,7 @@ export default function SalesPerMonth() {
 		<section>
 			<div className="p-3">
 				<label className="text-2xl">
-					Seleccione el año:
+					Información de ventas del año:
 					{/* Selector del año (la api me trae la fecha más antigua y de ahí los años hasta la fecha actual)*/}
 					<select className="ml-3" value={year} onChange={(e) => handleYearChange(Number(e.target.value))}>
 						{years.reverse().map((year) => (
