@@ -1,21 +1,14 @@
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import type { SalesMonthData } from '@/types/dashboard'
 
 interface SalesPerMonthProps {
 	data: SalesMonthData[]
 }
 
-export function SalesPerMonth({ data }: SalesPerMonthProps) {
-	if (data.length === 0)
-		return (
-			<div className="p-5">
-				<h2 className="text-2xl font-bold">No hay datos de ventas</h2>
-			</div>
-		)
-
+export function SalesPerMonthChart({ data }: SalesPerMonthProps) {
 	return (
-		<div className="p-5">
-			<BarChart style={{ width: '100%', maxHeight: '70vh', aspectRatio: 1.5 }} responsive data={data}>
+		<ResponsiveContainer width="100%" aspect={1.5} initialDimension={{ width: 320, height: 200 }}>
+			<BarChart data={data}>
 				<CartesianGrid strokeDasharray="5" strokeOpacity={0.5} />
 				<XAxis dataKey="month" />
 				<YAxis width="auto" domain={[0, (dataMax: number) => dataMax * 1.2]} />
@@ -41,6 +34,6 @@ export function SalesPerMonth({ data }: SalesPerMonthProps) {
 					activeBar={<Rectangle fill="gold" stroke="purple" />}
 				/>
 			</BarChart>
-		</div>
+		</ResponsiveContainer>
 	)
 }

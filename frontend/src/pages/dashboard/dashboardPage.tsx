@@ -1,5 +1,4 @@
-import SalesPerMonthController from './components/salesPerMonth/SalesPerMonth'
-import SalesDiscountInfoController from './components/salesDiscountInfo/SalesDiscountInfo'
+import SalesPerMonth from './components/salesPerMonth/SalesPerMonth'
 import GeneralInfo from './components/generalInfo/GeneralInfo'
 
 export function DashboardPage() {
@@ -8,13 +7,8 @@ export function DashboardPage() {
 			<article className="w-full p-5">
 				<GeneralInfo />
 			</article>
-			<div className="w-full flex flex-col lg:flex-row gap-4">
-				<article className="w-full">
-					<SalesPerMonthController />
-				</article>
-				<article className="w-full p-5">
-					<SalesDiscountInfoController />
-				</article>
+			<div className="w-full">
+				<SalesPerMonth />
 			</div>
 		</section>
 	)

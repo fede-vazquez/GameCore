@@ -2,6 +2,8 @@ export interface SalesMonthData {
 	month: string
 	totalSales: number
 	salesWhitDiscount: number
+	totalAmount: number
+	totalAmountsavedWhitDiscount: number
 }
 
 export interface PieChardComponentProps {
