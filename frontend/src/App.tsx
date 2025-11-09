@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react'
 import { Redirect, Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
+import { GCHeader } from './components/GCgenerics'
 import { useGlobalContext } from './context'
 import { AuthPage } from './pages/auth/authPage'
 import { AuthContextProvider } from './pages/auth/context'
+import { CatalogPage } from './pages/catalog/catalogPage'
 import { LibraryPage } from './pages/library/libraryPage'
 
 export function App() {
@@ -27,6 +29,8 @@ export function App() {
 					component={() => (true ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />)}
 				/>
 
+				<Route path="/games" component={() => <AsideBarWrapper children={<CatalogPage />} />} />
+
 				<Route component={() => <>404</>} />
 			</Switch>
 		</main>
@@ -38,7 +42,11 @@ function AsideBarWrapper({ children }: { children: ReactNode }) {
 	return (
 		<>
 			<AsideBar />
-			<article className="grow md:ml-[225px] pt-2.5 h-full mt-3 px-5 lg:px-5 ">{children}</article>
+
+			<article className="grow md:ml-[225px] pt-2.5 h-full mt-3 px-5 lg:px-5 ">
+				<GCHeader />
+				{children}
+			</article>
 		</>
 	)
 }

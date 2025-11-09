@@ -6,14 +6,17 @@ import { InputPassword, type InputPasswordProps } from './input/inputPassword'
 
 interface InputProps extends InputPasswordProps {
 	formFieldName: string
+	classInput?: string
 	error?: FieldError | undefined
 	children?: ReactNode
-	label: string
+	label?: string
 	type: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>['type']
 }
 
 export function GCInput({
 	formFieldName,
+	classInput,
+	className,
 	isDisabled = false,
 	error,
 	register,
@@ -23,9 +26,9 @@ export function GCInput({
 	placeholder,
 	isRequired
 }: InputProps) {
-	const INPUT_CLASSNAME = `border border-zinc-600 rounded-lg py-2 px-10 w-full ${error != null ? 'border-red-500!' : ''}`
+	const INPUT_CLASSNAME = `border border-zinc-600 rounded-lg py-2 pl-10 pr-10 ${classInput}  w-full ${error != null ? 'border-red-500!' : ''}`
 	return (
-		<Form.Field className="flex flex-col gap-y-1" name={formFieldName}>
+		<Form.Field className={`flex flex-col gap-y-1 ${className}`} name={formFieldName}>
 			<Form.Label className="text-zinc-300 font-semibold">{label}</Form.Label>
 
 			<span className="relative">
@@ -45,8 +48,8 @@ export function GCInput({
 						/>
 					) : (
 						<input
-							{...register}
-							className={INPUT_CLASSNAME}
+							{...(!register && { register })}
+							className={`${INPUT_CLASSNAME}`}
 							type={type}
 							placeholder={placeholder}
 							{...(isRequired && { required: true })}

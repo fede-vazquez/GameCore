@@ -18,7 +18,7 @@ export function GCSearchBar({ variant, placeholder, side, ref, className, svg }:
 			variant={variant ?? 'classic'}
 			placeholder={placeholder}
 			ref={ref}
-			className={`rounded-xl! ${className}`}
+			className={`rounded-xl! border border-zinc-700 *:text-primaryWhite! *:placeholder:text-neutral-400! bg-neutral-900! ${className}`}
 		>
 			<TextField.Slot side={side ?? 'left'}>{svg ?? <SearchSVG className="text-zinc-400" />}</TextField.Slot>
 		</TextField.Root>

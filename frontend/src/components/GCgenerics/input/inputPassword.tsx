@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { UseFormRegisterReturn } from 'react-hook-form'
 
 export interface InputPasswordProps {
-	register: UseFormRegisterReturn<any>
+	register?: UseFormRegisterReturn<any>
 	isDisabled?: boolean
 	className?: string
 	placeholder?: string
@@ -18,7 +18,7 @@ export function InputPassword({ className, isDisabled, register, placeholder, is
 		<>
 			<span className="relative flex">
 				<input
-					{...register}
+					{...(!register && { register })}
 					className={`pr-10! ${className}`}
 					type={!seePassword ? 'password' : 'text'}
 					placeholder={placeholder}

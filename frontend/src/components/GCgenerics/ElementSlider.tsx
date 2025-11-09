@@ -2,6 +2,7 @@ import type { GameModel } from '@/models'
 import { Heading } from '@radix-ui/themes'
 import { useCallback, useRef } from 'react'
 import { GameCard } from '../game'
+import { GCDivider } from './CoolDivider'
 import { ScrollBarSlider } from './ScrollbarSlider'
 
 interface ElementSliderProps {
@@ -38,20 +39,15 @@ export function ElementSlider({
 	return (
 		<article className={`flex flex-col gap-2.5 relative ${className}`}>
 			{!removeHeadings && (
-				<>
-					<span className="flex items-center justify-between">
-						<Heading as="h4">{titleName ?? 'No category name'}</Heading>
-						<ScrollBarSlider
-							className="z-10"
-							leftArrow={() => handleScroll('left')}
-							rightArrow={() => handleScroll('right')}
-						/>
-					</span>
-					<div
-						className='after:content-[""] after:w-full after:h-0.5 after:absolute after:top-7 after:translate-y-1 after:rounded-md
-					after:bg-linear-to-r after:from-neutral-800 after:via-neutral-600 after:to-neutral-800'
+				<span className="flex items-center justify-between mb-2">
+					<Heading as="h4">{titleName ?? 'No category name'}</Heading>
+					<ScrollBarSlider
+						className="z-10"
+						leftArrow={() => handleScroll('left')}
+						rightArrow={() => handleScroll('right')}
 					/>
-				</>
+					<GCDivider />
+				</span>
 			)}
 
 			{/* lo saque de internet y lo adapte, refactorizar esto si hay tiempo */}
