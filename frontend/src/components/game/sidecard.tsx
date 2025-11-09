@@ -1,18 +1,13 @@
 import type { GameModel } from '@/models'
+import { fallbackGame } from '@/utils'
 
 interface gameSideCardProps {
 	game: Pick<GameModel, 'title' | 'id' | 'imageUrl'>
 	className?: string
 }
 
-const fallback: gameSideCardProps['game'] = {
-	title: 'Factorio',
-	id: Math.floor(Math.random() * 100),
-	imageUrl: '/fallback_image.png'
-}
-
 export function GameSideCard({ game, className }: gameSideCardProps) {
-	const testing = fallback
+	const testing = fallbackGame
 
 	return (
 		<span className={`flex flex-row ${className}`}>

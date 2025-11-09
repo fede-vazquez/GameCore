@@ -8,7 +8,8 @@ export type ResponsesTypes = GameModel
 export type SetState<T extends any> = React.Dispatch<React.SetStateAction<T>>
 
 export const QUERY_KEYS = {
-	REGISTER_FORM: 'register_form'
+	GET_LIBRARY_GAMES: 'library_games',
+	GET_DISCOUNT_GAMES: 'discount_games'
 } as const
 
 export const FUN_FACTS_STRINGS = [
@@ -21,3 +22,14 @@ export const FUN_FACTS_STRINGS = [
 	'People blink less when they use computers',
 	'The first gigabyte drive cost $40,000'
 ] as const
+
+export const fallbackGame: GameModel = {
+	title: 'Factorio',
+	id: Math.floor(Math.random() * 100),
+	description: 'The factory must grow.',
+	price: 17.99,
+	imageUrl: '/fallback_image.png',
+	createdAt: new Date(),
+	deletedAt: new Date(),
+	releaseDate: new Date()
+}

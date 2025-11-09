@@ -1,5 +1,5 @@
 import type { GameModel } from '@/models'
-import { numberParser } from '@/utils'
+import { fallbackGame, numberParser } from '@/utils'
 
 interface gameCardProps {
 	game: Pick<GameModel, 'title' | 'id' | 'description' | 'price' | 'imageUrl'>
@@ -8,16 +8,8 @@ interface gameCardProps {
 	className?: string
 }
 
-const fallback: gameCardProps['game'] = {
-	title: 'Factorio',
-	id: Math.floor(Math.random() * 100),
-	description: 'The factory must grow.',
-	price: 17.99,
-	imageUrl: '/fallback_image.png'
-}
-
 export function GameCard({ game, discountPercentage, className }: gameCardProps) {
-	const testing = fallback
+	const testing = fallbackGame
 	const dsPer = Math.random() > 0.8 ? Math.floor(Math.random() * 100) : 0
 	const price = numberParser(testing.price)
 	return (

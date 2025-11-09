@@ -5,7 +5,8 @@ import { GameCard } from '../game'
 import { ScrollBarSlider } from './ScrollbarSlider'
 
 interface ElementSliderProps {
-	elements: GameModel[]
+	elements: GameModel[] | undefined
+	fallbackMsg?: { title?: string; description?: string }
 	titleName?: string
 	className?: string
 	pixelMovement?: number
@@ -13,6 +14,7 @@ interface ElementSliderProps {
 }
 export function ElementSlider({
 	className,
+	fallbackMsg,
 	pixelMovement = 200,
 	removeHeadings = false,
 	elements,
@@ -55,7 +57,7 @@ export function ElementSlider({
 			{/* lo saque de internet y lo adapte, refactorizar esto si hay tiempo */}
 			<section
 				ref={scrollbarRef}
-				className={`no-scrollbars bg-neutral-900 px-2 py-1 rounded-xl w-full flex flex-nowrap *:shrink-0! gap-1 overflow-x-auto ${!elements.length && 'py-12!'}`}
+				className={`no-scrollbars bg-neutral-900 px-2 py-1 rounded-xl w-fit flex flex-nowrap *:shrink-0! gap-1 overflow-x-auto ${!elements?.length && 'py-12! w-full!'}`}
 				onMouseDown={(e) => {
 					isDragged.current = true
 					startX.current = e.pageX - (scrollbarRef.current?.offsetLeft ?? 0)
@@ -71,16 +73,18 @@ export function ElementSlider({
 				onMouseUp={() => (isDragged.current = false)}
 				onMouseLeave={() => (isDragged.current = false)}
 			>
-				{elements.length ? (
+				{elements?.length ? (
 					elements.map((game, idx) => {
 						return <GameCard key={game?.id ?? idx} game={game} />
 					})
 				) : (
 					<span className="flex flex-col gap-2 grow justify-center items-center">
 						<h3 className="content-center text-center w-full h-full text-xl font-semibold text-neutral-300 flex justify-center items-center">
-							No games yet :C
+							{fallbackMsg?.title ?? 'No games yet :C'}
 						</h3>
-						<p className="text-neutral-500">You must be new here. Use the Searchbar at the top, its free!</p>
+						<p className="text-neutral-500">
+							{fallbackMsg?.description ?? 'You must be new here. Use the Searchbar at the top, its free!'}
+						</p>
 					</span>
 				)}
 			</section>
