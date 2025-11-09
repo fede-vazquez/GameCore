@@ -1,4 +1,5 @@
 import { ConsoleSVG, ControllerSVG, StoreSVG, UserSVG } from '@/assets'
+import { useGlobalContext } from '@/context'
 import type { GameModel } from '@/models'
 import type { ReactElement } from 'react'
 import { Link } from 'wouter'
@@ -6,6 +7,7 @@ import { GameSideCard } from '../game'
 import { GCButton } from '../GCgenerics'
 
 export function AsideBar() {
+	const { isMenuActive, setIsMenuActive, clientUser } = useGlobalContext()
 	return (
 		<>
 			<style>
@@ -16,7 +18,19 @@ export function AsideBar() {
 				`}
 			</style>
 
-			<aside className="fixed flex flex-col overflow-clip h-full w-[225px] bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-neutral-700 divide-solid *:px-2">
+			{/* this is the easy way */}
+			<div
+				className={`after:transition-all after:duration-500 after:content-[""] after:w-screen after:h-screen after:fixed
+					after:z-40 after:bg-transparent after:pointer-events-none
+					${isMenuActive && 'after:bg-black/30! after:pointer-events-auto!'}`}
+				onClick={() => setIsMenuActive(false)}
+			/>
+			<aside
+				className={`-translate-x-full md:translate-0 z-50! transition-all duration-300 fixed flex flex-col overflow-clip h-full w-[225px] 
+				bg-darkFG gap-y-5 rounded-r-xl divide-y-2 divide-neutral-700 divide-solid *:px-2
+				${isMenuActive && 'translate-0!'}
+				`}
+			>
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
 						<img src="/generic_logo.png" className="aspect-square object-contain w-full h-20" />
@@ -49,7 +63,7 @@ export function AsideBar() {
 					<div id="shadowTest" className="absolute w-full h-10 -translate-y-full -top-5"></div>
 					<GCButton theme="primary" className="flex gap-0.5">
 						<UserSVG />
-						{Math.random() >= 0.5 ? 'Profile' : 'Log In'}
+						{clientUser?.Id ? 'Profile' : 'Log In'}
 					</GCButton>
 				</footer>
 			</aside>

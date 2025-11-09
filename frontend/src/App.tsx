@@ -33,7 +33,7 @@ function AsideBarWrapper({ children }: { children: ReactNode }) {
 	return (
 		<>
 			<AsideBar />
-			<article className="grow ml-[225px] pt-2.5 h-full px-10">{children}</article>
+			<article className="grow md:ml-[225px] pt-2.5 h-full mt-3 px-5 lg:px-5 ">{children}</article>
 		</>
 	)
 }

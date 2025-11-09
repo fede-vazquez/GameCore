@@ -5,6 +5,9 @@ import { createContext } from 'react'
 export interface globalContextArgs {
 	clientUser: (Partial<UserModel> & Pick<UserModel, 'Id' | 'Username'>) | undefined
 	setClientUser: SetState<globalContextArgs['clientUser']>
+
+	isMenuActive: boolean
+	setIsMenuActive: SetState<boolean>
 }
 
 export const GlobalContext = createContext<globalContextArgs>({} as globalContextArgs)

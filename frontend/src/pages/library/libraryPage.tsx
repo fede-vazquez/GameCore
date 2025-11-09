@@ -1,14 +1,26 @@
+import { AsideMenuButton } from '@/components/asidebar'
 import { GCSearchBar } from '@/components/GCgenerics'
 import { ElementSlider } from '@/components/GCgenerics/ElementSlider'
+import { useGlobalContext } from '@/context'
+import { useLocation } from 'wouter'
 
 export function LibraryPage() {
-	const games = new Array(Math.floor(Math.random() * 3) + 5).fill(null)
+	const { clientUser } = useGlobalContext()
+	const [_, setNavigation] = useLocation()
+
+	// if (!clientUser?.Id) return setNavigation('/auth')
+
+	const games = new Array(Math.floor(Math.random() * 5) + 5).fill(null)
 	return (
 		<>
-			<header className="w-[380px] mb-10">
+			<header className="relative w-full flex gap-4 mb-10 bg-neutral-800 p-2 rounded-t-lg">
+				<div className="absolute w-full h-0.5 right-0 bg-neutral-700 bottom-0 translate-y-0.5" />
+
+				<AsideMenuButton />
+
 				<GCSearchBar
 					placeholder="Start searching..."
-					className="w-full border border-zinc-700 *:placeholder:text-neutral-400! bg-neutral-900! "
+					className="w-[380px] border border-zinc-700 *:text-primaryWhite! *:placeholder:text-neutral-400! bg-neutral-900! "
 				/>
 			</header>
 
