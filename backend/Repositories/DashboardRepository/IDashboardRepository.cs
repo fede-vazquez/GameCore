@@ -7,5 +7,6 @@ namespace GameCore.Repositories.DashboardRepository
     {
         Task<GeneralInfoResponseDTO> GetGeneralInfoAsync();
         Task<MonthlySalesPerYearDTO> GetMonthlySalesPerYearAsync(int year);
+        Task<GenreGeneralInfoResponseDTO> GetGenreGeneralInfoAsync(string genreName);
     }
 }

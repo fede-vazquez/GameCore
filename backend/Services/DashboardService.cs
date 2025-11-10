@@ -31,5 +31,22 @@ namespace GameCore.Services
 
             return monthlySales;
         }
+
+        public async Task<GenreGeneralInfoResponseDTO> GetGenreGeneralInfoAsync(string genreName)
+        {
+            if (string.IsNullOrEmpty(genreName))
+            {
+                throw new HttpResponseError(HttpStatusCode.BadRequest, "Genre name is required");
+            }
+
+            var genreInfo = await _repo.GetGenreGeneralInfoAsync(genreName);
+            
+            if (genreInfo.TotalGames == 0)
+            {
+                throw new HttpResponseError(HttpStatusCode.NotFound, $"No games found for genre '{genreName}'");
+            }
+
+            return genreInfo;
+        }
     }
 }
