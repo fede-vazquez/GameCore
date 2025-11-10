@@ -7,6 +7,7 @@ interface GCSelectProps {
 }
 
 export function GCSelect({ options, placeholder }: GCSelectProps) {
+	const newOptions = ['Anything', ...options]
 	return (
 		<Select.Root>
 			<Select.Trigger className="w-full">
@@ -25,20 +26,15 @@ export function GCSelect({ options, placeholder }: GCSelectProps) {
 					</Select.ScrollUpButton>
 
 					<Select.Viewport>
-						<Select.Item value="anything" className="flex">
-							<Select.ItemIndicator>
-								<CheckedSVG />
-							</Select.ItemIndicator>
-							<Select.ItemText>Anything</Select.ItemText>
-						</Select.Item>
-
-						<Select.Separator />
-
 						<Select.Group>
-							{options.map((t) => (
-								<Select.Item value={t.toLowerCase()} key={t.toLowerCase()} className="flex">
+							{newOptions.map((t) => (
+								<Select.Item
+									value={t.toLowerCase()}
+									key={t.toLowerCase()}
+									className="flex p-1 rounded-sm items-center hover:bg-neutral-800 cursor-pointer"
+								>
 									<Select.ItemIndicator>
-										<CheckedSVG />
+										<CheckedSVG className="h-5" />
 									</Select.ItemIndicator>
 									<Select.ItemText>{t}</Select.ItemText>
 								</Select.Item>

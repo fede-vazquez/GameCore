@@ -17,7 +17,7 @@ export function FilterDropMenu() {
 	const [isOpen, setIsOpen] = useState<boolean>(true)
 
 	return (
-		<DropdownMenu.Root open={isOpen}>
+		<DropdownMenu.Root open={isOpen} modal>
 			{/* radix wont let me use the GCButton */}
 			<DropdownMenu.Trigger
 				onClick={() => setIsOpen(true)}
