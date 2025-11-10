@@ -9,7 +9,8 @@ export type SetState<T extends any> = React.Dispatch<React.SetStateAction<T>>
 
 export const QUERY_KEYS = {
 	GET_LIBRARY_GAMES: 'library_games',
-	GET_DISCOUNT_GAMES: 'discount_games'
+	GET_DISCOUNT_GAMES: 'discount_games',
+	GET_GENRES_CATALOG: 'genres_catalog'
 } as const
 
 export const FUN_FACTS_STRINGS = [

@@ -6,6 +6,7 @@ import { useGlobalContext } from './context'
 import { AuthPage } from './pages/auth/authPage'
 import { AuthContextProvider } from './pages/auth/context'
 import { CatalogPage } from './pages/catalog/catalogPage'
+import { CatalogContextProvider } from './pages/catalog/context'
 import { LibraryPage } from './pages/library/libraryPage'
 
 export function App() {
@@ -29,7 +30,18 @@ export function App() {
 					component={() => (true ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />)}
 				/>
 
-				<Route path="/games" component={() => <AsideBarWrapper children={<CatalogPage />} />} />
+				<Route
+					path="/games"
+					component={() => (
+						<AsideBarWrapper
+							children={
+								<CatalogContextProvider>
+									<CatalogPage />
+								</CatalogContextProvider>
+							}
+						/>
+					)}
+				/>
 
 				<Route component={() => <>404</>} />
 			</Switch>

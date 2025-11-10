@@ -1,9 +1,25 @@
 import { HorizontalCard } from '@/components/game'
 import { GCDivider, GCSearchBar } from '@/components/GCgenerics'
-import { fallbackGame } from '@/utils'
+import { makeApiCall } from '@/services/apiCall'
+import { fallbackGame, QUERY_KEYS } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { FilterDropMenu } from './components'
+import { useCatalogContext } from './context'
 
 export function CatalogPage() {
+	const { genres, setGenres } = useCatalogContext()
+
+	const { isPending, error, data } = useQuery({
+		queryKey: [QUERY_KEYS.GET_GENRES_CATALOG],
+		queryFn: async () => await makeApiCall<string[]>({ endpoint: '/genres' })
+	})
+
+	useEffect(() => {
+		if (!data || error) return
+		setGenres(data)
+	}, [data])
+
 	const game: (typeof fallbackGame)[] = new Array(5).fill(fallbackGame)
 	return (
 		<main className="flex flex-col gap-4">
