@@ -46,7 +46,7 @@ export function ElementSlider({
 						leftArrow={() => handleScroll('left')}
 						rightArrow={() => handleScroll('right')}
 					/>
-					<GCDivider />
+					<GCDivider className="top-7! translate-y-1!" />
 				</span>
 			)}
 

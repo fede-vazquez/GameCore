@@ -1,5 +1,5 @@
 import type { GameModel } from '@/models'
-export const SERVER_URL = 'http://localhost:5104/' as const
+export const SERVER_URL = 'http://localhost:5104' as const
 
 export const MAX_FETCH_TIMEOUT = 5000 as const //5 secs
 

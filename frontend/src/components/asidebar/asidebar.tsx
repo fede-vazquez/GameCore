@@ -1,5 +1,5 @@
 import { ConsoleSVG, ControllerSVG, StoreSVG, UserSVG } from '@/assets'
-import { useGlobalContext } from '@/context'
+import { useGlobalContext, useMenuContext } from '@/context'
 import type { GameModel } from '@/models'
 import type { ReactElement } from 'react'
 import { Link } from 'wouter'
@@ -7,7 +7,8 @@ import { GameSideCard } from '../game'
 import { GCButton } from '../GCgenerics'
 
 export function AsideBar() {
-	const { isMenuActive, setIsMenuActive, clientUser } = useGlobalContext()
+	const { clientUser } = useGlobalContext()
+	const { isMenuActive, setIsMenuActive } = useMenuContext()
 	return (
 		<>
 			<style>

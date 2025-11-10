@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { Redirect, Route, Switch } from 'wouter'
 import { AsideBar } from './components/asidebar'
 import { GCHeader } from './components/GCgenerics'
@@ -9,7 +9,7 @@ import { CatalogPage } from './pages/catalog/catalogPage'
 import { CatalogContextProvider } from './pages/catalog/context'
 import { LibraryPage } from './pages/library/libraryPage'
 
-export function App() {
+export const App = function App() {
 	const { clientUser } = useGlobalContext()
 
 	return (

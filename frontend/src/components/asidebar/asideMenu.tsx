@@ -1,8 +1,8 @@
 import { MenuSVG } from '@/assets'
-import { useGlobalContext } from '@/context'
+import { useMenuContext } from '@/context'
 
 export function AsideMenuButton({ className }: { className?: string }) {
-	const { setIsMenuActive } = useGlobalContext()
+	const { setIsMenuActive } = useMenuContext()
 	return (
 		<span
 			className={`

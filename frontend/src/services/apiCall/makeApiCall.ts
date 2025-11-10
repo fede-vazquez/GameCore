@@ -1,5 +1,5 @@
 import { CLIENT_ERROR, CustomError, SERVER_ERROR } from '@/errors/customErrorMsg'
-import { MAX_FETCH_TIMEOUT, type HTTPMethods } from '@/utils'
+import { MAX_FETCH_TIMEOUT, SERVER_URL, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
 	ADMIN_URLENDPOINTS,
@@ -65,15 +65,19 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 	} as const
 
 	try {
-		const data = await fetch(`${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`, {
-			method: httpMethod,
-			headers: {
-				...headers
-			},
-			...(body != null && { body: JSON.stringify(body ?? {}) }),
-			signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
-		})
+		const data = await fetch(
+			`${SERVER_URL}${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`,
+			{
+				method: httpMethod,
+				headers: {
+					...headers
+				},
+				...(body != null && { body: JSON.stringify(body ?? {}) }),
+				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
+			}
+		)
 
+		console.log(data)
 		if (!data.ok) throw new CustomError(data.status === 404 ? SERVER_ERROR.CANT_REACH : undefined)
 
 		return (await data.json()) as T

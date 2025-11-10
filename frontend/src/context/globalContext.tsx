@@ -5,19 +5,15 @@ import { GlobalContext, type globalContextArgs } from '.'
 export function GlobalContextProvider({ children }: { children: ReactNode }) {
 	const [clientUser, setClientUser] = useState<globalContextArgs['clientUser']>()
 	// const [globalError, setGlobalError] = useState<Error>()
-	const [isMenuActive, setIsMenuActive] = useState<boolean>(false)
 
 	return (
 		<GlobalContext.Provider
 			value={{
 				clientUser,
-				setClientUser,
-				isMenuActive,
-				setIsMenuActive
+				setClientUser
 			}}
 		>
 			{/* <p className="absolute bg-red-300s z-20">error :(</p> */}
-
 			{children}
 		</GlobalContext.Provider>
 	)

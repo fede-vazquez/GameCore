@@ -1,7 +1,7 @@
 import { FiltersSVG, IconXSVG } from '@/assets'
 import { GCInput } from '@/components/GCgenerics'
 import { GCSelect } from '@/components/GCgenerics/Select'
-import { LIST_OF_GENRES } from '@/utils'
+import type { GameModel } from '@/models'
 import { Button } from '@radix-ui/themes'
 import { DropdownMenu, Form } from 'radix-ui'
 import { useState, type ReactNode } from 'react'
@@ -13,7 +13,7 @@ const INPUT_NAMES = {
 	RELEASE_YEAR: 'release_year'
 } as const
 
-export function FilterDropMenu() {
+export function FilterDropMenu({ selectOptions, games }: { selectOptions: string[]; games: GameModel[] | undefined }) {
 	const [isOpen, setIsOpen] = useState<boolean>(true)
 
 	return (
@@ -26,9 +26,12 @@ export function FilterDropMenu() {
 				Filters
 				<FiltersSVG />
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content className="bg-neutral-900 border border-neutral-600 rounded-lg p-3 z-30!">
+			<DropdownMenu.Content
+				onInteractOutside={(e) => e.preventDefault()}
+				className="bg-neutral-900 border border-neutral-600 rounded-lg p-3 z-30!"
+			>
 				<DropdownMenuItem className="flex! justify-between! items-center">
-					<p className="text-xs text-zinc-400">1859 Games</p>
+					<p className="text-xs text-zinc-400">{games?.length ?? 0} Games</p>
 					<IconXSVG className="mr-4! h-5! text-primaryWhite cursor-pointer" onClick={() => setIsOpen(false)} />
 				</DropdownMenuItem>
 				<Form.Root className="flex flex-col gap-y-2" onSubmit={(e) => e.preventDefault()}>
@@ -41,7 +44,7 @@ export function FilterDropMenu() {
 					</DropdownMenuItem>
 
 					<DropdownMenuItem>
-						<GCSelect options={LIST_OF_GENRES} placeholder="Select Genre" />
+						<GCSelect options={selectOptions} placeholder="Select Genre" />
 					</DropdownMenuItem>
 
 					<DropdownMenu.Separator className="bg-neutral-500 w-full! h-px rounded-xl! translate-y-full" />

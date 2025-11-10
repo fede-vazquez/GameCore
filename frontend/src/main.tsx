@@ -5,6 +5,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App.tsx'
 import { GlobalContextProvider } from './context/globalContext.tsx'
+import { MenuContextProvider } from './context/index.ts'
 import { CREATE_ZOD_CONFIG } from './errors/errors.ts'
 import './index.css'
 import { queryClient } from './services/apiCall'
@@ -17,7 +18,9 @@ createRoot(document.getElementById('root')!).render(
 			<GlobalContextProvider>
 				<Theme>
 					{/* <ThemePanel /> */}
-					<App />
+					<MenuContextProvider>
+						<App />
+					</MenuContextProvider>
 				</Theme>
 			</GlobalContextProvider>
 		</QueryClientProvider>
