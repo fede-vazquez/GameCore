@@ -11,7 +11,7 @@ interface HorizontalCardProps {
 
 export function HorizontalCard({ className, game: g, discountPercentage }: HorizontalCardProps) {
 	return (
-		<section className="rounded-md bg-neutral-900">
+		<section className={`rounded-md bg-neutral-900 ${className}`}>
 			<div className="aspect-video max-w-[225px] min-w-[200px] rounded-t-lg overflow-hidden select-none">
 				<img
 					draggable={false}

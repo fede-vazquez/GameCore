@@ -33,3 +33,26 @@ export const fallbackGame: GameModel = {
 	deletedAt: new Date(),
 	releaseDate: new Date()
 }
+
+export const LIST_OF_GENRES = [
+	'Action',
+	'Adventure',
+	'Role-Playing Game',
+	'Simulation',
+	'Strategy',
+	'Puzzle',
+	'Sports',
+	'Racing',
+	'Fighting',
+	'Platformer',
+	'Survival',
+	'Horror',
+	'Rhythm',
+	'MMORPG',
+	'MOBA',
+	'Battle Royale',
+	'Stealth',
+	'Sandbox',
+	'Visual Novel',
+	'Card Game'
+]

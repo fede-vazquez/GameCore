@@ -7,6 +7,7 @@ export interface SVGInterface {
 }
 
 export * from './caretSvg'
+export * from './checkSvg'
 export * from './consoleSvg'
 export * from './controllerSvg'
 export * from './emailSvg'
@@ -17,3 +18,4 @@ export * from './menuSvg'
 export * from './searchSvg'
 export * from './storeSvg'
 export * from './userSvg'
+export * from './XSvg'

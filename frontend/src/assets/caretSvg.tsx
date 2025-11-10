@@ -24,3 +24,24 @@ export function CaretSVG({ className, ref, onClick, position = 'right' }: CaretP
 		</svg>
 	)
 }
+
+export function ChevronSVG({ className, ref, onClick }: SVGInterface) {
+	return (
+		<svg
+			onClick={onClick}
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			className={className}
+			ref={ref}
+		>
+			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			<path d="M4 11l8 3l8 -3" />
+		</svg>
+	)
+}

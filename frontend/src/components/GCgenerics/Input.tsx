@@ -6,6 +6,7 @@ import { InputPassword, type InputPasswordProps } from './input/inputPassword'
 
 interface InputProps extends InputPasswordProps {
 	formFieldName: string
+	disableSvgPlaceholder?: boolean
 	classInput?: string
 	error?: FieldError | undefined
 	children?: ReactNode
@@ -15,6 +16,7 @@ interface InputProps extends InputPasswordProps {
 
 export function GCInput({
 	formFieldName,
+	disableSvgPlaceholder = false,
 	classInput,
 	className,
 	isDisabled = false,
@@ -26,17 +28,21 @@ export function GCInput({
 	placeholder,
 	isRequired
 }: InputProps) {
-	const INPUT_CLASSNAME = `border border-zinc-600 rounded-lg py-2 pl-10 pr-10 ${classInput}  w-full ${error != null ? 'border-red-500!' : ''}`
+	const INPUT_CLASSNAME = `w-full border border-zinc-600 rounded-lg py-2 ${!disableSvgPlaceholder ? 'px-10' : 'px-2'} ${classInput} ${error != null && 'border-red-500!'}`
 	return (
 		<Form.Field className={`flex flex-col gap-y-1 ${className}`} name={formFieldName}>
 			<Form.Label className="text-zinc-300 font-semibold">{label}</Form.Label>
 
 			<span className="relative">
 				{children}
-				<div
-					className="after:content-[''] after:absolute after:w-px after:h-[70%] after:bottom-[15%] after:left-[34px] after:bg-zinc-600
+
+				{!disableSvgPlaceholder && (
+					<div
+						className="after:content-[''] after:absolute after:w-px after:h-[70%] after:bottom-[15%] after:left-[34px] after:bg-zinc-600
                     "
-				/>
+					/>
+				)}
+
 				<Form.Control asChild>
 					{type === 'password' ? (
 						<InputPassword
