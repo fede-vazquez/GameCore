@@ -3,7 +3,7 @@ import { SalesPerMonthChart } from './SalesPerMonthChart'
 import { PieChardComponent } from '../PieChardComponent'
 import type { SalesMonthData } from '@/types/dashboard'
 
-export default function SalesPerMonth() {
+export function SalesPerMonth() {
 	const [salesData, setSalesData] = useState<{
 		sales: SalesMonthData[]
 		firstYear: number

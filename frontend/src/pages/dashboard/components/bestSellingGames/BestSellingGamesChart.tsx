@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { BestSellingGames } from '@/types/dashboard'
 
 export function BestSellingGamesChart({ data }: { data: BestSellingGames[] }) {

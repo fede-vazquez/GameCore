@@ -21,3 +21,7 @@ export interface BestSellingGames {
 	title: string
 	totalSales: number
 }
+
+export interface whitId {
+	id: string | number
+}

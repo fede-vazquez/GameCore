@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { InfoCard } from './InfoCard'
 import { Grid, Text } from '@radix-ui/themes'
 
-export default function GeneralInfo() {
+export function GeneralInfo() {
 	const [generalInfo, setGeneralInfo] = useState({
 		totalSales: 0,
 		totalUsers: 0,

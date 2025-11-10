@@ -7,28 +7,6 @@ export function BestSellingGames({ category }: { category: string }) {
 
 	useEffect(() => {
 		// Mock de llamada a la api
-		const resultadoApi = [
-			{
-				title: 'Stardew Valley',
-				totalSales: 10000
-			},
-			{
-				title: 'Stardew Valley 2',
-				totalSales: 20000
-			},
-			{
-				title: 'Stardew Valley 3',
-				totalSales: 22500
-			},
-			{
-				title: 'Stardew Valley 4',
-				totalSales: 20500
-			},
-			{
-				title: 'Stardew Valley 5',
-				totalSales: 17500
-			}
-		]
 		setBestSellingGames(resultadoApi)
 	}, [])
 
@@ -42,3 +20,26 @@ export function BestSellingGames({ category }: { category: string }) {
 		</>
 	)
 }
+
+const resultadoApi = [
+	{
+		title: 'Stardew Valley',
+		totalSales: 10000
+	},
+	{
+		title: 'Stardew Valley 2',
+		totalSales: 20000
+	},
+	{
+		title: 'Stardew Valley 3',
+		totalSales: 22500
+	},
+	{
+		title: 'Stardew Valley 4',
+		totalSales: 20500
+	},
+	{
+		title: 'Stardew Valley 5',
+		totalSales: 17500
+	}
+]

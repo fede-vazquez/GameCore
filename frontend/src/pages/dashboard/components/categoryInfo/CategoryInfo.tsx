@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BestSellingGames } from '../bestSellingGames/BestSellingGames'
+import { LatestGamesAdded } from '../listInfo/LatestGamesAdded'
 
 export function CategoryInfo() {
 	const [category, setCategory] = useState('' as string)
@@ -34,10 +35,18 @@ export function CategoryInfo() {
 					</select>
 				</label>
 			</div>
-			<article>
-				<h2 className="text-2xl font-bold mb-4 text-center">Juegos más vendidos</h2>
-				<BestSellingGames category={category} />
-			</article>
+
+			<section className="w-full flex flex-col lg:flex-row gap-4">
+				<div className="w-full">
+					<h2 className="text-2xl font-bold mb-4 text-center">Juegos más vendidos</h2>
+					<BestSellingGames category={category} />
+				</div>
+
+				<div className="w-full">
+					<h2 className="text-2xl font-bold mb-4 text-center">Ultimos juegos agregados</h2>
+					<LatestGamesAdded category={category} />
+				</div>
+			</section>
 		</section>
 	)
 }

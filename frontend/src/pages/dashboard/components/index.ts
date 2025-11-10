@@ -1,4 +1,6 @@
 export * from './generalInfo/InfoCard'
-export * from './salesPerMonth/SalesPerMonthChart'
 export * from './categoryInfo/CategoryInfo'
 export * from './bestSellingGames/BestSellingGamesChart'
+export * from './listInfo/LatestGamesAdded'
+export * from './generalInfo/GeneralInfo'
+export * from './salesPerMonth/SalesPerMonth'
