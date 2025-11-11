@@ -11,7 +11,7 @@ namespace GameCore.Specifications;
 
 internal static class SpecificationEvaluator
 {
-    public static IQueryable<TEntity> GetQuery<TEntity>(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
+    public static IQueryable<TEntity> GetFilteredQuery<TEntity>(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
     where TEntity : class
     {
         IQueryable<TEntity> query = inputQuery;
@@ -20,6 +20,7 @@ internal static class SpecificationEvaluator
             query = query.Where(spec.Criteria);
         }
         query = spec.Includes.Aggregate(query, (current, includes) => current.Include(includes));
+        query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
         if (spec.OrderBy != null)
         {
             query = query.OrderBy(spec.OrderBy);
@@ -28,9 +29,16 @@ internal static class SpecificationEvaluator
         {
             query = query.OrderByDescending(spec.OrderByDescending);
         }
+
+
+        return query;
+    }
+    public static IQueryable<TEntity> ApplyPaging<TEntity>(
+        IQueryable<TEntity> query,
+        ISpecification<TEntity> spec) where TEntity : class
+    {
         query = query.Skip(spec.Skip);
         query = query.Take(spec.Take);
-
         return query;
     }
 }

@@ -8,7 +8,7 @@ using GameCore.Utils;
 using AutoMapper;
 using System.Net;
 using GameCore.Models.Order.DTO;
-
+using GameCore.Specifications;
 public class OrderServices
 {
     private readonly IOrderRepository _repo;
@@ -18,7 +18,9 @@ public class OrderServices
     private readonly UserServices _userServices;
     private readonly GameUserServices _gameUserServices;
 
-    public OrderServices(IOrderRepository repo, IMapper mapper, GameServices gameServices, PaymentMethodService paymentMethodService, UserServices userServices, GameUserServices gameUserServices)
+    private readonly ISpecificationOrderFactory _orderSpecificationFactory;
+
+    public OrderServices(IOrderRepository repo, IMapper mapper, GameServices gameServices, PaymentMethodService paymentMethodService, UserServices userServices, GameUserServices gameUserServices, ISpecificationOrderFactory orderSpecificationFactory)
     {
         _repo = repo;
         _mapper = mapper;
@@ -26,6 +28,7 @@ public class OrderServices
         _paymentMethodService = paymentMethodService;
         _userServices = userServices;
         _gameUserServices = gameUserServices;
+        _orderSpecificationFactory = orderSpecificationFactory;
     }
     async public Task<List<GetOrderDTO>> GetAllAsync()
     {
@@ -41,6 +44,39 @@ public class OrderServices
         }
         return _mapper.Map<GetOrderDTO>(order);
     }
+    async public Task<OrderListForUsersPagedResultDTO> GetOrdersByUserIdAsync(OrderListForUsersParamsDTO parameters, int userId)
+    {
+        var spec = _orderSpecificationFactory.CreateOrderFilterSpecification(parameters, userId);
+        var orders = await _repo.GetAllAsync(spec);
+        var result = new OrderListForUsersPagedResultDTO();
+        result.Items = _mapper.Map<List<GetOrderForUserDTO>>(orders);
+        var count = await _repo.GetCountAsync(spec);
+        result.TotalCount = count;
+        result.TotalPages = (int)Math.Ceiling((double)count / parameters.PageSize);
+        if (parameters != null)
+        {
+            result.PageNumber = parameters.PageNumber;
+            result.PageSize = parameters.PageSize;
+        }
+        return result;
+    }
+    async public Task<OrderListForAdminsPagedResultDTO> GetOrdersAsync(OrderListForAdminsParamsDTO parameters)
+    {
+        var spec = _orderSpecificationFactory.CreateOrderFilterListForAdminSpecification(parameters);
+        var orders = await _repo.GetAllAsync(spec);
+        var result = new OrderListForAdminsPagedResultDTO();
+        result.Items = _mapper.Map<List<GetOrderForAdminDTO>>(orders);
+        var count = await _repo.GetCountAsync(spec);
+        result.TotalCount = count;
+        result.TotalPages = (int)Math.Ceiling((double)count / parameters.PageSize);
+        if (parameters != null)
+        {
+            result.PageNumber = parameters.PageNumber;
+            result.PageSize = parameters.PageSize;
+        }
+        return result;
+    }
+
     async public Task<GetOrderDTO> CreateOneAsync(int gameId, int userId, CreateOrderDTO createDTO)
     {
         //comprobamos primero que GameId, UserId y PaymentMethodId existan

@@ -8,6 +8,7 @@ public interface ISpecification<TEntity> where TEntity : class
 {
     Expression<Func<TEntity, bool>>? Criteria { get; }
     List<Expression<Func<TEntity, object>>> Includes { get; }
+    List<string> IncludeStrings { get; }
     Expression<Func<TEntity, object>>? OrderBy { get; }
     Expression<Func<TEntity, object>>? OrderByDescending { get; }
     int Skip { get; }
@@ -27,6 +28,7 @@ where TEntity : class
 
     public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
     public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
+    public List<string> IncludeStrings { get; private set; } = new List<string>();
     public int Skip { get; private set; }
     public int Take { get; private set; }
     protected void AddCriteria(Expression<Func<TEntity, bool>> criteria)
@@ -34,7 +36,10 @@ where TEntity : class
 
         Criteria = PredicateBuilder.And(Criteria, criteria);
     }
-
+    protected void AddInclude(string includeString)
+    {
+        IncludeStrings.Add(includeString);
+    }
     protected void AddInclude(Expression<Func<TEntity, object>> include)
     {
         Includes.Add(include);

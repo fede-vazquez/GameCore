@@ -40,7 +40,9 @@ public class UserServices
 
             var users = await _repo.GetAllAsync(spec);
             result.Users = _mapper.Map<List<UserWithoutPassDTO>>(users);
-            result.TotalCount = users.Count();
+            var count = await _repo.GetCountAsync(spec);
+            result.TotalCount = count;
+            result.TotalPages = (int)Math.Ceiling((double)count / parameters.PageSize);
             if (parameters != null)
             {
                 result.PageNumber = parameters.PageNumber;

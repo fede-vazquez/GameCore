@@ -6,6 +6,8 @@ using GameCore.Utils;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using GameCore.Enums;
+using GameCore.Models.Order.DTO;
+using GameCore.Models.Order;
 namespace GameCore.Controllers
 {
     [Route("api/[controller]")]
@@ -14,10 +16,13 @@ namespace GameCore.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly UserServices _userServices;
+        private readonly OrderServices _orderServices;
 
-        public ProfileController(UserServices userServices)
+
+        public ProfileController(UserServices userServices, OrderServices orderServices)
         {
             _userServices = userServices;
+            _orderServices = orderServices;
         }
         [HttpGet("")]
         [ProducesResponseType(typeof(UserWithoutPassDTO), StatusCodes.Status200OK)]
@@ -39,6 +44,44 @@ namespace GameCore.Controllers
                     return Unauthorized("Formato User ID invalido en el token.");
                 }
                 var res = await _userServices.GetOneByIdAsync(userId);
+                return Ok(res);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
+        // ver el historial de ordenes de un usuario
+        [HttpGet("orders")]
+        [ProducesResponseType(typeof(OrderListForUsersPagedResultDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<OrderListForUsersPagedResultDTO>> GetOrders([FromQuery] OrderListForUsersParamsDTO parameters)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst("id");
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User ID claim no encontrado en eltoken.");
+                }
+                int userId;
+
+                if (!int.TryParse(userIdClaim.Value, out userId))
+                {
+                    return Unauthorized("Formato User ID invalido en el token.");
+                }
+                var res = await _orderServices.GetOrdersByUserIdAsync(parameters, userId);
                 return Ok(res);
             }
             catch (HttpResponseError ex)

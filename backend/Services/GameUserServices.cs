@@ -9,6 +9,7 @@ using GameCore.Utils;
 using AutoMapper;
 using System.Net;
 using GameCore.Models.Game.DTO;
+using GameCore.Specifications;
 
 public class GameUserServices
 {
@@ -16,13 +17,15 @@ public class GameUserServices
     private readonly IMapper _mapper;
     private readonly GameServices _gameServices;
     private readonly UserServices _userServices;
+    private readonly IGameSpecificationFactory _gameSpecificationFactory;
 
-    public GameUserServices(IGameUserRepository repo, IMapper mapper, GameServices gameServices, UserServices userServices)
+    public GameUserServices(IGameUserRepository repo, IMapper mapper, GameServices gameServices, UserServices userServices, IGameSpecificationFactory gameSpecificationFactory)
     {
         _repo = repo;
         _mapper = mapper;
         _gameServices = gameServices;
         _userServices = userServices;
+        _gameSpecificationFactory = gameSpecificationFactory;
     }
     async public Task<List<GetGameUserDTO>> GetAllAsync()
     {
@@ -58,16 +61,22 @@ public class GameUserServices
 
         return _mapper.Map<List<GetGameUserDTO>>(gameUsers);
     }
-    async public Task<int> GetGameUsersCountByGameIdAsync(int gameId)
+
+    async public Task<LibraryListPagedResultDTO> GetGamesByUserIdAsync(LibraryListParametersDTO parameters, int userId)
     {
-        var gameUsers = await _repo.GetAllAsync(g => g.GameId == gameId);
-        return gameUsers.Count();
-    }
-    // devolver la cantidad de juegos que tiene un usuario
-    async public Task<int> GetGameUsersCountByUserIdAsync(int userId)
-    {
-        var gameUsers = await _repo.GetAllAsync(g => g.UserId == userId);
-        return gameUsers.Count();
+        var spec = _gameSpecificationFactory.CreateLibraryFilterSpecification(parameters, userId);
+        var games = await _repo.GetAllAsync(spec);
+        var result = new LibraryListPagedResultDTO();
+        result.Items = _mapper.Map<List<GetGameForLibraryDTO>>(games);
+        var count = await _repo.GetCountAsync(spec);
+        result.TotalCount = count;
+        result.TotalPages = (int)Math.Ceiling((double)count / parameters.PageSize);
+        if (parameters != null)
+        {
+            result.PageNumber = parameters.PageNumber;
+            result.PageSize = parameters.PageSize;
+        }
+        return result;
     }
     //crear a traves de id de juego y usuario
     async public Task<GetGameUserDTO> CreateOneAsync(int gameId, int userId)

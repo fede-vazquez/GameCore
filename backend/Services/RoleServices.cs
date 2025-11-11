@@ -3,15 +3,18 @@ using System;
 namespace GameCore.Services;
 
 using GameCore.Models.Rol;
+using GameCore.Models.Rol.DTO;
 using GameCore.Repositories;
 using GameCore.Utils;
-
+using AutoMapper;
 public class RolServices
 {
     private readonly IRolRepository _roleRepository;
-    public RolServices(IRolRepository roleRepository)
+    private readonly IMapper _mapper;
+    public RolServices(IRolRepository roleRepository, IMapper mapper)
     {
         _roleRepository = roleRepository;
+        _mapper = mapper;
     }
     public Task<Rol> GetOneByNameAsync(string name)
     {
@@ -30,6 +33,11 @@ public class RolServices
             throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "Rol no encontrado");
         }
         return rol;
+    }
+    public async Task<List<GetRolDTO>> GetAllAsync()
+    {
+        var roles = await _roleRepository.GetAllAsync();
+        return _mapper.Map<List<GetRolDTO>>(roles);
     }
 
 }

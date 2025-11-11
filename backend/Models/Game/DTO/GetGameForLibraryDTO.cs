@@ -1,11 +1,8 @@
-using System;
-
+using GameCore.Models.Developer.DTO;
+using GameCore.Models.Genre.DTO;
 namespace GameCore.Models.Game.DTO;
 
-using GameCore.Models.Developer.DTO;
-using GameCore.Models.Discount.DTO;
-using GameCore.Models.Genre.DTO;
-public class GetGameDTO
+public class GetGameForLibraryDTO
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;
@@ -14,7 +11,10 @@ public class GetGameDTO
     public decimal Price { get; set; }
     public DateTime ReleaseDate { get; set; }
     public GetDeveloperDTO Developer { get; set; }
-    public GetDiscountForGameDTO Discount { get; set; }
     public List<GenreDTO> Genres { get; set; } = new List<GenreDTO>();
+    public DateTime BuyDate { get; set; } = DateTime.Now;
+    public long TimePlayed { get; set; } = 0;
+
     public bool IsActive { get; set; }
+
 }

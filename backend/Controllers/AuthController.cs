@@ -11,17 +11,20 @@ using System.Net;
 using GameCore.Enums;
 using GameCore.Utils;
 using Microsoft.AspNetCore.Http;
-
+using GameCore.Models.Rol.DTO;
+using GameCore.Models.Rol;
 
 [Route("api/auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly AuthServices _authServices;
+    private readonly RolServices _rolServices;
 
-    public AuthController(AuthServices authServices)
+    public AuthController(AuthServices authServices, RolServices rolServices)
     {
         _authServices = authServices;
+        _rolServices = rolServices;
     }
 
     [HttpPost("register")]
@@ -117,6 +120,31 @@ public class AuthController : ControllerBase
         {
             var users = await _authServices.GetUsersAsync(parameters);
             return Ok(users);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
+    //obtener lista de roles disponibles
+    [HttpGet("roles")]
+    [ProducesResponseType(typeof(List<GetRolDTO>), StatusCodes.Status200OK)]
+    async public Task<ActionResult<List<GetRolDTO>>> GetRoles()
+    {
+        try
+        {
+            var roles = await _rolServices.GetAllAsync();
+            return Ok(roles);
         }
         catch (HttpResponseError ex)
         {

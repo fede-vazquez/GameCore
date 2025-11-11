@@ -68,6 +68,8 @@ builder.Services.AddScoped<PercentageService>();
 // builder.Services.AddScoped<GameFilterSpecification>();
 builder.Services.AddScoped<IGameSpecificationFactory, GameSpecificationFactory>();
 builder.Services.AddScoped<ISpecificationUserFactory, UserSpecificationFactory>();
+builder.Services.AddScoped<ISpecificationOrderFactory, SpecificationOrderFactory>();
+builder.Services.AddScoped<ISpecificationDiscountFactory, SpecificationDiscountFactory>();
 
 
 

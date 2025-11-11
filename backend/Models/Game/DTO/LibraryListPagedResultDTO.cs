@@ -2,11 +2,9 @@ using System;
 
 namespace GameCore.Models.Game.DTO;
 
-using GameCore.Models.Game;
-
-public class GameListPagedResultDTO
+public class LibraryListPagedResultDTO
 {
-    public IEnumerable<GetGameDTO> Items { get; set; } = Enumerable.Empty<GetGameDTO>();
+    public IEnumerable<GetGameForLibraryDTO> Items { get; set; } = Enumerable.Empty<GetGameForLibraryDTO>();
     public int TotalCount { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set; }

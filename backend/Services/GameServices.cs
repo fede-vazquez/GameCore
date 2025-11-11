@@ -15,7 +15,6 @@ public class GameServices
     private readonly DeveloperServices _developerServices;
     private readonly GenreServices _genreServices;
     private readonly IGameSpecificationFactory _gameSpecificationFactory;
-    // private readonly ISpecification<Game> _gameSpecification;
 
 
     private readonly IMapper _mapper;
@@ -36,13 +35,15 @@ public class GameServices
         }
         return game;
     }
-    async public Task<GameListPagedResultDTO> GetAllAsync(GameListParametersDTO? parameters, int? userId)
+    async public Task<GameListPagedResultDTO> GetAllAsync(GameListParametersDTO? parameters)
     {
-        var spec = _gameSpecificationFactory.CreateGameFilterSpecification(parameters, userId);
+        var spec = _gameSpecificationFactory.CreateGameFilterSpecification(parameters);
         var games = await _repo.GetAllAsync(spec);
         var result = new GameListPagedResultDTO();
         result.Items = _mapper.Map<List<GetGameDTO>>(games);
-        result.TotalCount = games.Count();
+        var count = await _repo.GetCountAsync(spec);
+        result.TotalCount = count;
+        result.TotalPages = (int)Math.Ceiling((double)count / parameters.PageSize);
         if (parameters != null)
         {
             result.PageNumber = parameters.PageNumber;
@@ -63,8 +64,6 @@ public class GameServices
         await _repo.CreateManyAsync(games);
         return _mapper.Map<List<GetGameDTO>>(games);
     }
-    //obtenemos una lista de juegos que tiene un usuario por id
-    async public Task<GameListPagedResultDTO> GetGamesByUserIdAsync(int userId) => await GetAllAsync(null, userId);
 
     async public Task<GetGameDTO> CreateOneAsync(CreateGameDTO createGameDTO)
     {

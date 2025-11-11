@@ -4,8 +4,6 @@ namespace GameCore.Repositories;
 
 using GameCore.Models.Game;
 using GameCore.Config;
-using GameCore.Utils;
-using System.Net;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using GameCore.Specifications;
@@ -16,6 +14,7 @@ public interface IGameRepository : IRepository<Game>
     public Task CreateManyAsync(List<Game> games);
 
     public Task<IEnumerable<Game>> GetAllAsync(ISpecification<Game> spec);
+    public Task<int> GetCountAsync(ISpecification<Game> spec);
 
 }
 public class GameRepository : Repository<Game>, IGameRepository
@@ -28,7 +27,13 @@ public class GameRepository : Repository<Game>, IGameRepository
 
     public async Task<IEnumerable<Game>> GetAllAsync(ISpecification<Game> spec = null)
     {
-        return await SpecificationEvaluator.GetQuery(_db.Games, spec).ToListAsync();
+        var filteredQuery = SpecificationEvaluator.GetFilteredQuery(_db.Games, spec);
+        var paginatedQuery = SpecificationEvaluator.ApplyPaging(filteredQuery, spec);
+        return await paginatedQuery.ToListAsync();
+    }
+    public async Task<int> GetCountAsync(ISpecification<Game> spec)
+    {
+        return await SpecificationEvaluator.GetFilteredQuery(_db.Games, spec).CountAsync();
     }
 
     public override async Task<Game> GetOneAsync(Expression<Func<Game, bool>>? filter = null)
@@ -39,6 +44,9 @@ public class GameRepository : Repository<Game>, IGameRepository
             query = query.Where(filter);
         }
         query = query.Include(g => g.Genres);
+        query = query.Include(g => g.Developer);
+        query = query.Include(g => g.Discounts);
+        query = query.Include("Discounts.Percentage");
         return await query.FirstOrDefaultAsync();
     }
     public async Task CreateManyAsync(List<Game> games)
@@ -46,8 +54,7 @@ public class GameRepository : Repository<Game>, IGameRepository
         await _db.Games.AddRangeAsync(games);
         await _db.SaveChangesAsync();
     }
-    //ELIMNAR
-    // traemos los juegos que tenga un usuario a traves de la tabla intermedia GameUser
+
     public async Task<IEnumerable<Game>> GetGamesByUserIdAsync(int userId)
     {
         IQueryable<Game> query = _db.Games;

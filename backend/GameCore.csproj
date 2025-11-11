@@ -23,8 +23,6 @@
   <ItemGroup>
     <Folder Include="Models/Achievement /DTO/" />
     <Folder Include="Models/AchievementUser /DTO/" />
-    <Folder Include="Models/PaymentMethod /DTO/" />
-    <Folder Include="Models/Rol/DTO/" />
   </ItemGroup>
 
 </Project>

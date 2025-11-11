@@ -6,6 +6,13 @@ using GameCore.Services;
 using GameCore.Models.Order.DTO;
 using Microsoft.AspNetCore.Authorization;
 using GameCore.Enums;
+using GameCore.Models.Genre.DTO;
+using GameCore.Models.Discount.DTO;
+using GameCore.Models.Percentage.DTO;
+using GameCore.Models.PaymentMethod.DTO;
+using GameCore.Models.Developer.DTO;
+
+
 using System.Security.Claims;
 
 
@@ -21,12 +28,23 @@ public class GamesController : ControllerBase
     private readonly GameServices _gameServices;
     private readonly OrderServices _orderServices;
     private readonly GameUserServices _gameUserServices;
+    private readonly GenreServices _genreServices;
+    private readonly DiscountServices _discountServices;
+    private readonly PercentageService _percentageServices;
+    private readonly PaymentMethodService _paymentMethodService;
 
-    public GamesController(GameServices gameServices, OrderServices orderServices, GameUserServices gameUserServices)
+    private readonly DeveloperServices _devServices;
+
+    public GamesController(GameServices gameServices, OrderServices orderServices, GameUserServices gameUserServices, GenreServices genreServices, DiscountServices discountServices, PercentageService percentageServices, PaymentMethodService paymentMethodService, DeveloperServices devServices)
     {
         _gameServices = gameServices;
         _orderServices = orderServices;
         _gameUserServices = gameUserServices;
+        _genreServices = genreServices;
+        _discountServices = discountServices;
+        _percentageServices = percentageServices;
+        _paymentMethodService = paymentMethodService;
+        _devServices = devServices;
     }
     // GET ALL
     [HttpGet("")]
@@ -38,7 +56,7 @@ public class GamesController : ControllerBase
     {
         try
         {
-            var res = await _gameServices.GetAllAsync(parameters, null);
+            var res = await _gameServices.GetAllAsync(parameters);
             return Ok(res);
         }
         catch (HttpResponseError ex)
@@ -122,14 +140,15 @@ public class GamesController : ControllerBase
             );
         }
     }
-    //obtener la catidad de usuario que tiene un juego
-    [HttpGet("{gameId}/users")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    public async Task<ActionResult<int>> GetGameUsersCountByGameId([FromRoute] int gameId)
+
+    //traer la lista de generos
+    [HttpGet("genres")]
+    [ProducesResponseType(typeof(List<GenreDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<GenreDTO>>> GetGenres()
     {
         try
         {
-            var res = await _gameUserServices.GetGameUsersCountByGameIdAsync(gameId);
+            var res = await _genreServices.GetAllAsync();
             return Ok(res);
         }
         catch (HttpResponseError ex)
@@ -147,5 +166,104 @@ public class GamesController : ControllerBase
             );
         }
     }
-
+    //obtener lista de descuentos
+    [HttpGet("discounts")]
+    [ProducesResponseType(typeof(DiscountLIstPagedResultDTO), StatusCodes.Status200OK)]
+    public async Task<ActionResult<DiscountLIstPagedResultDTO>> GetDiscounts([FromQuery] DiscountListParamsDTO parameters)
+    {
+        try
+        {
+            var res = await _discountServices.GetAllAsync(parameters);
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
+    //obtener la lista de porcentages de descuentos disponibles
+    [HttpGet("discounts/percentage")]
+    [ProducesResponseType(typeof(List<GetPercentageDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<GetPercentageDTO>>> GetDiscountsPercentage()
+    {
+        try
+        {
+            var res = await _percentageServices.GetAllAsync();
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
+    //traer todos los metodos de pago disponibles
+    [HttpGet("payment-methods")]
+    [ProducesResponseType(typeof(List<GetPaymentMethod>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<GetPaymentMethod>>> GetPaymentMethods()
+    {
+        try
+        {
+            var res = await _paymentMethodService.GetAllAsync();
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
+    //obtener lista de desarrolladores
+    [HttpGet("developers")]
+    [ProducesResponseType(typeof(List<GetDeveloperDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<GetDeveloperDTO>>> GetDevelopers()
+    {
+        try
+        {
+            var res = await _devServices.GetAllAsync();
+            return Ok(res);
+        }
+        catch (HttpResponseError ex)
+        {
+            return StatusCode(
+                (int)ex.StatusCode,
+                new HttpMessage(ex.Message)
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.InternalServerError,
+                new HttpMessage(ex.Message)
+            );
+        }
+    }
 }

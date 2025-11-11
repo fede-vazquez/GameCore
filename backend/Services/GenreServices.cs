@@ -31,11 +31,11 @@ public class GenreServices
     }
     async public Task<GenreDTO> GetOneByIdAsync(int id) => await GetOneByIdOrExceptionAsync(id);
 
-    async public Task<List<GenreDTO>> GetAllDTOAsync(Expression<Func<Genre, bool>>? filter = null)
+    async public Task<List<GenreDTO>> GetAllAsync(Expression<Func<Genre, bool>>? filter = null)
     {
         var genres = await _repo.GetAllAsync(filter);
 
-        return _mapper.Map<List<GenreDTO>>(_repo.GetAllAsync());
+        return _mapper.Map<List<GenreDTO>>(genres);
     }
     async public Task<List<Genre>> GetAllEntitiesAsync(Expression<Func<Genre, bool>>? filter = null)
     {

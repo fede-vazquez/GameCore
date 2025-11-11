@@ -10,6 +10,8 @@ using System.Net;
 using GameCore.Models.User.DTO;
 using GameCore.Models.Developer.DTO;
 using GameCore.Models.Discount.DTO;
+using GameCore.Models.Order.DTO;
+using GameCore.Models.Order;
 
 
 
@@ -24,13 +26,16 @@ namespace GameCore.Controllers
         private readonly UserServices _userServices;
         private readonly DeveloperServices _devServices;
         private readonly DiscountServices _discountServices;
+        private readonly OrderServices _orderServices;
 
-        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices, DiscountServices discountServices)
+
+        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices, DiscountServices discountServices, OrderServices orderServices)
         {
             _gameServices = gameServices;
             _userServices = userServices;
             _devServices = devServices;
             _discountServices = discountServices;
+            _orderServices = orderServices;
         }
         // GET ALL
         [HttpGet("games")]
@@ -40,7 +45,7 @@ namespace GameCore.Controllers
         {
             try
             {
-                var res = await _gameServices.GetAllAsync(parameters, null);
+                var res = await _gameServices.GetAllAsync(parameters);
                 return Ok(res);
             }
             catch (HttpResponseError ex)
@@ -268,7 +273,32 @@ namespace GameCore.Controllers
                 );
             }
         }
-
+        // obetener las ordenes de los usuarios
+        [HttpGet("orders")]
+        [ProducesResponseType(typeof(OrderListForAdminsPagedResultDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<OrderListForAdminsPagedResultDTO>> GetOrders([FromQuery] OrderListForAdminsParamsDTO parameters)
+        {
+            try
+            {
+                var res = await _orderServices.GetOrdersAsync(parameters);
+                return Ok(res);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
     }
 }
 

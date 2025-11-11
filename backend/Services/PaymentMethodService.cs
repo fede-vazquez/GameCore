@@ -1,37 +1,46 @@
 using System;
 using GameCore.Repositories;
 
-namespace GameCore.Services;
 
 using GameCore.Models.PaymentMethod;
 using GameCore.Utils;
-using System.Net;
+using GameCore.Models.PaymentMethod.DTO;
+using AutoMapper;
+
+namespace GameCore.Services;
 
 
 public class PaymentMethodService
 {
     private readonly IPaymentMethodRepository _repo;
-    public PaymentMethodService(IPaymentMethodRepository repo)
+    private readonly IMapper _mapper;
+    public PaymentMethodService(IPaymentMethodRepository repo, IMapper mapper)
     {
         _repo = repo;
+        _mapper = mapper;
     }
-    public Task<PaymentMethod> GetOneByNameAsync(string name)
+    public async Task<GetPaymentMethod> GetOneByNameAsync(string name)
     {
-        var method = _repo.GetOneAsync(r => r.Name == name);
+        var method = await _repo.GetOneAsync(r => r.Name == name);
         if (method == null)
         {
             throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "Method no encontrado");
         }
-        return method;
+        return _mapper.Map<GetPaymentMethod>(method);
     }
-    public Task<PaymentMethod> GetOneByIdAsync(int id)
+    public async Task<GetPaymentMethod> GetOneByIdAsync(int id)
     {
-        var method = _repo.GetOneAsync(r => r.Id == id);
+        var method = await _repo.GetOneAsync(r => r.Id == id);
         if (method == null)
         {
             throw new HttpResponseError(System.Net.HttpStatusCode.NotFound, "PaymentMethod no encontrado");
         }
-        return method;
+        return _mapper.Map<GetPaymentMethod>(method);
+    }
+    public async Task<List<GetPaymentMethod>> GetAllAsync()
+    {
+        var methods = await _repo.GetAllAsync();
+        return _mapper.Map<List<GetPaymentMethod>>(methods);
     }
 
 }
