@@ -23,7 +23,7 @@ interface ApiCallParams {
 
 	body?: Record<string, Array<unknown> | string | number>
 	opts?: {
-		filters?: Record<string, string>
+		filters?: Record<string, string | number>
 		version?: Versioning
 	}
 }
@@ -65,8 +65,17 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 	} as const
 
 	try {
+		//transform filters/urlSearch params into strings
+		const urlSearchParams = hasFilter
+			? Object.entries(filters)
+					.filter(([_, v]) => v)
+					.map(([k, v]) => {
+						return [k, v.toString()]
+					})
+			: [[]]
+
 		const data = await fetch(
-			`${SERVER_URL}${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`,
+			`${SERVER_URL}${endpoint}${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
 			{
 				method: httpMethod,
 				headers: {
@@ -77,7 +86,6 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 			}
 		)
 
-		console.log(data)
 		if (!data.ok) throw new CustomError(data.status === 404 ? SERVER_ERROR.CANT_REACH : undefined)
 
 		return (await data.json()) as T
@@ -86,6 +94,7 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 		if (err instanceof DOMException) throw new CustomError(CLIENT_ERROR.TIMEOUT_FETCH)
 		if (err instanceof CustomError) throw new CustomError(err.message as any)
 
+		console.log(err)
 		throw new CustomError()
 	}
 }

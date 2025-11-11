@@ -54,7 +54,7 @@ export function GCInput({
 						/>
 					) : (
 						<input
-							{...(!register && { register })}
+							{...register}
 							className={`${INPUT_CLASSNAME}`}
 							type={type}
 							placeholder={placeholder}
