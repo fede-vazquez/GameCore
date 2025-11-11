@@ -1,3 +1,4 @@
+import { ThrobberSVG } from '@/assets'
 import type { GameModel } from '@/models'
 import { Heading } from '@radix-ui/themes'
 import { useCallback, useRef } from 'react'
@@ -6,6 +7,7 @@ import { GCDivider } from './CoolDivider'
 import { ScrollBarSlider } from './ScrollbarSlider'
 
 interface ElementSliderProps {
+	isPending?: boolean
 	elements: GameModel[] | undefined
 	fallbackMsg?: { title?: string; description?: string }
 	titleName?: string
@@ -15,6 +17,7 @@ interface ElementSliderProps {
 }
 export function ElementSlider({
 	className,
+	isPending = false,
 	fallbackMsg,
 	pixelMovement = 200,
 	removeHeadings = false,
@@ -69,7 +72,9 @@ export function ElementSlider({
 				onMouseUp={() => (isDragged.current = false)}
 				onMouseLeave={() => (isDragged.current = false)}
 			>
-				{elements?.length ? (
+				{isPending ? (
+					<ThrobberSVG className="absolute top-1/2 right-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
+				) : elements?.length ? (
 					elements.map((game, idx) => {
 						return <GameCard key={game?.id ?? idx} game={game} />
 					})

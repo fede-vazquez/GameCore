@@ -37,6 +37,7 @@ const MATCH_ROUTES_TO_OBJECT = {
 } as const
 
 export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
+	console.warn('Check for unnecesary calls', { httpMethod, endpoint, opts })
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'
@@ -94,7 +95,6 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 		if (err instanceof DOMException) throw new CustomError(CLIENT_ERROR.TIMEOUT_FETCH)
 		if (err instanceof CustomError) throw new CustomError(err.message as any)
 
-		console.log(err)
 		throw new CustomError()
 	}
 }

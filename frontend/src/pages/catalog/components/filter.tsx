@@ -65,8 +65,8 @@ const FILTER_VALIDATOR = z
 	)
 
 export function FilterDropMenu({ selectOptions, games }: { selectOptions: string[]; games: GameModel[] | undefined }) {
-	const [isOpen, setIsOpen] = useState<boolean>(true)
-	const { error, startTransition, setCatalogGames } = useCatalogContext()
+	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const { startTransition, setCatalogGames } = useCatalogContext()
 
 	const {
 		register,
@@ -160,6 +160,7 @@ export function FilterDropMenu({ selectOptions, games }: { selectOptions: string
 					<DropdownMenuItem>
 						<span className="flex flex-row justify-evenly gap-x-2 items-center">
 							<Button
+								type="reset"
 								color="red"
 								variant="soft"
 								className="text-red-500! bg-red-700/20! cursor-pointer! hover:brightness-110!"
