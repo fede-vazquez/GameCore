@@ -2,4 +2,4 @@
 export * from './Button'
 export * from './ScrollbarSlider'
 export * from './SearchBar'
-export * from './ListInfo'
+export * from './GCList'

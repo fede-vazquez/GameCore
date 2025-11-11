@@ -21,7 +21,8 @@ export function GeneralInfo() {
 
 	return (
 		<div className="p-5">
-			<Text>Información general</Text>
+			<h2 className="text-4xl">Información general</h2>
+
 			<Grid columns={{ initial: '1', md: '2', lg: '3' }} gap="4" width="auto">
 				<InfoCard title="Ventas totales" value={generalInfo.totalSales.toString()} bgColor="#000000" />
 				<InfoCard title="Usuarios totales" value={generalInfo.totalUsers.toString()} bgColor="#125634" />

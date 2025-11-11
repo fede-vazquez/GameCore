@@ -1,4 +1,4 @@
-import { ListInfo } from '@/components/GCgenerics'
+import { GCList } from '@/components/GCgenerics'
 import type { GameModel } from '@/models'
 import { useEffect, useState } from 'react'
 
@@ -16,12 +16,17 @@ export function LatestGamesAdded({ category }: { category: string }) {
 
 	return (
 		<article>
-			<ListInfo
+			<GCList
 				dataList={lastGamesAdded}
+				type="list"
+				controlDirection="vertical"
 				fnMap={(game) => (
-					<div className="flex gap-2 items-center justify-between">
+					<div
+						className="flex gap-2 items-center justify-between"
+						aria-label={`nombre: ${game.title} - fecha de agregado: ${game.createdAt.toLocaleDateString()}`}
+					>
 						<h3 className="font-bold">{game.title}</h3>
-						<p>{game.createdAt.toLocaleDateString()}</p>
+						<span>{game.createdAt.toLocaleDateString()}</span>
 					</div>
 				)}
 			/>
