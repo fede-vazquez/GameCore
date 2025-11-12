@@ -8,6 +8,7 @@ import { AuthContextProvider } from './pages/auth/context'
 import { CatalogPage } from './pages/catalog/catalogPage'
 import { CatalogContextProvider } from './pages/catalog/context'
 import { LibraryPage } from './pages/library/libraryPage'
+import { LandingPage } from './pages/landing/landingPage'
 
 export const App = function App() {
 	const { clientUser } = useGlobalContext()
@@ -15,6 +16,7 @@ export const App = function App() {
 	return (
 		<main className="w-screen h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
 			<Switch>
+				<Route path="/" component={() => <LandingPage />} />
 				<Route
 					path="/auth"
 					component={() => (
