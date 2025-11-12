@@ -1,3 +1,6 @@
 {
-    "github.copilot.nextEditSuggestions.enabled": true
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin/Release/net8.0/publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/37600c3b-d80d-471a-b333-d1782a7f80c6/resourceGroups/GameCoreDB_RG/providers/Microsoft.Web/sites/GameCoreBackendUTN"
 }

@@ -180,7 +180,6 @@ namespace GameCore.Config
                 new Genre { Id = 9, Name = RACING },
                 new Genre { Id = 10, Name = FPS }
             );
-            //------------------------------------
             //-----------------------------------
             //establecer clave foranea compuesta para GameUser
             modelBuilder.Entity<GameUser>()

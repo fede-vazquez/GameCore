@@ -436,6 +436,18 @@ namespace GameCore.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 11, 10, 10, 30, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@example.com",
+                            IsActive = true,
+                            Password = "admin1234",
+                            RolId = 3,
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("GameGenre", b =>

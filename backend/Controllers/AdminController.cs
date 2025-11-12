@@ -326,6 +326,58 @@ namespace GameCore.Controllers
                 );
             }
         }
+        //eliminamos un developer por su id
+        [HttpDelete("developers/{id}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteDeveloper([FromRoute] int id)
+        {
+            try
+            {
+                await _devServices.DeleteOneByIdAsync(id);
+                return Ok();
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
+        //actualizar dev
+        [HttpPut("developers/{id}")]
+        [ProducesResponseType(typeof(GetDeveloperDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GetDeveloperDTO>> UpdateDeveloper([FromRoute] int id, [FromBody] UpdateDeveloperDTO updateDeveloperDTO)
+        {
+            try
+            {
+                var res = await _devServices.UpdateOneByIdAsync(id, updateDeveloperDTO);
+                return Ok(res);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
     }
 }
 

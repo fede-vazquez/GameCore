@@ -11,7 +11,6 @@ public class CreateGameDTO
     public int? MetacriticScore { get; set; }
     public DateTime ReleaseDate { get; set; }
     public int DeveloperId { get; set; }
-    public int DiscountId { get; set; }
     public List<int> GenreIds { get; set; } = new List<int>();
     public bool IsActive { get; set; }
 

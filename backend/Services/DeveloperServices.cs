@@ -29,6 +29,15 @@ public class DeveloperServices
         }
         return _mapper.Map<GetDeveloperDTO>(dev);
     }
+    async private Task<Developer> GetOneEntityByIdOrExceptionAsync(int id)
+    {
+        var dev = await _repo.GetOneAsync(p => p.Id == id);
+        if (dev == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.NotFound, $"No hay Devs con id = {id}");
+        }
+        return dev;
+    }
 
     async public Task<List<GetDeveloperDTO>> GetAllAsync()
     {
@@ -47,22 +56,18 @@ public class DeveloperServices
         return _mapper.Map<GetDeveloperDTO>(dev);
     }
 
-    async public Task<GetDeveloperDTO> UpdateOneByIdAsync(UpdateDeveloperDTO updateDTO)
+    async public Task<GetDeveloperDTO> UpdateOneByIdAsync(int id, UpdateDeveloperDTO updateDTO)
     {
-        var dev = await GetOneByIdOrExceptionAsync(updateDTO.Id);
-
-        var devMapped = _mapper.Map<Developer>(updateDTO);
-
-        await _repo.UpdateOneAsync(devMapped);
-
-        return _mapper.Map<GetDeveloperDTO>(devMapped);
+        var dev = await GetOneEntityByIdOrExceptionAsync(id);
+        dev.Name = updateDTO.Name;
+        await _repo.UpdateOneAsync(dev);
+        return _mapper.Map<GetDeveloperDTO>(dev);
     }
 
     async public Task DeleteOneByIdAsync(int id)
     {
-        var dev = await GetOneByIdOrExceptionAsync(id);
-        await _repo.DeleteOneAsync(_mapper.Map<Developer>(dev));
+        var dev = await GetOneEntityByIdOrExceptionAsync(id);
+        await _repo.DeleteOneAsync(dev);
     }
-
 
 }
