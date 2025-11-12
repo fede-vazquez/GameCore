@@ -1,5 +1,7 @@
+import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
 import { GCButton, GCDivider } from '@/components/GCgenerics'
+import { useLibraryContext } from '@/context'
 import type { GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
@@ -37,6 +39,8 @@ export function GamePage() {
 	const { id } = useParams()
 	if (!id) return <Redirect href="/library" />
 
+	const { libraryGames } = useLibraryContext()
+
 	const { error, isPending } = useQuery({
 		queryKey: [QUERY_KEYS.GET_SPECIFIC_GAME(id)],
 		queryFn: async () => {
@@ -49,7 +53,7 @@ export function GamePage() {
 	})
 
 	return (
-		<article className="flex flex-col justify-between w-full m-auto p-4 rounded-xl border-2 border-neutral-800">
+		<article className="flex flex-col justify-between w-[90%] m-auto p-4 rounded-xl border-2 border-neutral-800">
 			<section
 				style={{ backgroundImage: `url('${data.imageUrl}')` }}
 				className="rounded-xl h-[300px] w-full mask-b-from-20% mask-b-to-80% bg-no-repeat bg-cover bg-center"
@@ -60,8 +64,8 @@ export function GamePage() {
 				<GCDivider className="bottom-0" />
 			</span>
 
-			<section className="relative flex flex-row gap-x-6 h-full">
-				<div className="aspect-2/3 w-[270px] min-w-[270px] h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
+			<section className="relative flex flex-row gap-x-6 h-full max-h-[400px]!">
+				<div className="aspect-2/3 ml-10 w-[270px] min-w-[270px] h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
 					<img
 						draggable={false}
 						src={data.imageUrl}
@@ -69,7 +73,7 @@ export function GamePage() {
 						className="w-full h-full object-cover transition-all duration-300 hover:scale-110"
 					/>
 				</div>
-				<span className="flex flex-col gap-y-2 max-h-[400px]">
+				<span className="flex flex-col gap-y-2">
 					<section className="flex justify-between">
 						<span className="flex flex-row-reverse gap-3 items-end mr-4">
 							<DiscountBanner dsPer={10} price={data.price} />
@@ -90,13 +94,38 @@ export function GamePage() {
 						</ul>
 					</section>
 
-					<span className="divide divide-y-2 h-40 bg-neutral-800 p-2 rounded-lg">
+					<span className="divide divide-y-2 h-40 bg-neutral-800 border border-neutral-700 p-2 rounded-lg">
 						<p className="grow overflow-y-auto text-primaryWhite">{data.description}</p>
 					</span>
 
-					<GCButton theme="primary" className="flex justify-center w-fit">
-						Add to library
-					</GCButton>
+					<section className="flex justify-between gap-x-5 items-center w-full">
+						<GCButton theme="primary" className="flex justify-center w-fit">
+							Add to library
+						</GCButton>
+						<span className="flex flex-col items-center text-neutral-400">
+							<h5 className="text-neutral-400">{data.releaseDate}</h5>
+							<p>{data.developer.name}</p>
+						</span>
+					</section>
+				</span>
+				<span className="flex flex-col gap-y-5 w-[40%]! bg-neutral-900 rounded-lg px-2 py-4">
+					<span className="relative h-fit mx-auto w-fit flex items-center justify-center">
+						<h3 className="text-base font-semibold px-1">Other games you may like:</h3>
+						<GCDivider className="bottom-0" />
+					</span>
+					<ul className="flex flex-col h-full gap-y-2 justify-start overflow-y-auto px-4">
+						{new Array(5).fill(data).map(() => {
+							return (
+								<li key={data.id} className="flex flex-row">
+									<GameSideCard
+										className="flex flex-row"
+										game={data}
+										addPrice={{ discount: data.discount.percentageValue, price: data.price }}
+									/>
+								</li>
+							)
+						})}
+					</ul>
 				</span>
 			</section>
 		</article>

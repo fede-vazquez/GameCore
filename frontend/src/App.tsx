@@ -14,7 +14,7 @@ export const App = function App() {
 	const { clientUser } = useGlobalContext()
 
 	return (
-		<main className="w-screen h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
+		<main className="w-screen h-screen overflow-x-hidden text-primaryWhite bg-darkBG ">
 			<Switch>
 				<Route
 					path="/auth"
@@ -65,7 +65,7 @@ function AsideBarWrapper({ children }: { children: ReactNode }) {
 		<>
 			<AsideBar />
 
-			<article className="grow md:ml-[225px] pt-2.5 h-full mt-3 px-5 lg:px-5 ">
+			<article className="grow md:ml-[225px] pt-2.5 h-full px-5 lg:px-5 ">
 				<GCHeader />
 				{children}
 			</article>

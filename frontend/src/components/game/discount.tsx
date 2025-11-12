@@ -6,7 +6,7 @@ export function DiscountBanner({ dsPer, price }: { dsPer: number | undefined; pr
 	const finalPrice = price > 0 ? numberParser(price, dsPer) : FREE_PRICE
 	const isFree = finalPrice !== FREE_PRICE ? finalPrice : 'Free!'
 
-	if (!dsPer) return <p className="text-neutral-200">{isFree}</p>
+	if (!dsPer) return <p className="text-green-300 font-semibold">{isFree}</p>
 
 	return (
 		<>
@@ -15,7 +15,7 @@ export function DiscountBanner({ dsPer, price }: { dsPer: number | undefined; pr
 			</p>
 			<div className="flex gap-x-1.5">
 				<p className="text-zinc-500 line-through">${price}</p>
-				<p className="font-semibold text-primaryWhite">{isFree}</p>
+				<p className="font-semibold text-primaryWhite ">{isFree}</p>
 			</div>
 		</>
 	)
