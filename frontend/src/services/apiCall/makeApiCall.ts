@@ -95,7 +95,7 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 		if (!data.ok && 'message' in dataJson) throw new CustomError(dataJson?.message)
 
 		//quick fix
-		if ('token' in dataJson) localStorage.setItem(TOKEN_KEY, dataJson)
+		if ('token' in dataJson) localStorage.setItem(TOKEN_KEY, dataJson?.token)
 
 		return dataJson as T
 	} catch (err) {
