@@ -1,4 +1,4 @@
-import type { GameModel } from '@/models'
+import type { GameModel, GenreDTO } from '@/models'
 export const SERVER_URL = 'https://gamecorebackendutn-fnhkf6f5gdahfad7.brazilsouth-01.azurewebsites.net' as const
 
 export const MAX_FETCH_TIMEOUT = 5000 as const //5 secs
@@ -15,6 +15,8 @@ export const QUERY_KEYS = {
 	GET_GAME_BY_GENRE: (id: number | undefined) => `specific_game_by_genre_${id ?? 0}`,
 	GET_SPECIFIC_GAME: (id: string | undefined) => `specific_game_${id ?? 0}`
 } as const
+
+export const TOKEN_KEY = 'JWT_KEY_IMPORTANT_DO_NOT_LEAK' as const
 
 export const FUN_FACTS_STRINGS = [
 	"90% of the world's data was created in the last two years.",
@@ -38,25 +40,25 @@ export const fallbackGame: GameModel = {
 	releaseDate: new Date()
 }
 
-export const LIST_OF_GENRES = [
-	'Action',
-	'Adventure',
-	'Role-Playing Game',
-	'Simulation',
-	'Strategy',
-	'Puzzle',
-	'Sports',
-	'Racing',
-	'Fighting',
-	'Platformer',
-	'Survival',
-	'Horror',
-	'Rhythm',
-	'MMORPG',
-	'MOBA',
-	'Battle Royale',
-	'Stealth',
-	'Sandbox',
-	'Visual Novel',
-	'Card Game'
-]
+export const LIST_OF_GENRES_DTO: GenreDTO[] = [
+	{ id: 0, name: 'Action' },
+	{ id: 1, name: 'Adventure' },
+	{ id: 2, name: 'Role-Playing Game' },
+	{ id: 3, name: 'Simulation' },
+	{ id: 4, name: 'Strategy' },
+	{ id: 5, name: 'Puzzle' },
+	{ id: 6, name: 'Sports' },
+	{ id: 7, name: 'Racing' },
+	{ id: 8, name: 'Fighting' },
+	{ id: 9, name: 'Platformer' },
+	{ id: 10, name: 'Survival' },
+	{ id: 11, name: 'Horror' },
+	{ id: 12, name: 'Rhythm' },
+	{ id: 13, name: 'MMORPG' },
+	{ id: 14, name: 'MOBA' },
+	{ id: 15, name: 'Battle Royale' },
+	{ id: 16, name: 'Stealth' },
+	{ id: 17, name: 'Sandbox' },
+	{ id: 18, name: 'Visual Novel' },
+	{ id: 19, name: 'Card Game' }
+] as const

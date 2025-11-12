@@ -23,7 +23,7 @@ interface GetDiscountForGameDTO {
 	endDate: string
 }
 
-interface GenreDTO {
+export interface GenreDTO {
 	id: number
 	name: string
 }
@@ -36,7 +36,17 @@ export interface GetGameDTO {
 	price: number
 	releaseDate: string
 	developer: GetDeveloperDTO
-	discount: GetDiscountForGameDTO
+	discount: GetDiscountForGameDTO | null
 	genres: GenreDTO[]
 	isActive: boolean
+	metacriticScore?: number
+	achievements?: any[]
+}
+
+export interface GameListResponse {
+	items: GetGameDTO[]
+	totalCount: number
+	pageNumber: number
+	pageSize: number
+	totalPages: number
 }

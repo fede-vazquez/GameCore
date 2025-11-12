@@ -1,5 +1,5 @@
 import { ThrobberSVG } from '@/assets'
-import type { GameModel } from '@/models'
+import type { GameListResponse } from '@/models'
 import { Heading } from '@radix-ui/themes'
 import { useCallback, useRef } from 'react'
 import { GameCard } from '../game'
@@ -8,7 +8,7 @@ import { ScrollBarSlider } from './ScrollbarSlider'
 
 interface ElementSliderProps {
 	isPending?: boolean
-	elements: GameModel[] | undefined
+	elements: GameListResponse['items'] | undefined
 	fallbackMsg?: { title?: string; description?: string }
 	titleName?: string
 	className?: string

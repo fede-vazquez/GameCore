@@ -1,6 +1,6 @@
 import { ConsoleSVG, ControllerSVG, StoreSVG, ThrobberSVG, UserSVG } from '@/assets'
 import { useGlobalContext, useLibraryContext, useMenuContext } from '@/context'
-import type { GameModel } from '@/models'
+import type { GameListResponse } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -18,9 +18,9 @@ export function AsideBar() {
 		queryKey: [QUERY_KEYS.GET_LIBRARY_GAMES],
 		queryFn: async () => {
 			//this is the worst thing i've done. but it works. i accept changes (no rerenders please).
-			let result: GameModel[] = []
+			let result: GameListResponse['items'] = []
 			startLibTransition(async () => {
-				result = await makeApiCall<GameModel[]>({ endpoint: '/Library' })
+				result = (await makeApiCall<GameListResponse>({ endpoint: '/Library' }))?.items
 			})
 			return result
 		},
@@ -67,7 +67,7 @@ export function AsideBar() {
 						<ListElement href="/games" svg={<StoreSVG />} name="Store" />
 						<ListElement href="/library" svg={<ControllerSVG />} name="Library" />
 
-						{clientUser?.role === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
+						{clientUser?.rol === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
 					</ul>
 
 					<span className="flex flex-col flex-1 overflow-hidden">

@@ -1,7 +1,7 @@
 import { FiltersSVG, IconXSVG } from '@/assets'
 import { GCInput } from '@/components/GCgenerics'
 import { GCSelect } from '@/components/GCgenerics/Select'
-import type { GameModel } from '@/models'
+import type { GameListResponse, GenreDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@radix-ui/themes'
@@ -64,7 +64,13 @@ const FILTER_VALIDATOR = z
 		}
 	)
 
-export function FilterDropMenu({ selectOptions, games }: { selectOptions: string[]; games: GameModel[] | undefined }) {
+export function FilterDropMenu({
+	selectOptions,
+	games
+}: {
+	selectOptions: GenreDTO[]
+	games: GameListResponse['items'] | undefined
+}) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const { startTransition, setCatalogGames } = useCatalogContext()
 
@@ -99,9 +105,9 @@ export function FilterDropMenu({ selectOptions, games }: { selectOptions: string
 					className="flex flex-col gap-y-2"
 					onSubmit={handleSubmit((e) => {
 						startTransition(async () => {
-							const data = await makeApiCall<GameModel[]>({ endpoint: '/Games?', opts: { filters: e } })
-							if (!data) return
-							setCatalogGames(data)
+							const data = await makeApiCall<GameListResponse>({ endpoint: '/Games?', opts: { filters: e } })
+							if (!data?.items) return
+							setCatalogGames(data?.items)
 						})
 					})}
 				>

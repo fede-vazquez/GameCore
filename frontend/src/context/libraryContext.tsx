@@ -1,12 +1,12 @@
 import { CLIENT_ERROR, CustomError } from '@/errors'
 import { useTransitionError } from '@/hooks'
-import type { GameModel } from '@/models'
+import type { GameListResponse } from '@/models'
 import { useContext, useState, type ReactNode } from 'react'
 import { LibraryContext } from '.'
 
 export function LibraryContextProvider({ children }: { children: ReactNode }) {
 	const { error, isPending, startTransition } = useTransitionError()
-	const [libraryGames, setLibraryGames] = useState<GameModel[]>([])
+	const [libraryGames, setLibraryGames] = useState<GameListResponse['items']>([])
 
 	return (
 		<LibraryContext.Provider

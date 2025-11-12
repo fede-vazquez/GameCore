@@ -1,5 +1,5 @@
 import { CLIENT_ERROR, CustomError, SERVER_ERROR } from '@/errors/customErrorMsg'
-import { MAX_FETCH_TIMEOUT, SERVER_URL, type HTTPMethods } from '@/utils'
+import { MAX_FETCH_TIMEOUT, SERVER_URL, TOKEN_KEY, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
 	ADMIN_URLENDPOINTS,
@@ -76,6 +76,8 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 			{
 				method: httpMethod,
 				headers: {
+					//shouldnt be doing this for each call but okay....
+					Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) ?? ''}`,
 					...(body != null && { 'Content-Type': 'application/json' })
 				},
 				...(body != null && { body: JSON.stringify(body ?? {}) }),
@@ -91,6 +93,10 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 		const dataJson = await data.json()
 
 		if (!data.ok && 'message' in dataJson) throw new CustomError(dataJson?.message)
+
+		//quick fix
+		if ('token' in dataJson) localStorage.setItem(TOKEN_KEY, dataJson)
+
 		return dataJson as T
 	} catch (err) {
 		//todo: this is horrible, just to catch the AbortSignalErr. fix later

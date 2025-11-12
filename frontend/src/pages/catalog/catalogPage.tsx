@@ -1,7 +1,7 @@
 import { ThrobberSVG } from '@/assets'
 import { HorizontalCard } from '@/components/game'
 import { GCDivider, GCSearchBar } from '@/components/GCgenerics'
-import type { GameModel } from '@/models'
+import type { GameListResponse, GenreDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
 import { useQueries } from '@tanstack/react-query'
@@ -23,7 +23,7 @@ export function CatalogPage() {
 				queryKey: [QUERY_KEYS.GET_GENRES_CATALOG],
 				queryFn: async () => {
 					try {
-						return await makeApiCall<string[]>({ endpoint: '/Games/genres' })
+						return await makeApiCall<GenreDTO[]>({ endpoint: '/Games/genres' })
 					} catch {
 						return []
 					}
@@ -35,9 +35,10 @@ export function CatalogPage() {
 				queryKey: [QUERY_KEYS.GET_GAMES],
 				queryFn: async () => {
 					try {
-						return await makeApiCall<GameModel[]>({ endpoint: '/Games?', opts: { filters: { PageSize: 10 } } })
+						return (await makeApiCall<GameListResponse>({ endpoint: '/Games?', opts: { filters: { PageSize: 10 } } }))
+							?.items
 					} catch {
-						return [] as GameModel[]
+						return [] as GameListResponse['items']
 					}
 				},
 				refetchOnMount: false,

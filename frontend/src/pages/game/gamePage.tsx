@@ -2,7 +2,7 @@ import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
 import { ElementSlider, GCButton, GCDivider, GCSkeleton } from '@/components/GCgenerics'
 import { useLibraryContext } from '@/context'
-import type { GetGameDTO } from '@/models'
+import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -29,9 +29,16 @@ export function GamePage() {
 		queryKey: [QUERY_KEYS.GET_GAME_BY_GENRE(data?.id)],
 		queryFn: async () => {
 			try {
-				return await makeApiCall<GetGameDTO[]>({ endpoint: '/Games/{id}', opts: { parameter: id } })
+				const genreId = data?.genres?.at(0)?.id
+				if (!genreId) return
+				return (
+					await makeApiCall<GameListResponse>({
+						endpoint: '/Games?',
+						opts: { parameter: id, filters: { Genre: genreId } }
+					})
+				)?.items
 			} catch {
-				return {} as GetGameDTO[]
+				return [] as GameListResponse['items']
 			}
 		}
 	})

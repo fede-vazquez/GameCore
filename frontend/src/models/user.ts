@@ -2,7 +2,7 @@ export interface UserModel {
 	id: number
 	username: string
 	email: string
-	role: string
+	rol: string
 }
 
 export type RegisterModel = Pick<UserModel, 'id' | 'email' | 'username'>

@@ -4,7 +4,8 @@ export const GamesRoutes = {
 	GAMES_ID: '/Games/{id}',
 	GAMES_FILTER: '/Games?',
 	GAMES_ID_BUY: '/Games/{id}/buy',
-	GAMES_GENRES: '/Games/genres'
+	GAMES_GENRES: '/Games/genres',
+	GAMES_DISCOUNTS: '/Games/discounts'
 } as const
 
 export type AllGameRoutes = (typeof GamesRoutes)[keyof typeof GamesRoutes]
@@ -40,6 +41,15 @@ export const GAMES_URLENDPOINTS: HTTPConstructor<AllGameRoutes> = {
 	'/Games/genres': {
 		v1: {
 			url: 'v1/Games/genres',
+			GET: {
+				JWTRequired: false,
+				requiredFields: null
+			}
+		}
+	},
+	'/Games/discounts': {
+		v1: {
+			url: 'v1/Games/discounts',
 			GET: {
 				JWTRequired: false,
 				requiredFields: null

@@ -1,5 +1,5 @@
 import type { CustomError } from '@/errors'
-import type { GameModel, UserModel } from '@/models'
+import type { GameListResponse, UserModel } from '@/models'
 import type { SetState } from '@/utils'
 import { createContext } from 'react'
 
@@ -27,8 +27,8 @@ export * from './menuContext'
 
 //!library games context
 export interface libraryContextArgs {
-	libraryGames: GameModel[]
-	setLibraryGames: SetState<GameModel[]>
+	libraryGames: GameListResponse['items']
+	setLibraryGames: SetState<GameListResponse['items']>
 	startLibTransition: (cb: () => Promise<void> | void) => void
 	isPending: boolean
 	error: CustomError | null

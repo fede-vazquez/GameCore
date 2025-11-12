@@ -1,17 +1,18 @@
 import { CaretSVG, CheckedSVG, ChevronSVG } from '@/assets'
+import type { GenreDTO } from '@/models'
 import { Select } from 'radix-ui'
 import { Controller, type UseFormRegisterReturn } from 'react-hook-form'
 
 interface GCSelectProps {
 	className?: string
-	options: Array<string>
+	options: GenreDTO[]
 	placeholder: string
 	control: any
 	register: UseFormRegisterReturn<any>
 }
 
 export function GCSelect({ options, control, placeholder, className, register }: GCSelectProps) {
-	const newOptions = ['Anything', ...options]
+	const newOptions: GenreDTO[] = [{ id: 0, name: 'Anything' }, ...options]
 	return (
 		<Controller
 			control={control}
@@ -37,16 +38,16 @@ export function GCSelect({ options, control, placeholder, className, register }:
 
 							<Select.Viewport>
 								<Select.Group>
-									{newOptions.map((t) => (
+									{newOptions.map(({ id, name }) => (
 										<Select.Item
-											value={t.toLowerCase()}
-											key={t.toLowerCase()}
+											value={name.toLowerCase()}
+											key={id}
 											className="flex p-1 rounded-sm items-center hover:bg-neutral-800 cursor-pointer"
 										>
 											<Select.ItemIndicator>
 												<CheckedSVG className="h-5" />
 											</Select.ItemIndicator>
-											<Select.ItemText>{t}</Select.ItemText>
+											<Select.ItemText>{name}</Select.ItemText>
 										</Select.Item>
 									))}
 								</Select.Group>
