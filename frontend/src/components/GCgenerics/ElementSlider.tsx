@@ -14,6 +14,10 @@ interface ElementSliderProps {
 	className?: string
 	pixelMovement?: number
 	removeHeadings?: boolean
+	classImg?: string
+	classPrice?: string
+	classScroll?: string
+	removeOldPrice?: boolean
 }
 export function ElementSlider({
 	className,
@@ -22,7 +26,11 @@ export function ElementSlider({
 	pixelMovement = 200,
 	removeHeadings = false,
 	elements,
-	titleName
+	titleName,
+	classImg,
+	classPrice,
+	classScroll,
+	removeOldPrice
 }: ElementSliderProps) {
 	const scrollbarRef = useRef<HTMLSpanElement>(null)
 
@@ -43,7 +51,9 @@ export function ElementSlider({
 		<article className={`flex flex-col gap-2.5 relative ${className}`}>
 			{!removeHeadings && (
 				<span className="flex items-center justify-between mb-2">
-					<Heading as="h4">{titleName ?? 'No category name'}</Heading>
+					<Heading as="h4" className="text-lg! md:text-xl! lg:text-2xl! ">
+						{titleName ?? 'No category name'}
+					</Heading>
 					<ScrollBarSlider
 						className="z-10"
 						leftArrow={() => handleScroll('left')}
@@ -56,7 +66,7 @@ export function ElementSlider({
 			{/* lo saque de internet y lo adapte, refactorizar esto si hay tiempo */}
 			<section
 				ref={scrollbarRef}
-				className={`no-scrollbars bg-neutral-900 px-2 py-1 rounded-xl w-fit flex flex-nowrap *:shrink-0! gap-1 overflow-x-auto ${!elements?.length && 'py-12! w-full!'}`}
+				className={`no-scrollbars bg-neutral-900 px-2 py-1 rounded-xl flex flex-nowrap *:shrink-0! gap-1 overflow-x-auto w-full! ${classScroll} ${!elements?.length && 'py-12!'}`}
 				onMouseDown={(e) => {
 					isDragged.current = true
 					startX.current = e.pageX - (scrollbarRef.current?.offsetLeft ?? 0)
@@ -76,7 +86,15 @@ export function ElementSlider({
 					<ThrobberSVG className="absolute top-1/2 right-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
 				) : elements?.length ? (
 					elements.map((game, idx) => {
-						return <GameCard key={game?.id ?? idx} game={game} />
+						return (
+							<GameCard
+								key={game?.id ?? idx}
+								game={game}
+								classImg={classImg}
+								classPrice={classPrice}
+								removeOldPrice={removeOldPrice}
+							/>
+						)
 					})
 				) : (
 					<span className="flex flex-col gap-2 grow justify-center items-center">

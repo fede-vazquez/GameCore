@@ -2,7 +2,14 @@ import { numberParser } from '@/utils'
 
 const FREE_PRICE = '0' as const
 
-export function DiscountBanner({ dsPer, price }: { dsPer: number | undefined; price: number }) {
+interface DiscountBannerProps {
+	dsPer: number | undefined
+	price: number
+	removeOldPrice?: boolean
+	classTag?: string
+}
+
+export function DiscountBanner({ dsPer, price, removeOldPrice = false, classTag }: DiscountBannerProps) {
 	const finalPrice = price > 0 ? numberParser(price, dsPer) : FREE_PRICE
 	const isFree = finalPrice !== FREE_PRICE ? finalPrice : 'Free!'
 
@@ -10,11 +17,11 @@ export function DiscountBanner({ dsPer, price }: { dsPer: number | undefined; pr
 
 	return (
 		<>
-			<p className="text-center bg-neutral-100 text-neutral-900 px-1 py-0.5 text-sm rounded-md font-semibold">
+			<p className="text-center bg-neutral-100 text-neutral-900 px-0.5 py-px text-sm rounded-md font-semibold">
 				{dsPer}%
 			</p>
 			<div className="flex gap-x-1.5">
-				<p className="text-zinc-500 line-through">${price}</p>
+				{!removeOldPrice && <p className="text-zinc-500 line-through">${price}</p>}
 				<p className="font-semibold text-primaryWhite ">{isFree}</p>
 			</div>
 		</>

@@ -1,6 +1,6 @@
 import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
-import { GCButton, GCDivider } from '@/components/GCgenerics'
+import { ElementSlider, GCButton, GCDivider, GCSkeleton } from '@/components/GCgenerics'
 import { useLibraryContext } from '@/context'
 import type { GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
@@ -8,40 +8,13 @@ import { QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Redirect, useParams } from 'wouter'
 
-const data: GetGameDTO = {
-	id: 42,
-	title: 'Factorio',
-	description:
-		'Factorio is a game about building and maintaining factories. You will be mining resources, researching technologies, building infrastructure, automating production, and fighting enemies.',
-	imageUrl: '/fallback_image.png',
-	price: 35.0,
-	releaseDate: '2020-08-14',
-	developer: {
-		id: 101,
-		name: 'Wube Software LTD.'
-	},
-	discount: {
-		id: 201,
-		percentageValue: 0,
-		startDate: '2024-01-01T00:00:00Z',
-		endDate: '2024-01-01T00:00:00Z'
-	},
-	genres: [
-		{ id: 301, name: 'Simulation' },
-		{ id: 302, name: 'Strategy' },
-		{ id: 303, name: 'Automation' },
-		{ id: 304, name: 'Base Building' }
-	],
-	isActive: true
-}
-
 export function GamePage() {
 	const { id } = useParams()
 	if (!id) return <Redirect href="/library" />
 
 	const { libraryGames } = useLibraryContext()
 
-	const { error, isPending } = useQuery({
+	const { data } = useQuery({
 		queryKey: [QUERY_KEYS.GET_SPECIFIC_GAME(id)],
 		queryFn: async () => {
 			try {
@@ -52,83 +25,118 @@ export function GamePage() {
 		}
 	})
 
+	// i know, its a horrible practice but we have no more time
+	const findGame = libraryGames.find((e) => e.id === data?.id)
+
 	return (
-		<article className="flex flex-col justify-between w-[90%] m-auto p-4 rounded-xl border-2 border-neutral-800">
-			<section
-				style={{ backgroundImage: `url('${data.imageUrl}')` }}
-				className="rounded-xl h-[300px] w-full mask-b-from-20% mask-b-to-80% bg-no-repeat bg-cover bg-center"
-			/>
-
-			<span className="w-fit m-auto flex justify-center -translate-y-full">
-				<h3 className="text-3xl font-semibold px-1">{data.title}</h3>
-				<GCDivider className="bottom-0" />
-			</span>
-
-			<section className="relative flex flex-row gap-x-6 h-full max-h-[400px]!">
-				<div className="aspect-2/3 ml-10 w-[270px] min-w-[270px] h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
-					<img
-						draggable={false}
-						src={data.imageUrl}
-						alt={`Portrait image of ${data?.title}`}
-						className="w-full h-full object-cover transition-all duration-300 hover:scale-110"
+		<>
+			<article className="relative flex flex-col justify-between w-full 2xl:w-[90%] m-auto p-4 rounded-xl border-2 border-neutral-800">
+				{data?.imageUrl ? (
+					<section
+						style={{ backgroundImage: `url('${data.imageUrl}')` }}
+						className="rounded-xl h-[300px] w-full mask-b-from-20% mask-b-to-80% bg-no-repeat bg-cover bg-center"
 					/>
-				</div>
-				<span className="flex flex-col gap-y-2">
-					<section className="flex justify-between">
-						<span className="flex flex-row-reverse gap-3 items-end mr-4">
-							<DiscountBanner dsPer={10} price={data.price} />
+				) : (
+					<GCSkeleton className="h-[300px] w-full mb-4" />
+				)}
+
+				<span className="w-fit m-auto flex justify-center -translate-y-full">
+					<h3 className="text-3xl font-semibold px-1">{data?.title ?? 'Loading'}</h3>
+					<GCDivider className="bottom-0" />
+				</span>
+
+				<section className="flex flex-col md:flex-row gap-x-6 gap-y-2 h-full md:max-h-[400px]!">
+					<div className="aspect-2/3 w-[200px] m-auto md:m-0 md:ml-10 md:w-[270px] md:min-w-[270px] md:h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
+						{data?.imageUrl ? (
+							<img
+								draggable={false}
+								src={data.imageUrl}
+								alt={`Portrait image of ${data.title}`}
+								className="w-full h-full object-contain md:object-cover transition-all duration-300 hover:scale-110"
+							/>
+						) : (
+							<GCSkeleton className="h-full w-full" />
+						)}
+					</div>
+					<span className="flex flex-col gap-y-2">
+						<section className="flex flex-col items-center gap-y-2 xl:flex-row justify-between">
+							<span className="flex flex-row-reverse gap-3 items-end mr-4">
+								{data?.description ? (
+									<DiscountBanner dsPer={data?.discount?.percentageValue ?? 0} price={data?.price} />
+								) : (
+									<GCSkeleton className="h-8 w-40 grow!" />
+								)}
+							</span>
+							<ul className="flex flex-wrap flex-row gap-x-1 gap-y-1">
+								{data?.genres?.map((e) => (
+									<li
+										key={e.id}
+										className="border px-2 py-1 text-sm rounded-md text-neutral-300"
+										style={{
+											borderColor: `hsla(${stringToColor(e.name)}, 0.5)`,
+											color: `hsl(${stringToColor(e.name)})`
+										}}
+									>
+										<p>{e.name}</p>
+									</li>
+								))}
+							</ul>
+						</section>
+
+						{data?.description ? (
+							<span className="h-40 bg-neutral-800 border border-neutral-700 p-2 rounded-lg overflow-y-scroll">
+								<p className="grow overflow-y-auto text-primaryWhite">{data.description}</p>
+							</span>
+						) : (
+							<GCSkeleton className="h-40 w-[600px] grow!" />
+						)}
+
+						<section className="flex flex-col-reverse gap-y-2 justify-between gap-x-5 items-center w-full md:flex-row">
+							<GCButton
+								theme="primary"
+								className="flex justify-center w-fit"
+								disabled={!data || !!findGame}
+								onClick={async () => await makeApiCall({ endpoint: '/games/{id}/buy', httpMethod: 'PUT' })}
+							>
+								{findGame ? 'Already owned' : 'Add to library'}
+							</GCButton>
+							<span className="flex flex-row gap-x-2 md:flex-col items-center text-neutral-400">
+								<h5 className="text-neutral-400 text-sm md:text-base">{data?.releaseDate}</h5>
+								<p>{data?.developer?.name}</p>
+							</span>
+						</section>
+					</span>
+					<span className="flex-col gap-y-5 w-[40%]! min-w-[230px] bg-neutral-900 rounded-lg px-2 py-4 border border-neutral-600 hidden 2xl:flex">
+						<span className="relative h-fit mx-auto w-fit flex items-center justify-center">
+							<h3 className="text-base font-semibold px-1 text-center">Recommendations</h3>
+							<GCDivider className="bottom-0" />
 						</span>
-						<ul className="flex flex-row gap-x-1">
-							{data.genres.map((e) => (
-								<li
-									key={e.id}
-									className="border px-2 py-1 text-sm rounded-md text-neutral-300"
-									style={{
-										borderColor: `hsla(${stringToColor(e.name)}, 0.5)`,
-										color: `hsl(${stringToColor(e.name)})`
-									}}
-								>
-									<p>{e.name}</p>
-								</li>
-							))}
+						<ul className="flex flex-col h-full gap-y-2 justify-start overflow-y-auto px-4">
+							{new Array(5).fill(data).map(() => {
+								return (
+									<li key={data?.id} className="flex flex-col">
+										<GameSideCard
+											className="flex flex-row"
+											game={data}
+											addPrice={{ discount: data?.discount?.percentageValue ?? 0, price: data?.price ?? 0 }}
+										/>
+									</li>
+								)
+							})}
 						</ul>
-					</section>
-
-					<span className="divide divide-y-2 h-40 bg-neutral-800 border border-neutral-700 p-2 rounded-lg">
-						<p className="grow overflow-y-auto text-primaryWhite">{data.description}</p>
 					</span>
-
-					<section className="flex justify-between gap-x-5 items-center w-full">
-						<GCButton theme="primary" className="flex justify-center w-fit">
-							Add to library
-						</GCButton>
-						<span className="flex flex-col items-center text-neutral-400">
-							<h5 className="text-neutral-400">{data.releaseDate}</h5>
-							<p>{data.developer.name}</p>
-						</span>
-					</section>
-				</span>
-				<span className="flex flex-col gap-y-5 w-[40%]! bg-neutral-900 rounded-lg px-2 py-4">
-					<span className="relative h-fit mx-auto w-fit flex items-center justify-center">
-						<h3 className="text-base font-semibold px-1">Other games you may like:</h3>
-						<GCDivider className="bottom-0" />
-					</span>
-					<ul className="flex flex-col h-full gap-y-2 justify-start overflow-y-auto px-4">
-						{new Array(5).fill(data).map(() => {
-							return (
-								<li key={data.id} className="flex flex-row">
-									<GameSideCard
-										className="flex flex-row"
-										game={data}
-										addPrice={{ discount: data.discount.percentageValue, price: data.price }}
-									/>
-								</li>
-							)
-						})}
-					</ul>
-				</span>
-			</section>
-		</article>
+				</section>
+			</article>
+			<ElementSlider
+				elements={new Array(5).fill(data)}
+				titleName="Recommendations"
+				className="2xl:hidden mt-5! pb-20!"
+				classImg="w-[120px]!"
+				classPrice="flex-reverse-row! gap-x-2! justify-center! text-sm!"
+				classScroll="flex flex-row gap-x-4!"
+				removeOldPrice
+			/>
+		</>
 	)
 }
 
