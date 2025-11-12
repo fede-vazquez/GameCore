@@ -1,6 +1,5 @@
 import { WHY_USE_IT } from '@/utils'
-import { Hero, GCList } from './components'
-import { CardItem } from './components/CardItem'
+import { Hero, GCList, GameShowcase, CardItem } from './components'
 import { GCDivider } from '@/components/GCgenerics'
 
 export function LandingPage() {
@@ -16,6 +15,8 @@ export function LandingPage() {
 					fnMap={(item) => <CardItem title={item.title} description={item.description} />}
 				/>
 			</section>
+
+			<GameShowcase />
 		</>
 	)
 }
