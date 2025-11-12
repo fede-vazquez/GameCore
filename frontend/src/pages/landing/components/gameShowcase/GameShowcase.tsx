@@ -3,6 +3,7 @@ import { Tabs } from 'radix-ui'
 import { useState } from 'react'
 import { TabButton } from './TabButton'
 import GameList from './GameList'
+import { GamesRoutes } from '@/services/apiCall/routes'
 
 const TABS = {
 	POPULAR: 'popular',
@@ -29,13 +30,16 @@ export function GameShowcase() {
 				</Tabs.List>
 				<Box className="transition-all duration-300 min-h-[60vh]">
 					<Tabs.Content value={TABS.POPULAR}>
-						<GameList fetchUrl="/api/games?" />
+						<GameList fetchUrl={GamesRoutes.GAMES_FILTER} filters={{ Ascending: false, sortBy: 'title' }} />
 					</Tabs.Content>
 					<Tabs.Content value={TABS.NEW}>
-						<GameList fetchUrl="/api/games?" />
+						<GameList fetchUrl={GamesRoutes.GAMES_FILTER} filters={{ Ascending: false, sortBy: 'relaseDate' }} />
 					</Tabs.Content>
 					<Tabs.Content value={TABS.DISCOUNT}>
-						<GameList fetchUrl="/api/games?" />
+						<GameList
+							fetchUrl={GamesRoutes.GAMES_FILTER}
+							filters={{ Ascending: false, sortBy: 'discountPercentage' }}
+						/>
 					</Tabs.Content>
 				</Box>
 			</Tabs.Root>

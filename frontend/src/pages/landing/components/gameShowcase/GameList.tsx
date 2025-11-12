@@ -1,87 +1,64 @@
 import { HorizontalCard } from '@/components/game'
-import type { GameModel } from '@/models'
-import { useState } from 'react'
-import { useEffect } from 'react'
 import { GCList } from '../GCList'
 import { Link } from 'wouter'
 import { GCButton } from '@/components/GCgenerics'
+import { useQuery } from '@tanstack/react-query'
+import { makeApiCall } from '@/services/apiCall'
+import type { AllGameRoutes } from '@/services/apiCall/routes'
+import type { GameModel, GetGameDTO } from '@/models'
 
-export default function GameList({ fetchUrl }: { fetchUrl: string }) {
-	const [data, setData] = useState<
-		{ game: Pick<GameModel, 'id' | 'title' | 'description' | 'price' | 'imageUrl'>; discountPercentage: number }[]
-	>([])
+interface GameListProps {
+	fetchUrl: AllGameRoutes
+	filters?: any
+}
 
-	useEffect(() => {
-		// mock data
-		const mockData = [
-			{
-				game: {
-					id: 1,
-					title: 'Game 1',
-					description: 'Description 1',
-					price: 10,
-					imageUrl: '/fallback_image.png'
-				},
-				discountPercentage: 10
-			},
-			{
-				game: {
-					id: 2,
-					title: 'Game 2',
-					description: 'Description 2',
-					price: 20,
-					imageUrl: '/fallback_image.png'
-				},
-				discountPercentage: 20
-			},
-			{
-				game: {
-					id: 3,
-					title: 'Game 3',
-					description: 'Description 3',
-					price: 30,
-					imageUrl: '/fallback_image.png'
-				},
-				discountPercentage: 30
-			},
-			{
-				game: {
-					id: 4,
-					title: 'Game 4',
-					description: 'Description 4',
-					price: 40,
-					imageUrl: '/fallback_image.png'
-				},
-				discountPercentage: 40
-			},
-			{
-				game: {
-					id: 5,
-					title: 'Game 5',
-					description: 'Description 5',
-					price: 50,
-					imageUrl: '/fallback_image.png'
-				},
-				discountPercentage: 50
-			}
-		]
+interface GameListResponse {
+	items: GetGameDTO[]
+	isLoading: boolean
+	error: any
+}
 
-		setData(mockData)
-	}, [fetchUrl])
+export default function GameList({ fetchUrl, filters }: GameListProps) {
+	const { data, isLoading, error } = useQuery<GameListResponse>({
+		queryKey: [fetchUrl],
+		queryFn: async () => {
+			const response = await makeApiCall<GameListResponse>({
+				endpoint: fetchUrl,
+				opts: {
+					filters: filters
+				}
+			})
+			return response
+		}
+	})
+
+	if (isLoading) {
+		return <div>Cargando juegos...</div>
+	}
+
+	if (error) {
+		return <div>Error al cargar los juegos </div>
+	}
+
+	console.log(data?.items)
 
 	return (
 		<>
-			<GCList
-				dataList={data.map((game) => ({ ...game.game, discountPercentage: game.discountPercentage }))}
-				mode="horizontal"
-				type="grid"
-				fnMap={(game) => <HorizontalCard key={game.id} game={game} discountPercentage={game.discountPercentage} />}
-			/>
-			<Link href="/games" className="flex justify-center">
-				<GCButton theme="primary" className="w-full m-4 max-w-2xl">
-					... Ver más
-				</GCButton>
-			</Link>
+			{data?.items && (
+				<>
+					<GCList
+						dataList={data.items.map((game) => ({ ...game, discountPercentage: game.discount.percentageValue * 100 }))}
+						mode="horizontal"
+						type="grid"
+						fnMap={(game) => <HorizontalCard key={game.id} game={game} discountPercentage={game.discountPercentage} />}
+					/>
+					<Link href="/games" className="flex justify-center">
+						<GCButton theme="primary" className="w-full m-4 max-w-2xl">
+							... Ver más
+						</GCButton>
+					</Link>
+				</>
+			)}
 		</>
 	)
 }
