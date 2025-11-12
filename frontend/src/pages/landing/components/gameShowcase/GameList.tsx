@@ -5,10 +5,10 @@ import { GCButton } from '@/components/GCgenerics'
 import { useQuery } from '@tanstack/react-query'
 import { makeApiCall } from '@/services/apiCall'
 import type { AllGameRoutes } from '@/services/apiCall/routes'
-import type { GameModel, GetGameDTO } from '@/models'
+import type { GetGameDTO } from '@/models'
 
 interface GameListProps {
-	fetchUrl: AllGameRoutes
+	queryName: string
 	filters?: any
 }
 
@@ -18,12 +18,12 @@ interface GameListResponse {
 	error: any
 }
 
-export default function GameList({ fetchUrl, filters }: GameListProps) {
+export default function GameList({ filters, queryName }: GameListProps) {
 	const { data, isLoading, error } = useQuery<GameListResponse>({
-		queryKey: [fetchUrl],
+		queryKey: [queryName],
 		queryFn: async () => {
 			const response = await makeApiCall<GameListResponse>({
-				endpoint: fetchUrl,
+				endpoint: '/games?',
 				opts: {
 					filters: filters
 				}
@@ -39,8 +39,6 @@ export default function GameList({ fetchUrl, filters }: GameListProps) {
 	if (error) {
 		return <div>Error al cargar los juegos </div>
 	}
-
-	console.log(data?.items)
 
 	return (
 		<>
