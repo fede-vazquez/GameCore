@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GameCore.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfiguracionInicial : Migration
+    public partial class Migracion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,6 +86,8 @@ namespace GameCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MetacriticScore = table.Column<int>(type: "int", nullable: true),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     DeveloperId = table.Column<int>(type: "int", nullable: false),
@@ -110,7 +112,7 @@ namespace GameCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RolId = table.Column<int>(type: "int", nullable: false)
@@ -161,7 +163,6 @@ namespace GameCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Discounts", x => x.Id);
-                    table.CheckConstraint("CK_Discount_EndDate_GreaterThan_StartDate", "[EndDate] > [StartDate]");
                     table.ForeignKey(
                         name: "FK_Discounts_Games_GameId",
                         column: x => x.GameId,
@@ -262,29 +263,21 @@ namespace GameCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AchievementUsers",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    AchievementId = table.Column<int>(type: "int", nullable: false),
-                    DateAchieved = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AchievementUsers", x => new { x.AchievementId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_AchievementUsers_Achievements_AchievementId",
-                        column: x => x.AchievementId,
-                        principalTable: "Achievements",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AchievementUsers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, "Action" },
+                    { 2, "Adventure" },
+                    { 3, "RPG" },
+                    { 4, "Strategy" },
+                    { 5, "Simulation" },
+                    { 6, "Sports" },
+                    { 7, "Puzzle" },
+                    { 8, "Horror" },
+                    { 9, "Racing" },
+                    { 10, "First-Person Shooter" }
                 });
 
             migrationBuilder.InsertData(
@@ -328,11 +321,6 @@ namespace GameCore.Migrations
                 table: "Achievements",
                 column: "Name",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AchievementUsers_UserId",
-                table: "AchievementUsers",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Developers_Name",
@@ -426,7 +414,7 @@ namespace GameCore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AchievementUsers");
+                name: "Achievements");
 
             migrationBuilder.DropTable(
                 name: "Discounts");
@@ -441,13 +429,13 @@ namespace GameCore.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Achievements");
-
-            migrationBuilder.DropTable(
                 name: "Percentages");
 
             migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");
@@ -456,13 +444,10 @@ namespace GameCore.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Developers");
 
             migrationBuilder.DropTable(
                 name: "Rols");
-
-            migrationBuilder.DropTable(
-                name: "Developers");
         }
     }
 }

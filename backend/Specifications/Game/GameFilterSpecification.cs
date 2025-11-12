@@ -16,6 +16,7 @@ public class GameFilterSpecification : Specification<Game>
         AddInclude(g => g.Discounts);
         AddInclude(g => g.Developer);
         AddInclude("Discounts.Percentage");
+        AddInclude(g => g.Achievements);
         if (gameListParametersDTO != null)
         {
             if (gameListParametersDTO.Name != null)
@@ -56,6 +57,10 @@ public class GameFilterSpecification : Specification<Game>
             if (gameListParametersDTO.MaxPrice != null)
             {
                 AddCriteria(g => g.Price <= gameListParametersDTO.MaxPrice);
+            }
+            if (gameListParametersDTO.MinMetacriticScore != null)
+            {
+                AddCriteria(g => g.MetacriticScore >= gameListParametersDTO.MinMetacriticScore);
             }
             //ordenar
             if (!gameListParametersDTO.Ascending)

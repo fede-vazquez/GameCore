@@ -99,5 +99,43 @@ namespace GameCore.Controllers
                 );
             }
         }
+        //actualizar usuario
+        [HttpPut("")]
+        [ProducesResponseType(typeof(UserWithoutPassDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<UserWithoutPassDTO>> UpdateProfile([FromBody] UpdateUserDTO updateUserDTO)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst("id");
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User ID claim no encontrado en eltoken.");
+                }
+                int userId;
+
+                if (!int.TryParse(userIdClaim.Value, out userId))
+                {
+                    return Unauthorized("Formato User ID invalido en el token.");
+                }
+                var res = await _userServices.UpdateOneByIdAsync(userId, updateUserDTO);
+                return Ok(res);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
     }
 }

@@ -11,8 +11,7 @@ using GameCore.Models.User.DTO;
 using GameCore.Models.Developer.DTO;
 using GameCore.Models.Discount.DTO;
 using GameCore.Models.Order.DTO;
-using GameCore.Models.Order;
-
+using GameCore.Models.Achievement.DTO;
 
 
 namespace GameCore.Controllers
@@ -27,15 +26,17 @@ namespace GameCore.Controllers
         private readonly DeveloperServices _devServices;
         private readonly DiscountServices _discountServices;
         private readonly OrderServices _orderServices;
+        private readonly AchievementServices _achievementServices;
 
 
-        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices, DiscountServices discountServices, OrderServices orderServices)
+        public AdminController(GameServices gameServices, UserServices userServices, DeveloperServices devServices, DiscountServices discountServices, OrderServices orderServices, AchievementServices achievementServices)
         {
             _gameServices = gameServices;
             _userServices = userServices;
             _devServices = devServices;
             _discountServices = discountServices;
             _orderServices = orderServices;
+            _achievementServices = achievementServices;
         }
         // GET ALL
         [HttpGet("games")]
@@ -257,6 +258,32 @@ namespace GameCore.Controllers
             {
                 await _discountServices.CreateOneAsync(gameId, createDiscountDTO);
                 return Created("CreateDiscount", null);
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
+        // creamos un achievement a un juego
+        [HttpPost("games/{gameId}/achievements")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateAchievement([FromBody] CreateAchievementDTO createAchievementDTO, [FromRoute] int gameId)
+        {
+            try
+            {
+                await _achievementServices.CreateOneAsync(gameId, createAchievementDTO);
+                return Created("CreateAchievement", null);
             }
             catch (HttpResponseError ex)
             {

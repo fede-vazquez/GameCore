@@ -64,6 +64,7 @@ builder.Services.AddScoped<GameUserServices>();
 builder.Services.AddScoped<OrderServices>();
 builder.Services.AddScoped<DiscountServices>();
 builder.Services.AddScoped<PercentageService>();
+builder.Services.AddScoped<AchievementServices>();
 //specification
 // builder.Services.AddScoped<GameFilterSpecification>();
 builder.Services.AddScoped<IGameSpecificationFactory, GameSpecificationFactory>();
@@ -86,7 +87,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
-builder.Services.AddScoped<IAchievementUserRepository, AchievementUserRepository>();
 
 
 //JWT

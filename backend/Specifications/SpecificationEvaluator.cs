@@ -29,8 +29,6 @@ internal static class SpecificationEvaluator
         {
             query = query.OrderByDescending(spec.OrderByDescending);
         }
-
-
         return query;
     }
     public static IQueryable<TEntity> ApplyPaging<TEntity>(

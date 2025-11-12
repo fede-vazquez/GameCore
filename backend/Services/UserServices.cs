@@ -74,11 +74,23 @@ public class UserServices
 
     async public Task<UserWithoutPassDTO> CreateOneAsync(RegisterDTO register)
     {
+        if (register.ConfirmPassword != register.Password)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Las contraseñas no coinciden");
+        }
+        if (await _repo.GetOneAsync(x => x.Username == register.Username) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un usuario con ese username");
+        }
+        if (await _repo.GetOneAsync(x => x.Email == register.Email) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un usuario con ese email");
+        }
         var user = _mapper.Map<User>(register);
 
         user.Password = _encoderServices.Encode(user.Password);
 
-        var role = await _roleServices.GetOneByNameAsync(ROLE.ADMIN);
+        var role = await _roleServices.GetOneByNameAsync(ROLE.USER);
         user.Rol = role;
 
         await _repo.CreateOneAsync(user);
@@ -97,5 +109,34 @@ public class UserServices
 
         return _mapper.Map<UserWithoutPassDTO>(user);
     }
-
+    async public Task<UserWithoutPassDTO> UpdateOneByIdAsync(int id, UpdateUserDTO updateDTO)
+    {
+        if (updateDTO.ConfirmPassword != updateDTO.Password)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Las contraseñas no coinciden");
+        }
+        if (await _repo.GetOneAsync(x => x.Username == updateDTO.Username && x.Id != id) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un usuario con ese username");
+        }
+        if (await _repo.GetOneAsync(x => x.Email == updateDTO.Email && x.Id != id) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un usuario con ese email");
+        }
+        var user = await _repo.GetOneAsync(x => x.Id == id);
+        if (updateDTO.Password != null)
+        {
+            user.Password = _encoderServices.Encode(updateDTO.Password);
+        }
+        if (updateDTO.Username != null)
+        {
+            user.Username = updateDTO.Username;
+        }
+        if (updateDTO.Email != null)
+        {
+            user.Email = updateDTO.Email;
+        }
+        await _repo.UpdateOneAsync(user);
+        return _mapper.Map<UserWithoutPassDTO>(user);
+    }
 }

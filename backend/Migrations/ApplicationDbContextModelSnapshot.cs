@@ -51,24 +51,6 @@ namespace GameCore.Migrations
                     b.ToTable("Achievements");
                 });
 
-            modelBuilder.Entity("GameCore.Models.AchievementUser.AchievementUser", b =>
-                {
-                    b.Property<int>("AchievementId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAchieved")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AchievementId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AchievementUsers");
-                });
-
             modelBuilder.Entity("GameCore.Models.Developer.Developer", b =>
                 {
                     b.Property<int>("Id")
@@ -141,6 +123,9 @@ namespace GameCore.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("MetacriticScore")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
@@ -479,25 +464,6 @@ namespace GameCore.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("GameCore.Models.AchievementUser.AchievementUser", b =>
-                {
-                    b.HasOne("GameCore.Models.Achievement.Achievement", "Achievement")
-                        .WithMany("AchievementUsers")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameCore.Models.User.User", "User")
-                        .WithMany("AchievementUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Achievement");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GameCore.Models.Discount.Discount", b =>
                 {
                     b.HasOne("GameCore.Models.Game.Game", "Game")
@@ -600,11 +566,6 @@ namespace GameCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameCore.Models.Achievement.Achievement", b =>
-                {
-                    b.Navigation("AchievementUsers");
-                });
-
             modelBuilder.Entity("GameCore.Models.Developer.Developer", b =>
                 {
                     b.Navigation("Games");
@@ -638,8 +599,6 @@ namespace GameCore.Migrations
 
             modelBuilder.Entity("GameCore.Models.User.User", b =>
                 {
-                    b.Navigation("AchievementUsers");
-
                     b.Navigation("GameUsers");
 
                     b.Navigation("Orders");

@@ -4,7 +4,6 @@ namespace GameCore.Models.User;
 
 using GameCore.Models.Rol;
 using GameCore.Models.GameUser;
-using GameCore.Models.AchievementUser;
 using GameCore.Models.Order;
 public class User
 {
@@ -17,8 +16,5 @@ public class User
     public int RolId { get; set; }
     public Rol Rol { get; set; } = null!;
     public ICollection<GameUser> GameUsers { get; set; } = new List<GameUser>();
-    public
-    ICollection<AchievementUser> AchievementUsers
-    { get; set; } = new List<AchievementUser>();
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

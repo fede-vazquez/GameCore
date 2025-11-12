@@ -4,7 +4,6 @@ using GameCore.Models.Rol;
 using GameCore.Models.Game;
 using GameCore.Models.Developer;
 using GameCore.Models.Achievement;
-using GameCore.Models.AchievementUser;
 using GameCore.Models.Genre;
 using GameCore.Models.Discount;
 using GameCore.Models.Percentage;
@@ -29,7 +28,6 @@ namespace GameCore.Config
         public DbSet<Game> Games { get; set; } = null!;
         public DbSet<Developer> Developers { get; set; } = null!;
         public DbSet<Achievement> Achievements { get; set; } = null!;
-        public DbSet<AchievementUser> AchievementUsers { get; set; } = null!;
         public DbSet<Genre> Genres { get; set; } = null!;
         public DbSet<Discount> Discounts { get; set; } = null!;
         public DbSet<Percentage> Percentages { get; set; } = null!;
@@ -60,7 +58,6 @@ namespace GameCore.Config
                 .Property(u => u.Password)
                 .HasMaxLength(100)
                 .IsRequired();
-
             //------------------------------------
             //El nombre de Rol debe ser unico, no nulo y tener un maximo de 32 caracteres
             modelBuilder.Entity<Rol>()
@@ -134,12 +131,12 @@ namespace GameCore.Config
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Game)
                 .WithMany(g => g.Orders)
                 .HasForeignKey(o => o.GameId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
             //------------------------------------
             //EL nombre de PaymentMethod debe ser unico, no nulo y tener un maximo de 32 caracteres
             modelBuilder.Entity<PaymentMethod>()
@@ -185,9 +182,6 @@ namespace GameCore.Config
             );
             //------------------------------------
             //-----------------------------------
-            //establecer clave foranea compuesta para achievementUser
-            modelBuilder.Entity<AchievementUser>()
-                .HasKey(au => new { au.AchievementId, au.UserId });
             //establecer clave foranea compuesta para GameUser
             modelBuilder.Entity<GameUser>()
                 .HasKey(gu => new { gu.GameId, gu.UserId });

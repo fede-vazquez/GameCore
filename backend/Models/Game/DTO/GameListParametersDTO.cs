@@ -12,6 +12,7 @@ public class GameListParametersDTO
     public int? Year { get; set; }
     public int? MinPrice { get; set; } = 0;
     public int? MaxPrice { get; set; }
+    public int? MinMetacriticScore { get; set; }
 
     //ordenar por
     public string? SortBy { get; set; }

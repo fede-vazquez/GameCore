@@ -24,6 +24,9 @@ using GameCore.Models.Rol;
 using GameCore.Models.Rol.DTO;
 using GameCore.Models.Percentage;
 using GameCore.Models.Percentage.DTO;
+using GameCore.Models.Achievement;
+using GameCore.Models.Achievement.DTO;
+
 
 
 public class Mapping : Profile
@@ -39,6 +42,7 @@ public class Mapping : Profile
         //Genre
         CreateMap<Genre, GenreDTO>();
         CreateMap<GenreDTO, Genre>();
+        CreateMap<CreateGenreDTO, Genre>();
         //Developer
         CreateMap<Developer, GetDeveloperDTO>();
         CreateMap<CreateDeveloperDTO, Developer>();
@@ -57,6 +61,9 @@ public class Mapping : Profile
             ).ForMember(
                 dest => dest.Discount,
                 opt => opt.MapFrom(e => e.Discounts.OrderByDescending(d => d.Id).FirstOrDefault())
+            ).ForMember(
+                dest => dest.Achievements,
+                opt => opt.MapFrom(e => e.Achievements.Select(a => new GetAchievementForGameDTO { Id = a.Id, Name = a.Name, Description = a.Description }).ToList())
             );
         CreateMap<GameUser, GetGameForLibraryDTO>()
         .ForMember(
@@ -130,5 +137,8 @@ public class Mapping : Profile
         CreateMap<Rol, GetRolDTO>();
         //Percentages
         CreateMap<Percentage, GetPercentageDTO>();
+        //Achievement
+        CreateMap<Achievement, GetAchievementForGameDTO>();
+        CreateMap<CreateAchievementDTO, Achievement>();
     }
 }

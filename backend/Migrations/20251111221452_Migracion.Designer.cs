@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251101182111_ConfiguracionInicial")]
-    partial class ConfiguracionInicial
+    [Migration("20251111221452_Migracion")]
+    partial class Migracion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,24 +52,6 @@ namespace GameCore.Migrations
                         .IsUnique();
 
                     b.ToTable("Achievements");
-                });
-
-            modelBuilder.Entity("GameCore.Models.AchievementUser.AchievementUser", b =>
-                {
-                    b.Property<int>("AchievementId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAchieved")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AchievementId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AchievementUsers");
                 });
 
             modelBuilder.Entity("GameCore.Models.Developer.Developer", b =>
@@ -119,10 +101,7 @@ namespace GameCore.Migrations
 
                     b.HasIndex("PercentageId");
 
-                    b.ToTable("Discounts", t =>
-                        {
-                            t.HasCheckConstraint("CK_Discount_EndDate_GreaterThan_StartDate", "[EndDate] > [StartDate]");
-                        });
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("GameCore.Models.Game.Game", b =>
@@ -141,8 +120,15 @@ namespace GameCore.Migrations
                     b.Property<int>("DeveloperId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("MetacriticScore")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
@@ -206,6 +192,58 @@ namespace GameCore.Migrations
                         .IsUnique();
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "RPG"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Strategy"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Simulation"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Sports"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Puzzle"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Racing"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "First-Person Shooter"
+                        });
                 });
 
             modelBuilder.Entity("GameCore.Models.Order.Order", b =>
@@ -278,7 +316,7 @@ namespace GameCore.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GameCore.Models.Percentege.Percentage", b =>
+            modelBuilder.Entity("GameCore.Models.Percentage.Percentage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -379,8 +417,8 @@ namespace GameCore.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("RolId")
                         .HasColumnType("int");
@@ -429,25 +467,6 @@ namespace GameCore.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("GameCore.Models.AchievementUser.AchievementUser", b =>
-                {
-                    b.HasOne("GameCore.Models.Achievement.Achievement", "Achievement")
-                        .WithMany("AchievementUsers")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameCore.Models.User.User", "User")
-                        .WithMany("AchievementUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Achievement");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GameCore.Models.Discount.Discount", b =>
                 {
                     b.HasOne("GameCore.Models.Game.Game", "Game")
@@ -456,7 +475,7 @@ namespace GameCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameCore.Models.Percentege.Percentage", "Percentage")
+                    b.HasOne("GameCore.Models.Percentage.Percentage", "Percentage")
                         .WithMany("Discounts")
                         .HasForeignKey("PercentageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,11 +569,6 @@ namespace GameCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameCore.Models.Achievement.Achievement", b =>
-                {
-                    b.Navigation("AchievementUsers");
-                });
-
             modelBuilder.Entity("GameCore.Models.Developer.Developer", b =>
                 {
                     b.Navigation("Games");
@@ -576,7 +590,7 @@ namespace GameCore.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("GameCore.Models.Percentege.Percentage", b =>
+            modelBuilder.Entity("GameCore.Models.Percentage.Percentage", b =>
                 {
                     b.Navigation("Discounts");
                 });
@@ -588,8 +602,6 @@ namespace GameCore.Migrations
 
             modelBuilder.Entity("GameCore.Models.User.User", b =>
                 {
-                    b.Navigation("AchievementUsers");
-
                     b.Navigation("GameUsers");
 
                     b.Navigation("Orders");
