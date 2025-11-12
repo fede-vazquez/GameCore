@@ -7,6 +7,7 @@ import { AuthPage } from './pages/auth/authPage'
 import { AuthContextProvider } from './pages/auth/context'
 import { CatalogPage } from './pages/catalog/catalogPage'
 import { CatalogContextProvider } from './pages/catalog/context'
+import { GamePage } from './pages/game/gamePage'
 import { LibraryPage } from './pages/library/libraryPage'
 
 export const App = function App() {
@@ -40,6 +41,15 @@ export const App = function App() {
 								</CatalogContextProvider>
 							}
 						/>
+					)}
+				/>
+
+				<Route
+					path="/games/:id"
+					component={() => (
+						<AsideBarWrapper>
+							<GamePage />
+						</AsideBarWrapper>
 					)}
 				/>
 

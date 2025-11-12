@@ -10,10 +10,12 @@ export function DiscountBanner({ dsPer, price }: { dsPer: number | undefined; pr
 
 	return (
 		<>
-			<p className="text-center bg-primaryWhite text-neutral-900 px-2 py-1 rounded-md font-bold">{dsPer}%</p>
+			<p className="text-center bg-neutral-100 text-neutral-900 px-1 py-0.5 text-sm rounded-md font-semibold">
+				{dsPer}%
+			</p>
 			<div className="flex gap-x-1.5">
-				<p className="text-zinc-500 line-through">{price}</p>
-				<p className="text-neutral-200">{isFree}</p>
+				<p className="text-zinc-500 line-through">${price}</p>
+				<p className="font-semibold text-primaryWhite">{isFree}</p>
 			</div>
 		</>
 	)

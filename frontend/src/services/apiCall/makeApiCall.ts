@@ -25,6 +25,7 @@ interface ApiCallParams {
 	opts?: {
 		filters?: Record<string, string | number>
 		version?: Versioning
+		parameter?: string
 	}
 }
 
@@ -65,6 +66,9 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
 	} as const
 
+	// "/genre/{id}/buy" -> 7
+	const posParam = endpoint.indexOf('{id}')
+
 	try {
 		//transform filters/urlSearch params into strings
 		const urlSearchParams = hasFilter
@@ -76,7 +80,9 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 			: [[]]
 
 		const data = await fetch(
-			`${SERVER_URL}${endpoint}${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
+			`${SERVER_URL}
+			${posParam > 0 ? endpoint.substring(0, posParam) + (opts?.parameter ?? 0) + endpoint.substring(posParam + 4, endpoint.length) : endpoint}
+			${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
 			{
 				method: httpMethod,
 				headers: {
