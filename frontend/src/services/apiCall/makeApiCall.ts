@@ -81,9 +81,9 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 					...(body != null && { 'Content-Type': 'application/json' })
 				},
 				...(body != null && { body: JSON.stringify(body ?? {}) }),
-				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT),
+				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
 				// temp fix
-				...(endpoint === '/auth/login' && { credentials: 'include' })
+				// ...(endpoint === '/auth/login' && { credentials: 'include' })
 			}
 		)
 
