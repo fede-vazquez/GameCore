@@ -10,4 +10,6 @@ public class UserWithoutPassDTO
 
     public string Email { get; set; } = null!;
 
+    public string Rol { get; set; } = null!;
+    public int RolId { get; set; }
 }

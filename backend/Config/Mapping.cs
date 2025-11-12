@@ -38,7 +38,7 @@ public class Mapping : Profile
         CreateMap<string?, string>().ConvertUsing((src, dest) => src ?? dest);
         //Auth
         CreateMap<RegisterDTO, User>();
-        CreateMap<User, UserWithoutPassDTO>();
+        CreateMap<User, UserWithoutPassDTO>().ForMember(dest => dest.Rol, opt => opt.MapFrom(e => e.Rol.Name));
         //Genre
         CreateMap<Genre, GenreDTO>();
         CreateMap<GenreDTO, Genre>();
