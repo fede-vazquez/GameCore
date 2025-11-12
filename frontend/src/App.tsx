@@ -8,6 +8,7 @@ import { AuthContextProvider } from './pages/auth/context'
 import { CatalogPage } from './pages/catalog/catalogPage'
 import { CatalogContextProvider } from './pages/catalog/context'
 import { LibraryPage } from './pages/library/libraryPage'
+import { DashboardPage } from './pages/dashboard/dashboardPage'
 import { LandingPage } from './pages/landing/landingPage'
 
 export const App = function App() {
@@ -44,6 +45,8 @@ export const App = function App() {
 						/>
 					)}
 				/>
+
+				<Route path="/admin/dashboard" component={DashboardPage} />
 
 				<Route component={() => <>404</>} />
 			</Switch>
