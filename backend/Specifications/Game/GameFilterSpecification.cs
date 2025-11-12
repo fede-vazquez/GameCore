@@ -73,6 +73,9 @@ public class GameFilterSpecification : Specification<Game>
                     case SORT_BY.RELEASE_DATE:
                         AddOrderByDescending(g => g.ReleaseDate);
                         break;
+                    case SORT_BY.DISCOUNT_PERCENTAGE:
+                        AddOrderByDescending(g => g.Discounts.Where(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now).Max(d => d.Percentage.Value));
+                        break;
                     default:
                         AddOrderByDescending(g => g.Title);
                         break;
@@ -88,6 +91,9 @@ public class GameFilterSpecification : Specification<Game>
 
                     case SORT_BY.RELEASE_DATE:
                         AddOrderBy(g => g.ReleaseDate);
+                        break;
+                    case SORT_BY.DISCOUNT_PERCENTAGE:
+                        AddOrderBy(g => g.Discounts.Where(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now).Max(d => d.Percentage.Value));
                         break;
                     default:
                         AddOrderBy(g => g.Title);

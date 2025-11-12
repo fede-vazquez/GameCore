@@ -12,4 +12,5 @@ public static class SORT_BY
     public const string CREATED_AT = "createdAt";
     public const string START_DATE = "startDate";
     public const string END_DATE = "endDate";
+    public const string DISCOUNT_PERCENTAGE = "discountPercentage";
 }
