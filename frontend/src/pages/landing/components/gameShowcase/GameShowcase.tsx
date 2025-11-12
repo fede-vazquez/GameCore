@@ -3,7 +3,6 @@ import { Tabs } from 'radix-ui'
 import { useState } from 'react'
 import { TabButton } from './TabButton'
 import GameList from './GameList'
-import { GamesRoutes } from '@/services/apiCall/routes'
 
 const TABS = {
 	POPULAR: 'popular',
@@ -21,7 +20,7 @@ export function GameShowcase() {
 	}
 
 	return (
-		<section>
+		<>
 			<Tabs.Root defaultValue={TABS.POPULAR} onValueChange={handleTabChange}>
 				<Tabs.List className="flex justify-center md:gap-5">
 					<TabButton value={TABS.POPULAR} content="Populares" selected={selectedTab === TABS.POPULAR} />
@@ -40,6 +39,6 @@ export function GameShowcase() {
 					</Tabs.Content>
 				</Box>
 			</Tabs.Root>
-		</section>
+		</>
 	)
 }
