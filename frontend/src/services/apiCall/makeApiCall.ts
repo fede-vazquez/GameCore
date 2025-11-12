@@ -5,12 +5,10 @@ import {
 	ADMIN_URLENDPOINTS,
 	AUTH_URLENDPOINTS,
 	GAMES_URLENDPOINTS,
-	GENRES_URLENDPOINTS,
 	LIBRARY_URLENDPOINTS,
 	type AllAdminRoutes,
 	type AllAuthRoutes,
 	type AllGameRoutes,
-	type AllGenresRoutes,
 	type AllLibraryRoutes
 } from './routes'
 import type { Versioning } from './types'
@@ -19,7 +17,7 @@ export const queryClient = new QueryClient()
 
 interface ApiCallParams {
 	httpMethod?: HTTPMethods
-	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllGenresRoutes | AllLibraryRoutes
+	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllLibraryRoutes
 
 	body?: Record<string, Array<unknown> | string | number> | null
 	opts?: {
@@ -30,15 +28,13 @@ interface ApiCallParams {
 }
 
 const MATCH_ROUTES_TO_OBJECT = {
-	'/library': LIBRARY_URLENDPOINTS,
-	'/admin': ADMIN_URLENDPOINTS,
-	'/auth': AUTH_URLENDPOINTS,
-	'/genres': GENRES_URLENDPOINTS,
-	'/games': GAMES_URLENDPOINTS
+	'/Library': LIBRARY_URLENDPOINTS,
+	'/Admin': ADMIN_URLENDPOINTS,
+	'/auth': AUTH_URLENDPOINTS, // for some reason, in lower case
+	'/Games': GAMES_URLENDPOINTS
 } as const
 
 export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null, opts }: ApiCallParams) {
-	console.warn('Check for unnecesary calls', { httpMethod, endpoint, opts, body })
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'

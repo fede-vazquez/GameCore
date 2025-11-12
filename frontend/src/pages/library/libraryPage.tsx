@@ -15,7 +15,7 @@ export function LibraryPage() {
 		queryFn: async () => {
 			try {
 				return await makeApiCall<GameModel[]>({
-					endpoint: '/games?',
+					endpoint: '/Games?',
 					opts: { filters: { minDiscount: 0, maxDiscount: 100 } }
 				})
 			} catch {

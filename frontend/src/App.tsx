@@ -55,7 +55,7 @@ export const App = function App() {
 					)}
 				/>
 
-				<Route component={() => <>404</>} />
+				<Route component={() => <Redirect href="/auth" />} />
 			</Switch>
 		</main>
 	)

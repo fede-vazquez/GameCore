@@ -18,7 +18,7 @@ export function GamePage() {
 		queryKey: [QUERY_KEYS.GET_SPECIFIC_GAME(id)],
 		queryFn: async () => {
 			try {
-				return await makeApiCall<GetGameDTO>({ endpoint: '/games/{id}', opts: { parameter: id } })
+				return await makeApiCall<GetGameDTO>({ endpoint: '/Games/{id}', opts: { parameter: id } })
 			} catch {
 				return {} as GetGameDTO
 			}
@@ -29,7 +29,7 @@ export function GamePage() {
 		queryKey: [QUERY_KEYS.GET_GAME_BY_GENRE(data?.id)],
 		queryFn: async () => {
 			try {
-				return await makeApiCall<GetGameDTO[]>({ endpoint: '/games/{id}', opts: { parameter: id } })
+				return await makeApiCall<GetGameDTO[]>({ endpoint: '/Games/{id}', opts: { parameter: id } })
 			} catch {
 				return {} as GetGameDTO[]
 			}
@@ -107,7 +107,7 @@ export function GamePage() {
 								theme="primary"
 								className="flex justify-center w-fit"
 								disabled={!data || !!findGame}
-								onClick={async () => await makeApiCall({ endpoint: '/games/{id}/buy', httpMethod: 'PUT' })}
+								onClick={async () => await makeApiCall({ endpoint: '/Games/{id}/buy', httpMethod: 'PUT' })}
 							>
 								{findGame ? 'Already owned' : 'Add to library'}
 							</GCButton>

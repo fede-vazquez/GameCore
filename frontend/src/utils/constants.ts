@@ -11,6 +11,7 @@ export const QUERY_KEYS = {
 	GET_LIBRARY_GAMES: 'library_games',
 	GET_DISCOUNT_GAMES: 'discount_games',
 	GET_GENRES_CATALOG: 'genres_catalog',
+	GET_GAMES: 'games_catalog',
 	GET_GAME_BY_GENRE: (id: number | undefined) => `specific_game_by_genre_${id ?? 0}`,
 	GET_SPECIFIC_GAME: (id: string | undefined) => `specific_game_${id ?? 0}`
 } as const

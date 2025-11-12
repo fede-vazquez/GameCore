@@ -1,5 +1,4 @@
 export * from './adminRoutes'
 export * from './authRoutes'
 export * from './gameRoutes'
-export * from './genresRoutes'
 export * from './libraryRoutes'

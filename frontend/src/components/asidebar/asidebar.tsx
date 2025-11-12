@@ -20,7 +20,7 @@ export function AsideBar() {
 			//this is the worst thing i've done. but it works. i accept changes (no rerenders please).
 			let result: GameModel[] = []
 			startLibTransition(async () => {
-				result = await makeApiCall<GameModel[]>({ endpoint: '/library' })
+				result = await makeApiCall<GameModel[]>({ endpoint: '/Library' })
 			})
 			return result
 		},
