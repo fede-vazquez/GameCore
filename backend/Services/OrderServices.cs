@@ -80,7 +80,7 @@ public class OrderServices
     async public Task<GetOrderDTO> CreateOneAsync(int gameId, int userId, CreateOrderDTO createDTO)
     {
         //comprobamos primero que GameId, UserId y PaymentMethodId existan
-        await _gameServices.GetOneByIdAsync(gameId);
+        var game = await _gameServices.GetOneByIdAsync(gameId);
         await _userServices.GetOneByIdAsync(userId);
         await _paymentMethodService.GetOneByIdAsync(createDTO.PaymentMethodId);
         //verificamos si el usuario tiene el juego comprado
@@ -89,8 +89,8 @@ public class OrderServices
         {
             throw new HttpResponseError(HttpStatusCode.BadRequest, "El usuario ya tiene el juego comprado");
         }
-
         var order = _mapper.Map<Order>(createDTO);
+        order.BasePrice = game.Price * (1 - createDTO.DiscountApplied);
         order.GameId = gameId;
         order.UserId = userId;
         await _repo.CreateOneAsync(order);
