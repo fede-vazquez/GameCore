@@ -6,10 +6,9 @@ interface DiscountBannerProps {
 	dsPer: number | undefined
 	price: number
 	removeOldPrice?: boolean
-	classTag?: string
 }
 
-export function DiscountBanner({ dsPer, price, removeOldPrice = false, classTag }: DiscountBannerProps) {
+export function DiscountBanner({ dsPer, price, removeOldPrice = false }: DiscountBannerProps) {
 	const finalPrice = price > 0 ? numberParser(price, dsPer) : FREE_PRICE
 	const isFree = finalPrice !== FREE_PRICE ? finalPrice : 'Free!'
 

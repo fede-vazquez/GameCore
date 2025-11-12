@@ -22,7 +22,7 @@ const loginValidator = z.object({
 })
 
 export function LogInForm({ SVG_CLASS }: RegisterAndLoginProps) {
-	const { registerUser, isPending, startTransition, error } = useAuthContext()
+	const { registerUser, isPending, startTransition } = useAuthContext()
 
 	const {
 		register,

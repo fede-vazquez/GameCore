@@ -99,7 +99,7 @@ export function AsideBar() {
 					<Link href="/auth">
 						<GCButton theme="primary" className="flex gap-0.5" onClick={() => void 0}>
 							<UserSVG />
-							{clientUser?.Id ? 'Profile' : 'Log In'}
+							{clientUser?.id ? 'Profile' : 'Log In'}
 						</GCButton>
 					</Link>
 				</footer>

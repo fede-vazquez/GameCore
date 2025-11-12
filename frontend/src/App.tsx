@@ -28,7 +28,9 @@ export const App = function App() {
 				{/* //TODO: replace with clientUser?.Id */}
 				<Route
 					path="/library"
-					component={() => (true ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />)}
+					component={() =>
+						clientUser?.id ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />
+					}
 				/>
 
 				<Route
