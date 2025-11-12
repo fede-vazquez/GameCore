@@ -25,6 +25,17 @@ export function GamePage() {
 		}
 	})
 
+	const { data: recData } = useQuery({
+		queryKey: [QUERY_KEYS.GET_GAME_BY_GENRE(data?.id)],
+		queryFn: async () => {
+			try {
+				return await makeApiCall<GetGameDTO[]>({ endpoint: '/games/{id}', opts: { parameter: id } })
+			} catch {
+				return {} as GetGameDTO[]
+			}
+		}
+	})
+
 	// i know, its a horrible practice but we have no more time
 	const findGame = libraryGames.find((e) => e.id === data?.id)
 
@@ -112,23 +123,24 @@ export function GamePage() {
 							<GCDivider className="bottom-0" />
 						</span>
 						<ul className="flex flex-col h-full gap-y-2 justify-start overflow-y-auto px-4">
-							{new Array(5).fill(data).map(() => {
-								return (
-									<li key={data?.id} className="flex flex-col">
-										<GameSideCard
-											className="flex flex-row"
-											game={data}
-											addPrice={{ discount: data?.discount?.percentageValue ?? 0, price: data?.price ?? 0 }}
-										/>
-									</li>
-								)
-							})}
+							{recData?.length &&
+								recData?.map(() => {
+									return (
+										<li key={data?.id} className="flex flex-col">
+											<GameSideCard
+												className="flex flex-row"
+												game={data}
+												addPrice={{ discount: data?.discount?.percentageValue ?? 0, price: data?.price ?? 0 }}
+											/>
+										</li>
+									)
+								})}
 						</ul>
 					</span>
 				</section>
 			</article>
 			<ElementSlider
-				elements={new Array(5).fill(data)}
+				elements={undefined}
 				titleName="Recommendations"
 				className="2xl:hidden mt-5! pb-20!"
 				classImg="w-[120px]!"

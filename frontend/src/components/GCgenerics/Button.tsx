@@ -14,7 +14,7 @@ const props: Record<GCButtonProps['theme'], string> = {
 
 interface GCButtonProps {
 	theme: (typeof THEMES)[keyof typeof THEMES]
-	onClick: () => void
+	onClick?: () => void
 	children: ReactNode
 	title?: string
 	className?: string

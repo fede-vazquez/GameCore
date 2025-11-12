@@ -13,7 +13,7 @@ import { SaludationText } from './saludationText'
 const FIELDS_FORM = {
 	USERNAME: 'username',
 	PASSWORD: 'password',
-	CONFIRM_PASSWORD: 'confirm_password',
+	CONFIRM_PASSWORD: 'confirmPassword',
 	EMAIL: 'email'
 } as const
 

@@ -59,7 +59,7 @@ export function AsideBar() {
 			>
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
-						<img src="/generic_logo.png" className="aspect-square object-contain w-full h-20" />
+						<img src="/logo.webp" className="aspect-square object-contain w-full h-18 p-2" />
 					</Link>
 				</header>
 				<main className="flex flex-col flex-1 gap-y-4 overflow-hidden px-0!">
@@ -67,7 +67,7 @@ export function AsideBar() {
 						<ListElement href="/games" svg={<StoreSVG />} name="Store" />
 						<ListElement href="/library" svg={<ControllerSVG />} name="Library" />
 
-						{clientUser?.Rol === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
+						{clientUser?.role === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
 					</ul>
 
 					<span className="flex flex-col flex-1 overflow-hidden">
@@ -96,10 +96,12 @@ export function AsideBar() {
 				<footer className="flex justify-center items-center pb-4 relative">
 					{/* might delete this lmao */}
 					<div id="shadowTest" className="absolute w-full h-10 -translate-y-full -top-5"></div>
-					<GCButton theme="primary" className="flex gap-0.5">
-						<UserSVG />
-						{clientUser?.Id ? 'Profile' : 'Log In'}
-					</GCButton>
+					<Link href="/auth">
+						<GCButton theme="primary" className="flex gap-0.5" onClick={() => void 0}>
+							<UserSVG />
+							{clientUser?.Id ? 'Profile' : 'Log In'}
+						</GCButton>
+					</Link>
 				</footer>
 			</aside>
 		</>

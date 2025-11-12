@@ -29,6 +29,7 @@ export function GCInput({
 	isRequired
 }: InputProps) {
 	const INPUT_CLASSNAME = `w-full border border-zinc-600 rounded-lg py-2 ${!disableSvgPlaceholder ? 'px-10' : 'px-2'} ${classInput} ${error != null && 'border-red-500!'}`
+
 	return (
 		<Form.Field className={`flex flex-col gap-y-1 ${className}`} name={formFieldName}>
 			<Form.Label className="text-zinc-300 font-semibold">{label}</Form.Label>

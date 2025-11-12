@@ -21,7 +21,7 @@ interface ApiCallParams {
 	httpMethod?: HTTPMethods
 	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllGenresRoutes | AllLibraryRoutes
 
-	body?: Record<string, Array<unknown> | string | number>
+	body?: Record<string, Array<unknown> | string | number> | null
 	opts?: {
 		filters?: Record<string, string | number>
 		version?: Versioning
@@ -37,8 +37,8 @@ const MATCH_ROUTES_TO_OBJECT = {
 	'/games': GAMES_URLENDPOINTS
 } as const
 
-export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
-	console.warn('Check for unnecesary calls', { httpMethod, endpoint, opts })
+export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null, opts }: ApiCallParams) {
+	console.warn('Check for unnecesary calls', { httpMethod, endpoint, opts, body })
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'
@@ -61,10 +61,6 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 	if (!validFetchArgs) throw new CustomError(CLIENT_ERROR.INVALID_HTTP_OR_VER)
 
 	const filters = opts?.filters ?? {}
-	const headers = {
-		...(body != null && { 'Content-Type': 'application/json' })
-		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
-	} as const
 
 	// "/genre/{id}/buy" -> 7
 	const posParam = endpoint.indexOf('{id}')
@@ -80,22 +76,26 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 			: [[]]
 
 		const data = await fetch(
-			`${SERVER_URL}
-			${posParam > 0 ? endpoint.substring(0, posParam) + (opts?.parameter ?? 0) + endpoint.substring(posParam + 4, endpoint.length) : endpoint}
-			${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
+			`${SERVER_URL}/api${posParam > 0 ? endpoint.substring(0, posParam) + (opts?.parameter ?? 0) + endpoint.substring(posParam + 4, endpoint.length) : endpoint}${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
 			{
 				method: httpMethod,
 				headers: {
-					...headers
+					...(body != null && { 'Content-Type': 'application/json' })
 				},
 				...(body != null && { body: JSON.stringify(body ?? {}) }),
-				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
+				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT),
+				// temp fix
+				...(endpoint === '/auth/login' && { credentials: 'include' })
 			}
 		)
 
-		if (!data.ok) throw new CustomError(data.status === 404 ? SERVER_ERROR.CANT_REACH : undefined)
+		console.log({ data })
+		if (!data.ok && data.status === 404) throw new CustomError(SERVER_ERROR.CANT_REACH)
 
-		return (await data.json()) as T
+		const dataJson = await data.json()
+
+		if (!data.ok && 'message' in dataJson) throw new CustomError(dataJson?.message)
+		return dataJson as T
 	} catch (err) {
 		//todo: this is horrible, just to catch the AbortSignalErr. fix later
 		if (err instanceof DOMException) throw new CustomError(CLIENT_ERROR.TIMEOUT_FETCH)

@@ -1,5 +1,5 @@
 import type { GameModel } from '@/models'
-export const SERVER_URL = 'http://localhost:5104' as const
+export const SERVER_URL = 'https://gamecorebackendutn-fnhkf6f5gdahfad7.brazilsouth-01.azurewebsites.net' as const
 
 export const MAX_FETCH_TIMEOUT = 5000 as const //5 secs
 
@@ -11,6 +11,7 @@ export const QUERY_KEYS = {
 	GET_LIBRARY_GAMES: 'library_games',
 	GET_DISCOUNT_GAMES: 'discount_games',
 	GET_GENRES_CATALOG: 'genres_catalog',
+	GET_GAME_BY_GENRE: (id: number | undefined) => `specific_game_by_genre_${id ?? 0}`,
 	GET_SPECIFIC_GAME: (id: string | undefined) => `specific_game_${id ?? 0}`
 } as const
 

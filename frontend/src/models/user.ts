@@ -1,9 +1,9 @@
 export interface UserModel {
-	Id: number
-	Username: string
-	Email: string
-	Rol: string
+	id: number
+	username: string
+	email: string
+	role: string
 }
 
-export type RegisterModel = Pick<UserModel, 'Id' | 'Email' | 'Username'>
-export type LoginModel = { Token: string; User: RegisterModel }
+export type RegisterModel = Pick<UserModel, 'id' | 'email' | 'username'>
+export type LoginModel = { token: string; user: RegisterModel }
