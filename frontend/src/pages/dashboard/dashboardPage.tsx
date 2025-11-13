@@ -1,4 +1,5 @@
-import { GeneralInfo, GenreInfo, SalesPerMonth } from './components'
+import { GeneralInfo, SalesPerMonth } from './components'
+import { GenreInfo } from './components/categoryInfo/GenreInfo'
 
 export function DashboardPage() {
 	return (

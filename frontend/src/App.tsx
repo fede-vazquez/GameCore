@@ -31,7 +31,7 @@ const LoadingFallback = () => (
 
 export const App = function App() {
 	const { clientUser } = useGlobalContext()
-
+	console.log(clientUser, clientUser?.rol === 'Admin')
 	return (
 		<main className="w-screen h-screen overflow-x-hidden text-primaryWhite bg-darkBG">
 			<Suspense fallback={<LoadingFallback />}>
@@ -46,11 +46,17 @@ export const App = function App() {
 						)}
 					/>
 
-					{/* //TODO: replace with clientUser?.Id */}
 					<Route
 						path="/library"
 						component={() =>
 							clientUser?.id ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />
+						}
+					/>
+
+					<Route
+						path="/admin/dashboard"
+						component={() =>
+							clientUser?.rol === 'Admin' ? <AsideBarWrapper children={<DashboardPage />} /> : <Redirect href="/auth" />
 						}
 					/>
 
@@ -66,8 +72,6 @@ export const App = function App() {
 							/>
 						)}
 					/>
-
-					<Route path="/admin/dashboard" component={() => <AsideBarWrapper children={<DashboardPage />} />} />
 
 					<Route
 						path="/games/:id"
