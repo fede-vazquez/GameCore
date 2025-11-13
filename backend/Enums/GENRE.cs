@@ -4,6 +4,8 @@ namespace GameCore.Enums;
 
 public static class GENRE
 {
+    public const int ANY_ID = 11;
+    public const string ANY = "Any";
     public const string ACTION = "Action";
     public const string ADVENTURE = "Adventure";
     public const string RPG = "RPG";

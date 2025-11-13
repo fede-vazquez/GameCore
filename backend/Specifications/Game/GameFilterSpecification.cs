@@ -25,7 +25,10 @@ public class GameFilterSpecification : Specification<Game>
             }
             if (gameListParametersDTO.GenreId != null)
             {
-                AddCriteria(g => g.Genres.Any(gg => gg.Id == gameListParametersDTO.GenreId));
+                if (gameListParametersDTO.GenreId != GENRE.ANY_ID)
+                {
+                    AddCriteria(g => g.Genres.Any(gg => gg.Id == gameListParametersDTO.GenreId));
+                }
             }
             if (gameListParametersDTO.DeveloperId != null)
             {

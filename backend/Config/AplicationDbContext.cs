@@ -178,7 +178,8 @@ namespace GameCore.Config
                 new Genre { Id = 7, Name = PUZZLE },
                 new Genre { Id = 8, Name = HORROR },
                 new Genre { Id = 9, Name = RACING },
-                new Genre { Id = 10, Name = FPS }
+                new Genre { Id = 10, Name = FPS },
+                new Genre { Id = ANY_ID, Name = ANY }
             );
             //-----------------------------------
             //establecer clave foranea compuesta para GameUser

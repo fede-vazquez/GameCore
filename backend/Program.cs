@@ -135,7 +135,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "MiPoliticaCORS",
         builder =>
         {
-            builder.WithOrigins("https://gamecore.pages.dev")
+            builder.WithOrigins("https://gamecore.pages.dev", "http://localhost:5173"
+            )
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();

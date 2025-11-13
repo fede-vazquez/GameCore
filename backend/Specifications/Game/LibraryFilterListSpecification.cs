@@ -24,7 +24,11 @@ public class LibraryFilterListSpecification : Specification<GameUser>
             }
             if (libraryParametersDTO.GenreId != null)
             {
-                AddCriteria(g => g.Game.Genres.Any(gg => gg.Id == libraryParametersDTO.GenreId));
+                if (libraryParametersDTO.GenreId != GENRE.ANY_ID)
+                {
+                    AddCriteria(g => g.Game.Genres.Any(gg => gg.Id == libraryParametersDTO.GenreId));
+                }
+
             }
             if (libraryParametersDTO.DeveloperId != null)
             {
