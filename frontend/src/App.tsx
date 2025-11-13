@@ -7,6 +7,7 @@ import { AuthPage } from './pages/auth/authPage'
 import { AuthContextProvider } from './pages/auth/context'
 import { CatalogPage } from './pages/catalog/catalogPage'
 import { CatalogContextProvider } from './pages/catalog/context'
+import { GamePage } from './pages/game/gamePage'
 import { LibraryPage } from './pages/library/libraryPage'
 import { DashboardPage } from './pages/dashboard/dashboardPage'
 import { LandingPage } from './pages/landing/landingPage'
@@ -15,7 +16,7 @@ export const App = function App() {
 	const { clientUser } = useGlobalContext()
 
 	return (
-		<main className="w-screen h-dvh overflow-x-hidden text-primaryWhite bg-darkBG ">
+		<main className="w-screen h-screen overflow-x-hidden text-primaryWhite bg-darkBG ">
 			<Switch>
 				<Route path="/" component={() => <LandingPage />} />
 				<Route
@@ -30,7 +31,9 @@ export const App = function App() {
 				{/* //TODO: replace with clientUser?.Id */}
 				<Route
 					path="/library"
-					component={() => (true ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />)}
+					component={() =>
+						clientUser?.id ? <AsideBarWrapper children={<LibraryPage />} /> : <Redirect href="/auth" />
+					}
 				/>
 
 				<Route
@@ -48,7 +51,16 @@ export const App = function App() {
 
 				<Route path="/admin/dashboard" component={() => <AsideBarWrapper children={<DashboardPage />} />} />
 
-				<Route component={() => <>404</>} />
+				<Route
+					path="/games/:id"
+					component={() => (
+						<AsideBarWrapper>
+							<GamePage />
+						</AsideBarWrapper>
+					)}
+				/>
+
+				<Route component={() => <Redirect href="/auth" />} />
 			</Switch>
 		</main>
 	)
@@ -60,7 +72,7 @@ function AsideBarWrapper({ children }: { children: ReactNode }) {
 		<>
 			<AsideBar />
 
-			<article className="grow md:ml-[225px] pt-2.5 h-full mt-3 px-5 lg:px-5 ">
+			<article className="grow md:ml-[225px] pt-2.5 h-full px-5 lg:px-5 ">
 				<GCHeader />
 				{children}
 			</article>

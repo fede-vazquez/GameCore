@@ -18,7 +18,7 @@ export function AuthPage() {
 				className="flex flex-col gap-7 border border-zinc-800 border-t-zinc-700 bg-darkFGAlt py-5 px-8 rounded-lg shadow-xl shadow-neutral-900
 				h-full p-20 md:p-6 min-w-[50%] justify-center items-center relative"
 			>
-				<img src="/generic_logo.png" alt="GameStore Logo" className="absolute w-56 top-7 left-7" />
+				<img src="/logo.webp" alt="GameCore Logo" className="absolute w-40 top-7 left-7" />
 				<Tabs.List className="flex justify-evenly text-xl gap-4 md:gap-10 font-semibold">
 					<Tabs.Trigger
 						aria-label="Access to your account"

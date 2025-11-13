@@ -1,9 +1,8 @@
 import type { HTTPConstructor } from '../types'
 
 export const AdminRoutes = {
-	ADMIN: '/admin',
-	GAMES: '/admin/games',
-	GAMES_ID: '/admin/games/{id}',
+	GAMES: '/Admin/games',
+	GAMES_ID: '/Admin/games/{id}',
 	DASHBOARD_GENRE: '/admin/dashboard/genre/{genre}',
 	DASHBOARD_YEAR_SALES: '/admin/dashboard/sales/{year}',
 	DASHBOARD_GENERAL_INFO: '/admin/dashboard/generalInfo'
@@ -12,27 +11,18 @@ export const AdminRoutes = {
 export type AllAdminRoutes = (typeof AdminRoutes)[keyof typeof AdminRoutes]
 
 export const ADMIN_URLENDPOINTS: HTTPConstructor<AllAdminRoutes> = {
-	'/admin': {
+	'/Admin/games': {
 		v1: {
-			url: 'v1/admin',
-			GET: {
-				requiredFields: null,
-				JWTRequired: true
-			}
-		}
-	},
-	'/admin/games': {
-		v1: {
-			url: 'v1/admin/games',
+			url: 'v1/Admin/games',
 			POST: {
 				requiredFields: null,
 				JWTRequired: true
 			}
 		}
 	},
-	'/admin/games/{id}': {
+	'/Admin/games/{id}': {
 		v1: {
-			url: 'v1/admin/games/{id}',
+			url: 'v1/Admin/games/{id}',
 			PUT: {
 				requiredFields: null,
 				JWTRequired: true

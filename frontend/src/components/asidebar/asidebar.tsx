@@ -1,14 +1,39 @@
-import { ConsoleSVG, ControllerSVG, StoreSVG, UserSVG } from '@/assets'
-import { useGlobalContext, useMenuContext } from '@/context'
-import type { GameModel } from '@/models'
-import type { ReactElement } from 'react'
+import { ConsoleSVG, ControllerSVG, StoreSVG, ThrobberSVG, UserSVG } from '@/assets'
+import { useGlobalContext, useLibraryContext, useMenuContext } from '@/context'
+import type { GameListResponse } from '@/models'
+import { makeApiCall } from '@/services/apiCall'
+import { QUERY_KEYS } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, type ReactElement } from 'react'
 import { Link } from 'wouter'
 import { GameSideCard } from '../game'
 import { GCButton } from '../GCgenerics'
 
 export function AsideBar() {
 	const { clientUser } = useGlobalContext()
-	const { isMenuActive, setIsMenuActive } = useMenuContext()
+	const { libraryGames, setLibraryGames, startLibTransition } = useLibraryContext()
+	const { isMenuActive, setIsMenuActive, enabled, setEnabled } = useMenuContext()
+
+	const { data, isPending } = useQuery({
+		queryKey: [QUERY_KEYS.GET_LIBRARY_GAMES],
+		queryFn: async () => {
+			//this is the worst thing i've done. but it works. i accept changes (no rerenders please).
+			let result: GameListResponse['items'] = []
+			startLibTransition(async () => {
+				result = (await makeApiCall<GameListResponse>({ endpoint: '/Library' }))?.items
+			})
+			return result
+		},
+		refetchOnMount: false,
+		enabled: enabled
+	})
+
+	useEffect(() => {
+		if (!data) return
+		setEnabled(false)
+		setLibraryGames(data)
+	}, [data])
+
 	return (
 		<>
 			<style>
@@ -34,14 +59,15 @@ export function AsideBar() {
 			>
 				<header className="cursor-pointer max-w-full">
 					<Link href="/">
-						<img src="/generic_logo.png" className="aspect-square object-contain w-full h-20" />
+						<img src="/logo.webp" className="aspect-square object-contain w-full h-18 p-2" />
 					</Link>
 				</header>
 				<main className="flex flex-col flex-1 gap-y-4 overflow-hidden px-0!">
 					<ul className="flex flex-col gap-y-2.5 px-2!">
-						<ListElement svg={<StoreSVG />} name="Store" />
-						<ListElement svg={<ControllerSVG />} name="Games" />
-						<ListElement svg={<ConsoleSVG />} name="Admin" />
+						<ListElement href="/games" svg={<StoreSVG />} name="Store" />
+						<ListElement href="/library" svg={<ControllerSVG />} name="Library" />
+
+						{clientUser?.rol === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
 					</ul>
 
 					<span className="flex flex-col flex-1 overflow-hidden">
@@ -53,19 +79,29 @@ export function AsideBar() {
 						</div>
 
 						<div className="flex flex-col mt-2 overflow-y-auto *">
-							{new Array(Math.floor(Math.random() * 10) + 1).fill(null).map((_, id) => {
-								return <GameSideCard key={id} className="hover:bg-neutral-900/70 pl-2 py-2" game={{} as GameModel} />
-							})}
+							{isPending ? (
+								<ThrobberSVG className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
+							) : libraryGames?.length ? (
+								libraryGames.map((g) => {
+									return <GameSideCard key={g.id} className="hover:bg-neutral-900/70 pl-2 py-2" game={g} />
+								})
+							) : (
+								<p className="w-full text-center absolute top-1/2 -translate-y-1/2 font-semibold text-lg text-zinc-600">
+									No games available :C
+								</p>
+							)}
 						</div>
 					</span>
 				</main>
 				<footer className="flex justify-center items-center pb-4 relative">
 					{/* might delete this lmao */}
 					<div id="shadowTest" className="absolute w-full h-10 -translate-y-full -top-5"></div>
-					<GCButton theme="primary" className="flex gap-0.5">
-						<UserSVG />
-						{clientUser?.Id ? 'Profile' : 'Log In'}
-					</GCButton>
+					<Link href="/auth">
+						<GCButton theme="primary" className="flex gap-0.5" onClick={() => void 0}>
+							<UserSVG />
+							{clientUser?.id ? 'Profile' : 'Log In'}
+						</GCButton>
+					</Link>
 				</footer>
 			</aside>
 		</>
@@ -73,14 +109,17 @@ export function AsideBar() {
 }
 
 // create another file (if necessary!)
-function ListElement({ svg, name }: { svg: ReactElement; name: string }) {
+function ListElement({ svg, name, href }: { svg: ReactElement; name: string; href: string }) {
 	return (
-		<li
-			className="flex flex-row items-center pl-2 py-1.5 w-full gap-3 rounded-lg 
+		<Link href={href} className="">
+			<li
+				className="flex flex-row items-center pl-2 py-1.5 w-full gap-3 rounded-lg 
 			cursor-pointer hover:bg-primaryBlue transition-colors duration-75"
-		>
-			{svg}
-			<span className="">{name}</span>
-		</li>
+			>
+				{svg}
+
+				<span>{name}</span>
+			</li>
+		</Link>
 	)
 }

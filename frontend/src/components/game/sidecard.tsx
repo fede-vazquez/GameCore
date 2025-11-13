@@ -1,24 +1,44 @@
 import type { GameModel } from '@/models'
-import { fallbackGame } from '@/utils'
+import { useLocation } from 'wouter'
+import { GCButton, GCSkeleton } from '../GCgenerics'
+import { DiscountBanner } from './discount'
 
 interface gameSideCardProps {
-	game: Pick<GameModel, 'title' | 'id' | 'imageUrl'>
+	game: Pick<GameModel, 'title' | 'id' | 'imageUrl'> | undefined
 	className?: string
+	addPrice?: { discount: number; price: number }
 }
 
-export function GameSideCard({ game, className }: gameSideCardProps) {
-	const testing = fallbackGame
-
+export function GameSideCard({ game, className, addPrice }: gameSideCardProps) {
+	const [_, navigate] = useLocation()
 	return (
 		<span className={`flex flex-row ${className}`}>
-			<img
-				src={testing.imageUrl}
-				alt={`Image of the game: ${testing.title}`}
-				className="aspect-2/3 w-20 object-cover rounded-lg"
-			/>
-			<span className="flex flex-col justify-center items-start pl-2">
-				<h4 className="font-semibold text-lg">{testing.title}</h4>
-				<button className="text-textMedium">View</button>
+			{game?.imageUrl ? (
+				<img
+					src={game.imageUrl}
+					alt={`Image of the game: ${game.title}`}
+					className="aspect-2/3 w-20 object-cover rounded-lg"
+				/>
+			) : (
+				<GCSkeleton className="w-20 aspect-2/3" />
+			)}
+
+			<span className="flex flex-col justify-center items-start gap-y-1 pl-2">
+				<h4 className="font-semibold text-lg">{game?.title}</h4>
+
+				<GCButton
+					theme="ghost"
+					className="text-neutral-200! px-2! py-1!"
+					onClick={() => navigate(`/games/${game?.id}`)}
+				>
+					View
+				</GCButton>
+
+				{addPrice && (
+					<span className="flex flex-row gap-x-2 mt-1">
+						<DiscountBanner price={addPrice?.price} dsPer={addPrice.discount} />
+					</span>
+				)}
 			</span>
 		</span>
 	)

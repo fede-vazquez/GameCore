@@ -1,16 +1,14 @@
 import { CLIENT_ERROR, CustomError, SERVER_ERROR } from '@/errors/customErrorMsg'
-import { MAX_FETCH_TIMEOUT, SERVER_URL, type HTTPMethods } from '@/utils'
+import { MAX_FETCH_TIMEOUT, SERVER_URL, TOKEN_KEY, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
 	ADMIN_URLENDPOINTS,
 	AUTH_URLENDPOINTS,
 	GAMES_URLENDPOINTS,
-	GENRES_URLENDPOINTS,
 	LIBRARY_URLENDPOINTS,
 	type AllAdminRoutes,
 	type AllAuthRoutes,
 	type AllGameRoutes,
-	type AllGenresRoutes,
 	type AllLibraryRoutes
 } from './routes'
 import type { Versioning } from './types'
@@ -19,24 +17,24 @@ export const queryClient = new QueryClient()
 
 interface ApiCallParams {
 	httpMethod?: HTTPMethods
-	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllGenresRoutes | AllLibraryRoutes
+	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllLibraryRoutes
 
-	body?: Record<string, Array<unknown> | string | number>
+	body?: Record<string, Array<unknown> | string | number> | null
 	opts?: {
-		filters?: Record<string, string>
+		filters?: Record<string, string | number>
 		version?: Versioning
+		parameter?: string
 	}
 }
 
 const MATCH_ROUTES_TO_OBJECT = {
-	'/library': LIBRARY_URLENDPOINTS,
-	'/admin': ADMIN_URLENDPOINTS,
-	'/auth': AUTH_URLENDPOINTS,
-	'/genres': GENRES_URLENDPOINTS,
-	'/games': GAMES_URLENDPOINTS
+	'/Library': LIBRARY_URLENDPOINTS,
+	'/Admin': ADMIN_URLENDPOINTS,
+	'/auth': AUTH_URLENDPOINTS, // for some reason, in lower case
+	'/Games': GAMES_URLENDPOINTS
 } as const
 
-export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts }: ApiCallParams) {
+export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null, opts }: ApiCallParams) {
 	// ["/", "admin/games/{id}"] -> ["admin", "/games/{id}"]
 	const path = endpoint.split('/')[1].split('/')[0]
 	const hasFilter = path.at(-1) === '?'
@@ -59,28 +57,47 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body, opts 
 	if (!validFetchArgs) throw new CustomError(CLIENT_ERROR.INVALID_HTTP_OR_VER)
 
 	const filters = opts?.filters ?? {}
-	const headers = {
-		...(body != null && { 'Content-Type': 'application/json' })
-		// ...(JWTRequired && { Authorization: `Bearer ${'jwtJson'}` })
-	} as const
+
+	// "/genre/{id}/buy" -> 7
+	const posParam = endpoint.indexOf('{id}')
 
 	try {
+		//transform filters/urlSearch params into strings
+		const urlSearchParams = hasFilter
+			? Object.entries(filters)
+					.filter(([_, v]) => v)
+					.map(([k, v]) => {
+						return [k, v.toString()]
+					})
+			: [[]]
+
 		const data = await fetch(
-			`${SERVER_URL}${endpoint}${hasFilter ? '?' + new URLSearchParams(filters).toString() : ''}`,
+			`${SERVER_URL}/api${posParam > 0 ? endpoint.substring(0, posParam) + (opts?.parameter ?? 0) + endpoint.substring(posParam + 4, endpoint.length) : endpoint}${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
 			{
 				method: httpMethod,
 				headers: {
-					...headers
+					//shouldnt be doing this for each call but okay....
+					Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) ?? ''}`,
+					...(body != null && { 'Content-Type': 'application/json' })
 				},
 				...(body != null && { body: JSON.stringify(body ?? {}) }),
 				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
+				// temp fix
+				// ...(endpoint === '/auth/login' && { credentials: 'include' })
 			}
 		)
 
-		console.log(data)
-		if (!data.ok) throw new CustomError(data.status === 404 ? SERVER_ERROR.CANT_REACH : undefined)
+		console.log({ data })
+		if (!data.ok && data.status === 404) throw new CustomError(SERVER_ERROR.CANT_REACH)
 
-		return (await data.json()) as T
+		const dataJson = await data.json()
+
+		if (!data.ok && 'message' in dataJson) throw new CustomError(dataJson?.message)
+
+		//quick fix
+		if ('token' in dataJson) localStorage.setItem(TOKEN_KEY, dataJson?.token)
+
+		return dataJson as T
 	} catch (err) {
 		//todo: this is horrible, just to catch the AbortSignalErr. fix later
 		if (err instanceof DOMException) throw new CustomError(CLIENT_ERROR.TIMEOUT_FETCH)

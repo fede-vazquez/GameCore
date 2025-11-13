@@ -5,11 +5,16 @@ import { MenuContext } from '.'
 export function MenuContextProvider({ children }: { children: ReactNode }) {
 	const [isMenuActive, setIsMenuActive] = useState<boolean>(false)
 
+	//very lazy way to fix this...
+	const [enabled, setEnabled] = useState<boolean>(true)
+
 	return (
 		<MenuContext.Provider
 			value={{
 				isMenuActive,
-				setIsMenuActive
+				setIsMenuActive,
+				enabled,
+				setEnabled
 			}}
 		>
 			{children}

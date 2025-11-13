@@ -12,8 +12,8 @@ import { useAuthContext } from '../context'
 import { SaludationText } from './saludationText'
 
 const FIELDS_FORM = {
-	USERNAME: 'username',
-	PASSWORD: 'password'
+	USERNAME: 'Username',
+	PASSWORD: 'Password'
 } as const
 
 const loginValidator = z.object({
@@ -38,10 +38,11 @@ export function LogInForm({ SVG_CLASS }: RegisterAndLoginProps) {
 		<Form.Root
 			onSubmit={handleSubmit((e) => {
 				startTransition(async () => {
+					console.log(e)
 					const data = await makeApiCall<LoginModel>({ httpMethod: 'POST', endpoint: '/auth/login', body: e })
 
-					if (!data?.User) return
-					registerUser(data.User)
+					if (!data?.user) return
+					registerUser(data.user)
 					navigate('/library')
 				})
 			})}

@@ -14,6 +14,7 @@ const props: Record<GCButtonProps['theme'], string> = {
 
 interface GCButtonProps {
 	theme: (typeof THEMES)[keyof typeof THEMES]
+	onClick?: () => void
 	children: ReactNode
 	title?: string
 	className?: string
@@ -21,9 +22,10 @@ interface GCButtonProps {
 }
 
 // use radix ui primitive???
-export function GCButton({ theme, children, className, title, disabled }: GCButtonProps) {
+export function GCButton({ theme, children, className, title, disabled, onClick }: GCButtonProps) {
 	return (
 		<button
+			onClick={onClick}
 			disabled={disabled}
 			title={title}
 			className={`

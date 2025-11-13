@@ -1,9 +1,9 @@
-import type { GameModel } from '@/models'
+import type { GetGameDTO } from '@/models'
 import { GCButton } from '../GCgenerics'
 import { DiscountBanner } from './discount'
 
 interface HorizontalCardProps {
-	game: Pick<GameModel, 'title' | 'id' | 'description' | 'price' | 'imageUrl'>
+	game: Pick<GetGameDTO, 'title' | 'id' | 'description' | 'price' | 'imageUrl' | 'genres'>
 
 	discountPercentage?: number
 	className?: string
@@ -21,9 +21,11 @@ export function HorizontalCard({ className, game: g, discountPercentage }: Horiz
 				/>
 			</div>
 			<span className="flex flex-col py-2 gap-1">
-				<div className="flex flex-col px-4">
-					<h5 className="font-semibold">{g.title}</h5>
-					<p className="text-neutral-400">Role, action, playful idk</p>
+				<div className="flex flex-col px-4 overflow-x-hidden">
+					<h5 className="font-semibold truncate" title={g.title}>
+						{g.title}
+					</h5>
+					<p className="text-neutral-400">{g.genres.join(', ')}</p>
 				</div>
 
 				<div className="px-4 flex items-center justify-between">
