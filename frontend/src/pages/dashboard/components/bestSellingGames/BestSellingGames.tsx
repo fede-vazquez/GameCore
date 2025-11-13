@@ -1,45 +1,38 @@
-import { useEffect, useState } from 'react'
-import type { BestSellingGames } from '@/types/dashboard'
+import type { BestSellingGames } from '@/models/dashboard'
 import { BestSellingGamesChart } from './BestSellingGamesChart'
+import { useQuery } from '@tanstack/react-query'
+import { AdminRoutes } from '@/services/apiCall/routes'
+import { makeApiCall } from '@/services/apiCall/makeApiCall'
 
-export function BestSellingGames({ category }: { category: string }) {
-	const [bestSellingGames, setBestSellingGames] = useState<BestSellingGames[]>([])
-
-	useEffect(() => {
-		// Mock de llamada a la api
-		setBestSellingGames(resultadoApi)
-	}, [])
-
-	if (bestSellingGames.length === 0) {
-		return <p>No hay datos</p>
-	}
-
-	return (
-		<>
-			<BestSellingGamesChart data={bestSellingGames} />
-		</>
-	)
+interface BestSellingGamesProps {
+	genre: string
 }
 
-const resultadoApi = [
-	{
-		title: 'Stardew Valley',
-		totalSales: 10000
-	},
-	{
-		title: 'Stardew Valley 2',
-		totalSales: 20000
-	},
-	{
-		title: 'Stardew Valley 3',
-		totalSales: 22500
-	},
-	{
-		title: 'Stardew Valley 4',
-		totalSales: 20500
-	},
-	{
-		title: 'Stardew Valley 5',
-		totalSales: 17500
+interface BestSellingGamesResponse {
+	bestSellingGames: BestSellingGames[]
+}
+
+export function BestSellingGames({ genre }: BestSellingGamesProps) {
+	const { data, isLoading, error } = useQuery<BestSellingGamesResponse>({
+		queryKey: ['bestSellingGames', genre],
+		queryFn: async () => {
+			const response = await makeApiCall<BestSellingGamesResponse>({
+				endpoint: AdminRoutes.DASHBOARD_GENRE,
+				opts: {
+					parameter: genre
+				}
+			})
+			return response
+		}
+	})
+
+	if (isLoading) {
+		return <div>Cargando datos...</div>
 	}
-]
+
+	if (error) {
+		return <div>Error al cargar los datos</div>
+	}
+
+	return <>{data && <BestSellingGamesChart data={data.bestSellingGames} />}</>
+}

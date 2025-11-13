@@ -58,34 +58,49 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 
 	const filters = opts?.filters ?? {}
 
-	// "/genre/{id}/buy" -> 7
-	const posParam = endpoint.indexOf('{id}')
+	// Buscar cualquier parámetro en el formato {parametro}
+	const paramMatch = endpoint.match(/\{([^}]+)\}/)
+	const hasParam = paramMatch !== null
+	const paramName = paramMatch ? paramMatch[1] : ''
+	const paramStart = hasParam ? paramMatch.index! : -1
 
 	try {
 		//transform filters/urlSearch params into strings
 		const urlSearchParams = hasFilter
 			? Object.entries(filters)
 					.filter(([_, v]) => v)
-					.map(([k, v]) => {
-						return [k, v.toString()]
-					})
-			: [[]]
+					.map(([k, v]) => [k, v.toString()])
+			: []
 
-		const data = await fetch(
-			`${SERVER_URL}/api${posParam > 0 ? endpoint.substring(0, posParam) + (opts?.parameter ?? 0) + endpoint.substring(posParam + 4, endpoint.length) : endpoint}${hasFilter ? new URLSearchParams(urlSearchParams).toString() : ''}`,
-			{
-				method: httpMethod,
-				headers: {
-					//shouldnt be doing this for each call but okay....
-					Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) ?? ''}`,
-					...(body != null && { 'Content-Type': 'application/json' })
-				},
-				...(body != null && { body: JSON.stringify(body ?? {}) }),
-				signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
-				// temp fix
-				// ...(endpoint === '/auth/login' && { credentials: 'include' })
-			}
-		)
+		// Construir la URL final
+		let finalUrl = `${SERVER_URL}/api`
+
+		if (hasParam && opts?.parameter !== undefined) {
+			// Reemplazar {parametro} con el valor proporcionado
+			finalUrl +=
+				endpoint.substring(0, paramStart) + opts.parameter + endpoint.substring(paramStart + paramName.length + 2)
+		} else {
+			finalUrl += endpoint
+		}
+
+		// Añadir parámetros de consulta si existen
+		if (hasFilter && urlSearchParams.length > 0) {
+			const queryString = new URLSearchParams(urlSearchParams).toString()
+			finalUrl += `?${queryString}`
+		}
+
+		const data = await fetch(finalUrl, {
+			method: httpMethod,
+			headers: {
+				//shouldnt be doing this for each call but okay....
+				Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) ?? ''}`,
+				...(body != null && { 'Content-Type': 'application/json' })
+			},
+			...(body != null && { body: JSON.stringify(body ?? {}) }),
+			signal: AbortSignal.timeout(MAX_FETCH_TIMEOUT)
+			// temp fix
+			// ...(endpoint === '/auth/login' && { credentials: 'include' })
+		})
 
 		//horrible code
 		if (!data.ok && data.status === 404) throw new CustomError(SERVER_ERROR.CANT_REACH)

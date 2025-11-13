@@ -95,3 +95,25 @@ export function debouncer<T extends Function>(
 		}, delay)
 	}
 }
+export const WHY_USE_IT = [
+	{
+		id: 'instant-download',
+		title: 'Descarga instantánea',
+		description: 'Descarga tus juegos en minutos'
+	},
+	{
+		id: 'insuperable-prices',
+		title: 'Precios insuperables',
+		description: 'Los mejores precios para los mejores juegos'
+	},
+	{
+		id: 'extensive-catalog',
+		title: 'Catalogo extenso',
+		description: 'Todos los juegos que buscas'
+	},
+	{
+		id: 'secure-purchases',
+		title: 'Compras seguras',
+		description: 'Compra sin preocupaciones'
+	}
+]

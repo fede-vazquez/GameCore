@@ -1,5 +1,5 @@
 import { Box } from '@radix-ui/themes'
-import type { InfoCardProps } from '@/types/dashboard'
+import type { InfoCardProps } from '@/models/dashboard'
 
 export function InfoCard({ title, value, bgColor, extraStyles = '' }: InfoCardProps) {
 	return (
