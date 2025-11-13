@@ -1,7 +1,8 @@
 export interface SalesMonthData {
+	monthNumber: number
 	month: string
 	totalSales: number
-	salesWhitDiscount: number
+	totalSalesWithDiscount: number
 	totalAmount: number
 	totalAmountsavedWhitDiscount: number
 }
