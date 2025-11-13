@@ -5,7 +5,8 @@ export const AdminRoutes = {
 	GAMES: '/admin/games',
 	GAMES_ID: '/admin/games/{id}',
 	DASHBOARD_GENRE: '/admin/dashboard/genre/{genre}',
-	DASHBOARD_YEAR_SALES: '/admin/dashboard/sales/{year}'
+	DASHBOARD_YEAR_SALES: '/admin/dashboard/sales/{year}',
+	DASHBOARD_GENERAL_INFO: '/admin/dashboard/generalInfo'
 } as const
 
 export type AllAdminRoutes = (typeof AdminRoutes)[keyof typeof AdminRoutes]
@@ -54,6 +55,15 @@ export const ADMIN_URLENDPOINTS: HTTPConstructor<AllAdminRoutes> = {
 	'/admin/dashboard/sales/{year}': {
 		v1: {
 			url: 'v1/admin/dashboard/sales/{year}',
+			GET: {
+				requiredFields: null,
+				JWTRequired: true
+			}
+		}
+	},
+	'/admin/dashboard/generalInfo': {
+		v1: {
+			url: 'v1/admin/dashboard/generalInfo',
 			GET: {
 				requiredFields: null,
 				JWTRequired: true
