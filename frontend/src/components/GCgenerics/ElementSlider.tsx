@@ -17,6 +17,7 @@ interface ElementSliderProps {
 	classImg?: string
 	classPrice?: string
 	classScroll?: string
+	showPrice?: boolean
 	removeOldPrice?: boolean
 }
 export function ElementSlider({
@@ -30,7 +31,8 @@ export function ElementSlider({
 	classImg,
 	classPrice,
 	classScroll,
-	removeOldPrice
+	removeOldPrice,
+	showPrice = true
 }: ElementSliderProps) {
 	const scrollbarRef = useRef<HTMLSpanElement>(null)
 
@@ -88,6 +90,7 @@ export function ElementSlider({
 					elements.map((game, idx) => {
 						return (
 							<GameCard
+								showPrice={showPrice}
 								key={game?.id ?? idx}
 								game={game}
 								classImg={classImg}

@@ -32,6 +32,8 @@ export interface libraryContextArgs {
 	startLibTransition: (cb: () => Promise<void> | void) => void
 	isPending: boolean
 	error: CustomError | null
+	nonRepeatedGames: GameListResponse['items']
+	setNonRepeatedGames: SetState<GameListResponse['items']>
 }
 
 export const LibraryContext = createContext<libraryContextArgs>({} as libraryContextArgs)

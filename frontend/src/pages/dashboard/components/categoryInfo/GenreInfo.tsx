@@ -1,7 +1,7 @@
+import { LIST_OF_GENRES_DTO } from '@/utils'
 import { useEffect, useState } from 'react'
 import { BestSellingGames } from '../bestSellingGames/BestSellingGames'
 import { LatestGamesAdded } from '../listInfo/LatestGamesAdded'
-import { LIST_OF_GENRES_DTO } from '@/utils'
 
 export function GenreInfo() {
 	const [genre, setGenre] = useState('' as string)

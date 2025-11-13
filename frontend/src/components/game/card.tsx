@@ -11,6 +11,7 @@ interface gameCardProps {
 	discountPercentage?: number
 	className?: string
 	removeOldPrice?: boolean
+	showPrice?: boolean
 }
 
 export function GameCard({
@@ -19,7 +20,8 @@ export function GameCard({
 	className,
 	classImg,
 	classPrice,
-	removeOldPrice = false
+	removeOldPrice = false,
+	showPrice = true
 }: gameCardProps) {
 	const [_, navigate] = useLocation()
 
@@ -40,11 +42,14 @@ export function GameCard({
 					<GCSkeleton className="w-full h-full" />
 				)}
 			</div>
+
 			<div className="w-full p-1 pt-1 min-w-0">
-				<h4 className={`font-bold tracking-wide text-sm ${classImg} truncate`}>{game.title}</h4>
-				<span className={`flex flex-row text-sm gap-x-4 items-center ${classPrice}`}>
-					<DiscountBanner dsPer={discountPercentage} price={game.price} removeOldPrice={removeOldPrice} />
-				</span>
+				<h4 className={`font-bold tracking-wide text-sm ${classImg} text-center w-full truncate`}>{game.title}</h4>
+				{showPrice && (
+					<span className={`flex flex-row text-sm gap-x-4 items-center ${classPrice}`}>
+						<DiscountBanner dsPer={discountPercentage} price={game.price} removeOldPrice={removeOldPrice} />
+					</span>
+				)}
 			</div>
 		</article>
 	)

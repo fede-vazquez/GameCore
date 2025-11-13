@@ -4,7 +4,7 @@ import { ElementSlider, GCDivider, GCSkeleton } from '@/components/GCgenerics'
 import type { CustomError } from '@/errors'
 import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
-import { FormatDateISO, QUERY_KEYS } from '@/utils'
+import { FormatDateISO, QUERY_KEYS, stringToColor } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Redirect, useParams } from 'wouter'
@@ -156,17 +156,4 @@ export function GamePage() {
 			/>
 		</>
 	)
-}
-
-// https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-const stringToColor = (str: string) => {
-	let hash = 0
-	str.split('').forEach((char) => {
-		hash = char.charCodeAt(0) + ((hash << 10) - hash)
-	})
-
-	const hue = hash % 180
-	const saturation = 90
-	const lightness = 65
-	return `${hue}, ${saturation}%, ${lightness}%`
 }

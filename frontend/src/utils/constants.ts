@@ -117,3 +117,16 @@ export const WHY_USE_IT = [
 		description: 'Compra sin preocupaciones'
 	}
 ]
+
+// https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+export const stringToColor = (str: string) => {
+	let hash = 0
+	str.split('').forEach((char) => {
+		hash = char.charCodeAt(0) + ((hash << 10) - hash)
+	})
+
+	const hue = hash % 180
+	const saturation = 90
+	const lightness = 65
+	return `${hue}, ${saturation}%, ${lightness}%`
+}

@@ -7,6 +7,7 @@ import { LibraryContext } from '.'
 export function LibraryContextProvider({ children }: { children: ReactNode }) {
 	const { error, isPending, startTransition } = useTransitionError()
 	const [libraryGames, setLibraryGames] = useState<GameListResponse['items']>([])
+	const [nonRepeatedGames, setNonRepeatedGames] = useState<GameListResponse['items']>([])
 
 	return (
 		<LibraryContext.Provider
@@ -15,7 +16,9 @@ export function LibraryContextProvider({ children }: { children: ReactNode }) {
 				setLibraryGames,
 				startLibTransition: startTransition,
 				isPending,
-				error
+				error,
+				nonRepeatedGames,
+				setNonRepeatedGames
 			}}
 		>
 			{children}
