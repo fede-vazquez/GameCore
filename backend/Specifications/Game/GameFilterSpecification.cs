@@ -34,7 +34,6 @@ public class GameFilterSpecification : Specification<Game>
             {
                 AddCriteria(g => g.DeveloperId == gameListParametersDTO.DeveloperId);
             }
-            //filtrar por el ultimo descuento
             if (gameListParametersDTO.PercentageId != null)
             {
                 int desiredPercentageId = gameListParametersDTO.PercentageId.Value;
@@ -49,6 +48,7 @@ public class GameFilterSpecification : Specification<Game>
                     .Any()
                 );
             }
+
             if (gameListParametersDTO.Year != null)
             {
                 AddCriteria(g => g.ReleaseDate.Year == gameListParametersDTO.Year);

@@ -7,6 +7,8 @@ using GameCore.Models.Discount.DTO;
 using GameCore.Models.Discount;
 using AutoMapper;
 using GameCore.Specifications;
+using GameCore.Utils;
+using System.Net;
 public class DiscountServices
 {
     private readonly IDiscountRepository _repo;
@@ -40,5 +42,29 @@ public class DiscountServices
             result.PageSize = discountListParams.PageSize;
         }
         return result;
+    }
+    public async Task<GetDiscountDTO> GetOneById(int id)
+    {
+        var discount = await _repo.GetOneAsync(d => d.Id == id);
+        if (discount == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.NotFound, "Descuento no encontrado");
+        }
+        else
+        {
+            return _mapper.Map<GetDiscountDTO>(discount);
+        }
+    }
+    public async Task DeleteOneById(int id)
+    {
+        var discount = await _repo.GetOneAsync(d => d.Id == id);
+        if (discount == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.NotFound, "Descuento no encontrado");
+        }
+        else
+        {
+            await _repo.DeleteOneAsync(discount);
+        }
     }
 }

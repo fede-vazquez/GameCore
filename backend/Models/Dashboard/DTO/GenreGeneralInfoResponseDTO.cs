@@ -6,6 +6,6 @@ namespace GameCore.Models.Dashboard.DTO
     {
         public int TotalGames { get; set; }
         public List<GetGameDTO> LastGamesAdded { get; set; } = new List<GetGameDTO>();
-        public List<GetGameDTO> BestSellingGames { get; set; } = new List<GetGameDTO> { };
+        public List<GameSalesInfo> BestSellingGames { get; set; } = new List<GameSalesInfo> { };
     }
 }

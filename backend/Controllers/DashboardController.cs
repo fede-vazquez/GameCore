@@ -79,5 +79,34 @@ namespace GameCore.Controllers
                 );
             }
         }
+
+        [HttpGet("generalInfo")]
+        [ProducesResponseType(typeof(GeneralInfoResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GeneralInfoResponseDTO>> GetGeneralInfoPerGenre()
+        {
+            try
+            {
+                var generalInfo = await _dashboardService.GetGeneralInfoAsync();
+
+                return generalInfo;
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
     }
 }

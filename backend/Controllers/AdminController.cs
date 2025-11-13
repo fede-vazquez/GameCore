@@ -274,6 +274,33 @@ namespace GameCore.Controllers
                 );
             }
         }
+        // Eliminamos un descuento
+        [HttpDelete("games/discounts/{discountId}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteDiscount([FromRoute] int discountId)
+        {
+            try
+            {
+                await _discountServices.DeleteOneById(discountId);
+                return Ok();
+            }
+            catch (HttpResponseError ex)
+            {
+                return StatusCode(
+                    (int)ex.StatusCode,
+                    new HttpMessage(ex.Message)
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
+        }
+        // Eliminanos 
         // creamos un achievement a un juego
         [HttpPost("games/{gameId}/achievements")]
         [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
@@ -300,6 +327,11 @@ namespace GameCore.Controllers
                 );
             }
         }
+
+
+
+
+
         // obetener las ordenes de los usuarios
         [HttpGet("orders")]
         [ProducesResponseType(typeof(OrderListForAdminsPagedResultDTO), StatusCodes.Status200OK)]

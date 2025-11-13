@@ -48,5 +48,11 @@ namespace GameCore.Services
 
             return genreInfo;
         }
+
+        public async Task<GeneralInfoResponseDTO> GetGeneralInfoAsync()
+        {
+            var generalInfo = await _repo.GetGeneralInfoAsync();
+            return generalInfo;
+        }
     }
 }

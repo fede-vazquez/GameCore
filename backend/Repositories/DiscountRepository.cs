@@ -26,6 +26,7 @@ public class DiscountRepository : Repository<Discount>, IDiscountRepository
         var paginatedQuery = SpecificationEvaluator.ApplyPaging(filteredQuery, spec);
         return await paginatedQuery.ToListAsync();
     }
+
     public async Task<int> GetCountAsync(ISpecification<Discount> spec)
     {
         return await SpecificationEvaluator.GetFilteredQuery(_db.Discounts, spec).CountAsync();

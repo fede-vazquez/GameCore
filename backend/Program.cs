@@ -47,9 +47,18 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddAutoMapper(opts => { }, typeof(Mapping));
 // DB
+const string ConnectionName = "devConnection";
+
+var connectionStringValue = builder.Configuration.GetConnectionString(ConnectionName);
+
+if (string.IsNullOrEmpty(connectionStringValue))
+{
+    throw new InvalidOperationException($"La cadena de conexión '{ConnectionName}' no fue encontrada.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("devConnection"));
+    options.UseSqlServer(connectionStringValue);
 });
 //registro de servicios
 // Services
@@ -91,7 +100,35 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
+/*
+var secretKey = builder.Configuration["JWT_SECRET"];
+// Configuración de JWT
+if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
+{
+    throw new InvalidOperationException("La clave secreta JWT es nula, vacía o demasiado corta");
+}
+var key = Encoding.UTF8.GetBytes(secretKey);
 
+
+builder.Services.AddAuthentication(options =>
+{
+    // Usa JWT como el esquema predeterminado para Autenticación y Desafío
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(opts =>
+{
+    opts.SaveToken = true;
+    opts.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+    };
+});*/
 //JWT
 // Configuración de JWT
 var secret = builder.Configuration.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
@@ -105,10 +142,17 @@ var key = Encoding.UTF8.GetBytes(secret);
 
 builder.Services.AddAuthentication(options =>
 {
-    // Usa JWT como el esquema predeterminado para Autenticación y Desafío
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    // Establece JWT como el esquema a usar cuando una acción falla por falta de credenciales (Challenge)
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    // Establece JWT como el esquema predeterminado general
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    /*
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;*/
 })
 .AddJwtBearer(opts =>
 {
