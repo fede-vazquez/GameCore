@@ -67,11 +67,11 @@ namespace GameCore.Repositories.DashboardRepository
                 .Select(g => new
                 {
                     Game = g,
-                    TotalSales = g.Orders.Count
+                    TotalSales = g.Orders.Count,
+                    TotalRevenue = g.Orders.Sum(o => o.BasePrice - o.DiscountApplied)
                 })
                 .OrderByDescending(x => x.TotalSales)
                 .Take(5)
-                .Select(x => x.Game)
                 .ToListAsync();
 
             var lastGamesAdded = await _db.Genres
@@ -88,7 +88,13 @@ namespace GameCore.Repositories.DashboardRepository
 
             return new GenreGeneralInfoResponseDTO
             {
-                BestSellingGames = _mapper.Map<List<GetGameDTO>>(bestSellingGames),
+                BestSellingGames = bestSellingGames.Select(b => new GameSalesInfo { 
+                    GameId = b.Game.Id,
+                    Title = b.Game.Title,
+                    TotalSales = b.TotalSales,
+                    TotalRevenue = b.TotalRevenue
+                }).ToList(),
+
                 LastGamesAdded = _mapper.Map<List<GetGameDTO>>(lastGamesAdded),
                 TotalGames = totalGames
             };
