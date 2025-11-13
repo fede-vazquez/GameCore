@@ -1,11 +1,11 @@
 import type { CustomError } from '@/errors'
-import type { RegisterModel } from '@/models'
+import type { UserModel } from '@/models'
 import type { SetState } from '@/utils'
 import { createContext } from 'react'
 import type { ALL_TABS_PAGES } from '../components'
 
 interface authContextArgs {
-	registerUser: (c: RegisterModel) => void
+	registerUser: (c: UserModel) => void
 	changeTabToLogin: () => void
 	activeTab: ALL_TABS_PAGES
 	setActiveTab: SetState<ALL_TABS_PAGES>

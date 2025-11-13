@@ -1,6 +1,6 @@
 import { EmailSVG, LockSVG, UserSVG } from '@/assets'
 import { GCButton, GCInput } from '@/components/GCgenerics'
-import type { RegisterModel } from '@/models'
+import type { UserModel } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from 'radix-ui'
@@ -44,7 +44,7 @@ export function RegisterForm({ SVG_CLASS }: RegisterAndLoginProps) {
 		<Form.Root
 			onSubmit={handleSubmit((e) => {
 				startTransition(async () => {
-					const data = await makeApiCall<RegisterModel>({ httpMethod: 'POST', endpoint: '/auth/register', body: e })
+					const data = await makeApiCall<UserModel>({ httpMethod: 'POST', endpoint: '/auth/register', body: e })
 					if (!data) return
 					registerUser(data)
 					changeTabToLogin()

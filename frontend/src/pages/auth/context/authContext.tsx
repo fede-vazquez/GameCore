@@ -1,7 +1,7 @@
 import { useGlobalContext } from '@/context'
 import { CLIENT_ERROR, CustomError } from '@/errors'
 import { useTransitionError } from '@/hooks'
-import type { RegisterModel } from '@/models'
+import type { UserModel } from '@/models'
 import { useCallback, useContext, useState, type ReactNode } from 'react'
 import { AuthContext } from '.'
 import { TABS_PAGES, type ALL_TABS_PAGES } from '../components'
@@ -12,7 +12,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
 
 	const { setClientUser } = useGlobalContext()
 
-	const registerUser = useCallback((client: RegisterModel) => {
+	const registerUser = useCallback((client: UserModel) => {
 		setClientUser(client)
 	}, [])
 
