@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
 import { InfoCard } from './InfoCard'
 import { Grid } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query'
-import { SERVER_URL } from '@/utils'
 import { AdminRoutes } from '@/services/apiCall/routes'
+import { makeApiCall } from '@/services/apiCall'
 
 interface GeneralInfoResponse {
 	totalSales: number
@@ -15,18 +14,15 @@ export function GeneralInfo() {
 	const { data, isLoading, error } = useQuery<GeneralInfoResponse>({
 		queryKey: ['generalInfo'],
 		queryFn: async () => {
-			const response = await fetch(`${SERVER_URL}${AdminRoutes.DASHBOARD_GENERAL_INFO}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjI5OTE2NjEsImV4cCI6MTc2MzA3ODA2MSwiaWF0IjoxNzYyOTkxNjYxfQ.obfXF9_3PaxiL92-YogfOZUYX4_9rADK_ah_CHxVrb4'}`
-				}
-			})
-			if (!response.ok) {
-				throw new Error('Error')
+			try {
+				const response = await makeApiCall<GeneralInfoResponse>({
+					endpoint: AdminRoutes.DASHBOARD_GENERAL_INFO,
+					httpMethod: 'GET'
+				})
+				return response
+			} catch (err) {
+				throw err
 			}
-			const data = await response.json()
-			return data
 		}
 	})
 
@@ -35,7 +31,11 @@ export function GeneralInfo() {
 	}
 
 	if (error) {
-		return <div>Error al cargar los datos</div>
+		return <div>Error al cargar los datos: {error instanceof Error ? error.message : 'Error desconocido'}</div>
+	}
+
+	if (!data) {
+		return <div>No hay datos disponibles</div>
 	}
 
 	return (

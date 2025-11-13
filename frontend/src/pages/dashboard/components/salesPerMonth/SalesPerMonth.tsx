@@ -3,7 +3,7 @@ import { SalesPerMonthChart } from './SalesPerMonthChart'
 import { PieChardComponent } from '../PieChardComponent'
 import type { SalesMonthData } from '@/models/dashboard'
 import { AdminRoutes } from '@/services/apiCall/routes'
-import { SERVER_URL } from '@/utils'
+import { makeApiCall } from '@/services/apiCall'
 import { useQuery } from '@tanstack/react-query'
 
 interface SalesMonthDataResponse {
@@ -18,21 +18,14 @@ export function SalesPerMonth() {
 	const { data, isLoading, error } = useQuery<SalesMonthDataResponse>({
 		queryKey: ['salesPerMonth', yearSelected],
 		queryFn: async () => {
-			const response = await fetch(
-				`${SERVER_URL}${AdminRoutes.DASHBOARD_YEAR_SALES.replace('{year}', yearSelected.toString())}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NjI5OTE2NjEsImV4cCI6MTc2MzA3ODA2MSwiaWF0IjoxNzYyOTkxNjYxfQ.obfXF9_3PaxiL92-YogfOZUYX4_9rADK_ah_CHxVrb4'}`
-					}
+			const response = await makeApiCall<SalesMonthDataResponse>({
+				endpoint: AdminRoutes.DASHBOARD_YEAR_SALES,
+				httpMethod: 'GET',
+				opts: {
+					parameter: yearSelected.toString()
 				}
-			)
-			if (!response.ok) {
-				throw new Error('Error')
-			}
-			const data = await response.json()
-			return data
+			})
+			return response
 		}
 	})
 

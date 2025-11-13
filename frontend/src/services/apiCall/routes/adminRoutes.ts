@@ -3,9 +3,9 @@ import type { HTTPConstructor } from '../types'
 export const AdminRoutes = {
 	GAMES: '/Admin/games',
 	GAMES_ID: '/Admin/games/{id}',
-	DASHBOARD_GENRE: '/admin/dashboard/genre/{genre}',
-	DASHBOARD_YEAR_SALES: '/admin/dashboard/sales/{year}',
-	DASHBOARD_GENERAL_INFO: '/admin/dashboard/generalInfo'
+	DASHBOARD_GENRE: '/Admin/dashboard/genre/{genre}',
+	DASHBOARD_YEAR_SALES: '/Admin/dashboard/sales/{year}',
+	DASHBOARD_GENERAL_INFO: '/Admin/dashboard/generalInfo'
 } as const
 
 export type AllAdminRoutes = (typeof AdminRoutes)[keyof typeof AdminRoutes]
@@ -33,27 +33,27 @@ export const ADMIN_URLENDPOINTS: HTTPConstructor<AllAdminRoutes> = {
 			}
 		}
 	},
-	'/admin/dashboard/genre/{genre}': {
+	'/Admin/dashboard/genre/{genre}': {
 		v1: {
-			url: 'v1/admin/dashboard/genre/{genre}',
+			url: 'v1/Admin/dashboard/genre/{genre}',
 			GET: {
 				requiredFields: null,
 				JWTRequired: true
 			}
 		}
 	},
-	'/admin/dashboard/sales/{year}': {
+	'/Admin/dashboard/sales/{year}': {
 		v1: {
-			url: 'v1/admin/dashboard/sales/{year}',
+			url: 'v1/Admin/dashboard/sales/{year}',
 			GET: {
 				requiredFields: null,
 				JWTRequired: true
 			}
 		}
 	},
-	'/admin/dashboard/generalInfo': {
+	'/Admin/dashboard/generalInfo': {
 		v1: {
-			url: 'v1/admin/dashboard/generalInfo',
+			url: 'v1/Admin/dashboard/generalInfo',
 			GET: {
 				requiredFields: null,
 				JWTRequired: true

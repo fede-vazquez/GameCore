@@ -22,7 +22,7 @@ export default function GameList({ filters, queryName }: GameListProps) {
 		queryKey: [queryName],
 		queryFn: async () => {
 			const response = await makeApiCall<GameListResponse>({
-				endpoint: '/games?',
+				endpoint: '/Games?',
 				opts: {
 					filters: filters
 				}
@@ -44,7 +44,10 @@ export default function GameList({ filters, queryName }: GameListProps) {
 			{data?.items && (
 				<>
 					<GCList
-						dataList={data.items.map((game) => ({ ...game, discountPercentage: game.discount.percentageValue * 100 }))}
+						dataList={data.items.map((game) => ({
+							...game,
+							discountPercentage: game?.discount ? game.discount.percentageValue * 100 : 0
+						}))}
 						mode="horizontal"
 						type="grid"
 						fnMap={(game) => <HorizontalCard key={game.id} game={game} discountPercentage={game.discountPercentage} />}

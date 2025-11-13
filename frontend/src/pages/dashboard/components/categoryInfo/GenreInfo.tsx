@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BestSellingGames } from '../bestSellingGames/BestSellingGames'
 import { LatestGamesAdded } from '../listInfo/LatestGamesAdded'
-import { LIST_OF_GENRES } from '@/utils'
+import { LIST_OF_GENRES_DTO } from '@/utils'
 
 export function GenreInfo() {
 	const [genre, setGenre] = useState('' as string)
@@ -12,8 +12,8 @@ export function GenreInfo() {
 	}
 
 	useEffect(() => {
-		setGenre(LIST_OF_GENRES[0])
-		setGenres(LIST_OF_GENRES)
+		setGenre(LIST_OF_GENRES_DTO[0].name)
+		setGenres(LIST_OF_GENRES_DTO.map((genre) => genre.name))
 	}, [])
 
 	if (genres.length === 0) {
