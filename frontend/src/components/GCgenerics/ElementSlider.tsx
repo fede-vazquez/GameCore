@@ -98,7 +98,7 @@ export function ElementSlider({
 					})
 				) : (
 					<span className="flex flex-col gap-2 grow justify-center items-center">
-						<h3 className="content-center text-center w-full h-full text-xl font-semibold text-neutral-300 flex justify-center items-center">
+						<h3 className="content-center text-center h-full text-xl font-semibold text-neutral-300 flex justify-center items-center">
 							{fallbackMsg?.title ?? 'No games yet :C'}
 						</h3>
 						<p className="text-neutral-500">

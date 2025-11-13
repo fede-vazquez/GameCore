@@ -1,5 +1,5 @@
 import { CLIENT_ERROR, CustomError, SERVER_ERROR } from '@/errors/customErrorMsg'
-import { MAX_FETCH_TIMEOUT, SERVER_URL, TOKEN_KEY, type HTTPMethods } from '@/utils'
+import { MAX_FETCH_TIMEOUT, SERVER_URL, TOKEN_KEY, TOKEN_USER_INFO, type HTTPMethods } from '@/utils'
 import { QueryClient } from '@tanstack/react-query'
 import {
 	ADMIN_URLENDPOINTS,
@@ -87,15 +87,19 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 			}
 		)
 
-		console.log({ data })
+		//horrible code
 		if (!data.ok && data.status === 404) throw new CustomError(SERVER_ERROR.CANT_REACH)
+		if (!data.ok && data.status === 401) throw new CustomError(SERVER_ERROR.NO_AUTHORIZED)
 
 		const dataJson = await data.json()
 
 		if (!data.ok && 'message' in dataJson) throw new CustomError(dataJson?.message)
 
 		//quick fix
-		if ('token' in dataJson) localStorage.setItem(TOKEN_KEY, dataJson?.token)
+		if ('token' in dataJson) {
+			if ('user' in dataJson) localStorage.setItem(TOKEN_USER_INFO, JSON.stringify(dataJson?.user ?? ''))
+			localStorage.setItem(TOKEN_KEY, dataJson?.token)
+		}
 
 		return dataJson as T
 	} catch (err) {

@@ -24,7 +24,7 @@ export function GameCard({
 	const [_, navigate] = useLocation()
 
 	return (
-		<article className={`${className} transition-colors hover:bg-black/20 rounded-lg p-2`}>
+		<article title={game.title} className={`${className} transition-colors hover:bg-black/20 rounded-lg p-2`}>
 			<div
 				onClick={() => navigate(`/games/${game.id}`)}
 				className={`aspect-2/3 w-[200px] rounded-lg overflow-hidden select-none ${classImg}`}
@@ -40,9 +40,8 @@ export function GameCard({
 					<GCSkeleton className="w-full h-full" />
 				)}
 			</div>
-			<div className="w-full p-1 pt-1">
-				<h4 className="font-bold tracking-wide text-center">{game.title}</h4>
-
+			<div className="w-full p-1 pt-1 min-w-0">
+				<h4 className={`font-bold tracking-wide text-sm ${classImg} truncate`}>{game.title}</h4>
 				<span className={`flex flex-row text-sm gap-x-4 items-center ${classPrice}`}>
 					<DiscountBanner dsPer={discountPercentage} price={game.price} removeOldPrice={removeOldPrice} />
 				</span>

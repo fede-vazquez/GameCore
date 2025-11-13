@@ -11,8 +11,9 @@ interface gameSideCardProps {
 
 export function GameSideCard({ game, className, addPrice }: gameSideCardProps) {
 	const [_, navigate] = useLocation()
+
 	return (
-		<span className={`flex flex-row ${className}`}>
+		<span className={`flex flex-row max-h-32 ${className}`}>
 			{game?.imageUrl ? (
 				<img
 					src={game.imageUrl}
@@ -24,7 +25,9 @@ export function GameSideCard({ game, className, addPrice }: gameSideCardProps) {
 			)}
 
 			<span className="flex flex-col justify-center items-start gap-y-1 pl-2">
-				<h4 className="font-semibold text-lg">{game?.title}</h4>
+				<h4 title={game?.title} className="font-semibold text-sm text-wrap truncate">
+					{game?.title}
+				</h4>
 
 				<GCButton
 					theme="ghost"

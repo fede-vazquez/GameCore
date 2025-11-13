@@ -5,24 +5,26 @@ import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, type ReactElement } from 'react'
-import { Link } from 'wouter'
+import { Link, useLocation } from 'wouter'
 import { GameSideCard } from '../game'
 import { GCButton } from '../GCgenerics'
 
 export function AsideBar() {
 	const { clientUser } = useGlobalContext()
-	const { libraryGames, setLibraryGames, startLibTransition } = useLibraryContext()
+	const { libraryGames, setLibraryGames } = useLibraryContext()
 	const { isMenuActive, setIsMenuActive, enabled, setEnabled } = useMenuContext()
+
+	const [location, navigate] = useLocation()
 
 	const { data, isPending } = useQuery({
 		queryKey: [QUERY_KEYS.GET_LIBRARY_GAMES],
 		queryFn: async () => {
 			//this is the worst thing i've done. but it works. i accept changes (no rerenders please).
-			let result: GameListResponse['items'] = []
-			startLibTransition(async () => {
-				result = (await makeApiCall<GameListResponse>({ endpoint: '/Library' }))?.items
-			})
-			return result
+			try {
+				return (await makeApiCall<GameListResponse>({ endpoint: '/Library' }))?.items ?? []
+			} catch (error) {
+				return []
+			}
 		},
 		refetchOnMount: false,
 		enabled: enabled
@@ -64,10 +66,12 @@ export function AsideBar() {
 				</header>
 				<main className="flex flex-col flex-1 gap-y-4 overflow-hidden px-0!">
 					<ul className="flex flex-col gap-y-2.5 px-2!">
-						<ListElement href="/games" svg={<StoreSVG />} name="Store" />
-						<ListElement href="/library" svg={<ControllerSVG />} name="Library" />
+						<ListElement href="/games" svg={<StoreSVG />} name="Store" currentLocation={location} />
+						<ListElement href="/library" svg={<ControllerSVG />} name="Library" currentLocation={location} />
 
-						{clientUser?.rol === 'Admin' && <ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" />}
+						{clientUser?.rol === 'Admin' && (
+							<ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" currentLocation={location} />
+						)}
 					</ul>
 
 					<span className="flex flex-col flex-1 overflow-hidden">
@@ -97,10 +101,32 @@ export function AsideBar() {
 					{/* might delete this lmao */}
 					<div id="shadowTest" className="absolute w-full h-10 -translate-y-full -top-5"></div>
 					<Link href="/auth">
-						<GCButton theme="primary" className="flex gap-0.5" onClick={() => void 0}>
-							<UserSVG />
-							{clientUser?.id ? 'Profile' : 'Log In'}
-						</GCButton>
+						{!clientUser?.id ? (
+							<GCButton theme="primary" className="flex gap-0.5" onClick={() => void 0}>
+								<UserSVG />
+								Log In
+							</GCButton>
+						) : (
+							<span className="flex flex-row w-fit gap-x-2 items-center">
+								<GCButton
+									theme="primary"
+									className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
+									onClick={() => void 0}
+								>
+									Profile
+								</GCButton>
+								<GCButton
+									theme="ghost"
+									className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
+									onClick={() => {
+										localStorage.clear()
+										navigate(location, { replace: true })
+									}}
+								>
+									Log Out
+								</GCButton>
+							</span>
+						)}
 					</Link>
 				</footer>
 			</aside>
@@ -109,12 +135,22 @@ export function AsideBar() {
 }
 
 // create another file (if necessary!)
-function ListElement({ svg, name, href }: { svg: ReactElement; name: string; href: string }) {
+function ListElement({
+	svg,
+	name,
+	href,
+	currentLocation
+}: {
+	svg: ReactElement
+	name: string
+	href: string
+	currentLocation: string
+}) {
 	return (
 		<Link href={href} className="">
 			<li
-				className="flex flex-row items-center pl-2 py-1.5 w-full gap-3 rounded-lg 
-			cursor-pointer hover:bg-primaryBlue transition-colors duration-75"
+				className={`flex flex-row items-center pl-2 py-1.5 w-full gap-3 rounded-lg 
+			cursor-pointer hover:bg-primaryBlue transition-colors duration-75 ${currentLocation === href && 'bg-neutral-800!'}`}
 			>
 				{svg}
 

@@ -38,7 +38,6 @@ export function LogInForm({ SVG_CLASS }: RegisterAndLoginProps) {
 		<Form.Root
 			onSubmit={handleSubmit((e) => {
 				startTransition(async () => {
-					console.log(e)
 					const data = await makeApiCall<LoginModel>({ httpMethod: 'POST', endpoint: '/auth/login', body: e })
 
 					if (!data?.user) return

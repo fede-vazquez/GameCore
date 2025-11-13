@@ -5,7 +5,7 @@ import { createContext } from 'react'
 
 //! global context
 export interface globalContextArgs {
-	clientUser: (Partial<UserModel> & Pick<UserModel, 'id' | 'username'>) | undefined
+	clientUser: UserModel | undefined
 	setClientUser: SetState<globalContextArgs['clientUser']>
 }
 

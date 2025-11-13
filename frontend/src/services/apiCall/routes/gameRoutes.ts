@@ -5,7 +5,8 @@ export const GamesRoutes = {
 	GAMES_FILTER: '/Games?',
 	GAMES_ID_BUY: '/Games/{id}/buy',
 	GAMES_GENRES: '/Games/genres',
-	GAMES_DISCOUNTS: '/Games/discounts'
+	GAMES_DISCOUNTS: '/Games/discounts',
+	GAMES_PAY: '/Games/payment-methods'
 } as const
 
 export type AllGameRoutes = (typeof GamesRoutes)[keyof typeof GamesRoutes]
@@ -32,7 +33,7 @@ export const GAMES_URLENDPOINTS: HTTPConstructor<AllGameRoutes> = {
 	'/Games/{id}/buy': {
 		v1: {
 			url: 'v1/Games/{id}/buy',
-			POST: {
+			PUT: {
 				requiredFields: null,
 				JWTRequired: true
 			}
@@ -50,6 +51,15 @@ export const GAMES_URLENDPOINTS: HTTPConstructor<AllGameRoutes> = {
 	'/Games/discounts': {
 		v1: {
 			url: 'v1/Games/discounts',
+			GET: {
+				JWTRequired: false,
+				requiredFields: null
+			}
+		}
+	},
+	'/Games/payment-methods': {
+		v1: {
+			url: 'v1/Games/payment-methods',
 			GET: {
 				JWTRequired: false,
 				requiredFields: null

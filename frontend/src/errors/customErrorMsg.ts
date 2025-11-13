@@ -14,7 +14,8 @@ export const CLIENT_ERROR = {
 } as const
 
 export const SERVER_ERROR = {
-	CANT_REACH: "Couldn't reached the server. Try later on, maybe its on maintenance"
+	CANT_REACH: "Couldn't reached the server. Try later on, maybe its on maintenance",
+	NO_AUTHORIZED: 'No valid user. Have you ever tried registering/logging in?'
 } as const
 
 export const EXTRAS_ERROR = {

@@ -2,7 +2,7 @@ import { CLIENT_ERROR, CustomError } from '@/errors'
 import { useTransitionError } from '@/hooks'
 import type { GameListResponse, GenreDTO } from '@/models'
 import { LIST_OF_GENRES_DTO } from '@/utils'
-import { useContext, useState, type ReactNode } from 'react'
+import { useContext, useRef, useState, type ReactNode } from 'react'
 import { CatalogContext } from '.'
 
 export function CatalogContextProvider({ children }: { children: ReactNode }) {
@@ -10,6 +10,7 @@ export function CatalogContextProvider({ children }: { children: ReactNode }) {
 	const { isPending, error, startTransition } = useTransitionError()
 
 	const [catalogGames, setCatalogGames] = useState<GameListResponse['items']>([])
+	const getPrevGames = useRef<GameListResponse['items']>([])
 
 	return (
 		<CatalogContext.Provider
@@ -20,7 +21,8 @@ export function CatalogContextProvider({ children }: { children: ReactNode }) {
 				error,
 				startTransition,
 				catalogGames,
-				setCatalogGames
+				setCatalogGames,
+				getPrevGames
 			}}
 		>
 			{children}

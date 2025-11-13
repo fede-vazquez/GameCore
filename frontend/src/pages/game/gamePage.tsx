@@ -1,18 +1,20 @@
 import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
-import { ElementSlider, GCButton, GCDivider, GCSkeleton } from '@/components/GCgenerics'
-import { useLibraryContext } from '@/context'
+import { ElementSlider, GCDivider, GCSkeleton } from '@/components/GCgenerics'
+import type { CustomError } from '@/errors'
 import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
-import { QUERY_KEYS } from '@/utils'
+import { FormatDateISO, QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Redirect, useParams } from 'wouter'
+import { ModalPlata } from './components/modalPlata'
 
 export function GamePage() {
 	const { id } = useParams()
 	if (!id) return <Redirect href="/library" />
 
-	const { libraryGames } = useLibraryContext()
+	const [buyError, setBuyError] = useState<CustomError | null>(null)
 
 	const { data } = useQuery({
 		queryKey: [QUERY_KEYS.GET_SPECIFIC_GAME(id)],
@@ -43,9 +45,6 @@ export function GamePage() {
 		}
 	})
 
-	// i know, its a horrible practice but we have no more time
-	const findGame = libraryGames.find((e) => e.id === data?.id)
-
 	return (
 		<>
 			<article className="relative flex flex-col justify-between w-full 2xl:w-[90%] m-auto p-4 rounded-xl border-2 border-neutral-800">
@@ -59,12 +58,12 @@ export function GamePage() {
 				)}
 
 				<span className="w-fit m-auto flex justify-center -translate-y-full">
-					<h3 className="text-3xl font-semibold px-1">{data?.title ?? 'Loading'}</h3>
+					<h3 className="text-3xl font-semibold px-1 text-center">{data?.title ?? 'Loading'}</h3>
 					<GCDivider className="bottom-0" />
 				</span>
 
 				<section className="flex flex-col md:flex-row gap-x-6 gap-y-2 h-full md:max-h-[400px]!">
-					<div className="aspect-2/3 w-[200px] m-auto md:m-0 md:ml-10 md:w-[270px] md:min-w-[270px] md:h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
+					<div className="md:aspect-2/3 w-[300px] sm:w-[400px] m-auto md:m-0 md:ml-10 md:w-[270px] md:min-w-[270px] md:h-[400px] shrink-0 rounded-lg overflow-hidden select-none">
 						{data?.imageUrl ? (
 							<img
 								draggable={false}
@@ -110,19 +109,19 @@ export function GamePage() {
 						)}
 
 						<section className="flex flex-col-reverse gap-y-2 justify-between gap-x-5 items-center w-full md:flex-row">
-							<GCButton
-								theme="primary"
-								className="flex justify-center w-fit"
-								disabled={!data || !!findGame}
-								onClick={async () => await makeApiCall({ endpoint: '/Games/{id}/buy', httpMethod: 'PUT' })}
-							>
-								{findGame ? 'Already owned' : 'Add to library'}
-							</GCButton>
+							<ModalPlata
+								game={data}
+								id={data?.id ?? 0}
+								setErrorBuy={setBuyError}
+								idDiscount={data?.discount?.id ?? 0}
+							/>
+
 							<span className="flex flex-row gap-x-2 md:flex-col items-center text-neutral-400">
-								<h5 className="text-neutral-400 text-sm md:text-base">{data?.releaseDate}</h5>
+								<h5 className="text-neutral-400 text-sm md:text-base">{FormatDateISO(data?.releaseDate ?? '')}</h5>
 								<p>{data?.developer?.name}</p>
 							</span>
 						</section>
+						{buyError != null && <p className="text-red-400 text-center">{buyError.message}</p>}
 					</span>
 					<span className="flex-col gap-y-5 w-[40%]! min-w-[230px] bg-neutral-900 rounded-lg px-2 py-4 border border-neutral-600 hidden 2xl:flex">
 						<span className="relative h-fit mx-auto w-fit flex items-center justify-center">
@@ -131,13 +130,13 @@ export function GamePage() {
 						</span>
 						<ul className="flex flex-col h-full gap-y-2 justify-start overflow-y-auto px-4">
 							{recData?.length &&
-								recData?.map(() => {
+								recData?.map((e) => {
 									return (
-										<li key={data?.id} className="flex flex-col">
+										<li key={e?.id} className="flex flex-col">
 											<GameSideCard
 												className="flex flex-row"
-												game={data}
-												addPrice={{ discount: data?.discount?.percentageValue ?? 0, price: data?.price ?? 0 }}
+												game={e}
+												addPrice={{ discount: e?.discount?.percentageValue ?? 0, price: e?.price ?? 0 }}
 											/>
 										</li>
 									)
@@ -147,10 +146,10 @@ export function GamePage() {
 				</section>
 			</article>
 			<ElementSlider
-				elements={undefined}
+				elements={recData}
 				titleName="Recommendations"
 				className="2xl:hidden mt-5! pb-20!"
-				classImg="w-[120px]!"
+				classImg="w-[120px] max-w-[120px]!"
 				classPrice="flex-reverse-row! gap-x-2! justify-center! text-sm!"
 				classScroll="flex flex-row gap-x-4!"
 				removeOldPrice

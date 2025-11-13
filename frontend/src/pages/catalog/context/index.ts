@@ -1,7 +1,7 @@
 import type { CustomError } from '@/errors'
-import type { GameListResponse, GenreDTO } from '@/models'
+import type { GameListResponse, GenreDTO, GetGameDTO } from '@/models'
 import type { SetState } from '@/utils'
-import { createContext } from 'react'
+import { createContext, type RefObject } from 'react'
 
 interface catalogContextArgs {
 	genres: GenreDTO[]
@@ -11,6 +11,7 @@ interface catalogContextArgs {
 	startTransition: (cb: () => void) => void
 	catalogGames: GameListResponse['items']
 	setCatalogGames: SetState<GameListResponse['items']>
+	getPrevGames: RefObject<GetGameDTO[]>
 }
 
 export const CatalogContext = createContext<catalogContextArgs>({} as catalogContextArgs)

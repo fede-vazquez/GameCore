@@ -12,7 +12,6 @@ interface GCSelectProps {
 }
 
 export function GCSelect({ options, control, placeholder, className, register }: GCSelectProps) {
-	const newOptions: GenreDTO[] = [{ id: 0, name: 'Anything' }, ...options]
 	return (
 		<Controller
 			control={control}
@@ -38,9 +37,9 @@ export function GCSelect({ options, control, placeholder, className, register }:
 
 							<Select.Viewport>
 								<Select.Group>
-									{newOptions.map(({ id, name }) => (
+									{options.map(({ id, name }) => (
 										<Select.Item
-											value={name.toLowerCase()}
+											value={String(id)}
 											key={id}
 											className="flex p-1 rounded-sm items-center hover:bg-neutral-800 cursor-pointer"
 										>

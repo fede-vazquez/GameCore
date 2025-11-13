@@ -12,11 +12,13 @@ export const QUERY_KEYS = {
 	GET_DISCOUNT_GAMES: 'discount_games',
 	GET_GENRES_CATALOG: 'genres_catalog',
 	GET_GAMES: 'games_catalog',
+	GET_PAY_METHOD: 'payment_method',
 	GET_GAME_BY_GENRE: (id: number | undefined) => `specific_game_by_genre_${id ?? 0}`,
 	GET_SPECIFIC_GAME: (id: string | undefined) => `specific_game_${id ?? 0}`
 } as const
 
 export const TOKEN_KEY = 'JWT_KEY_IMPORTANT_DO_NOT_LEAK' as const
+export const TOKEN_USER_INFO = 'USER_INFO' as const
 
 export const FUN_FACTS_STRINGS = [
 	"90% of the world's data was created in the last two years.",
@@ -62,3 +64,34 @@ export const LIST_OF_GENRES_DTO: GenreDTO[] = [
 	{ id: 18, name: 'Visual Novel' },
 	{ id: 19, name: 'Card Game' }
 ] as const
+
+export function FormatDateISO(dateString: string) {
+	try {
+		const formatter = new Intl.DateTimeFormat('fr-CA', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			timeZone: 'UTC'
+		}).format(new Date(dateString))
+
+		return formatter
+	} catch (error) {
+		return 'Error'
+	}
+}
+
+export const DEBOUNCER_DEFAULT_DELAY = 500
+
+export function debouncer<T extends Function>(
+	func: T,
+	delay: number = DEBOUNCER_DEFAULT_DELAY
+): (...args: any[]) => void {
+	let timeoutId: ReturnType<typeof setTimeout>
+	return function (this: any, ...args: any[]) {
+		const context = this
+		clearTimeout(timeoutId)
+		timeoutId = setTimeout(() => {
+			func.apply(context, args)
+		}, delay)
+	}
+}

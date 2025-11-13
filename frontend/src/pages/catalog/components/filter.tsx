@@ -12,11 +12,10 @@ import z from 'zod'
 import { useCatalogContext } from '../context'
 
 const INPUT_NAMES = {
-	MAX_PRICE_RANGE: 'max_price',
-	MIN_PRICE_RANGE: 'min_price',
+	MAX_PRICE_RANGE: 'MaxPrice',
+	MIN_PRICE_RANGE: 'MinPrice',
 	GENRE: 'genre',
-	MIN_RELEASE_YEAR: 'min_release',
-	MAX_RELEASE_YEAR: 'max_release'
+	RELEASE_YEAR: 'Year'
 } as const
 
 const default_vals = {
@@ -31,19 +30,10 @@ const FILTER_VALIDATOR = z
 		[INPUT_NAMES.MAX_PRICE_RANGE]: z.coerce.number().max(default_vals.max_price).min(0).optional(),
 		[INPUT_NAMES.MIN_PRICE_RANGE]: z.coerce.number().max(default_vals.max_price).min(0).optional(),
 		[INPUT_NAMES.GENRE]: z.string().optional(),
-		[INPUT_NAMES.MAX_RELEASE_YEAR]: z
-			.preprocess(
-				(val) => (val === '' ? undefined : val),
-				z.coerce.number().max(default_vals.max_release_year).min(default_vals.min_release_year).optional()
-			)
-			.optional(),
-
-		[INPUT_NAMES.MIN_RELEASE_YEAR]: z
-			.preprocess(
-				(val) => (val === '' ? undefined : val),
-				z.coerce.number().max(default_vals.max_release_year).min(default_vals.min_release_year).optional()
-			)
-			.optional()
+		[INPUT_NAMES.RELEASE_YEAR]: z.preprocess(
+			(val) => (val === '' ? undefined : val),
+			z.coerce.number().max(default_vals.max_release_year).min(default_vals.min_release_year).optional()
+		)
 	})
 	.refine(
 		(d) =>
@@ -52,15 +42,6 @@ const FILTER_VALIDATOR = z
 		{
 			path: [INPUT_NAMES.MIN_PRICE_RANGE],
 			error: 'MinPrice cannot be higher than MaxPrice'
-		}
-	)
-	.refine(
-		(d) =>
-			(d[INPUT_NAMES.MAX_RELEASE_YEAR] ?? default_vals.min_release_year) >=
-			(d[INPUT_NAMES.MIN_RELEASE_YEAR] ?? default_vals.min_release_year),
-		{
-			path: [INPUT_NAMES.MIN_RELEASE_YEAR],
-			error: 'MinYear cannot be older than MaxYear'
 		}
 	)
 
@@ -72,7 +53,7 @@ export function FilterDropMenu({
 	games: GameListResponse['items'] | undefined
 }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const { startTransition, setCatalogGames } = useCatalogContext()
+	const { startTransition, setCatalogGames, getPrevGames } = useCatalogContext()
 
 	const {
 		register,
@@ -106,8 +87,7 @@ export function FilterDropMenu({
 					onSubmit={handleSubmit((e) => {
 						startTransition(async () => {
 							const data = await makeApiCall<GameListResponse>({ endpoint: '/Games?', opts: { filters: e } })
-							if (!data?.items) return
-							setCatalogGames(data?.items)
+							setCatalogGames(data?.items ?? [])
 						})
 					})}
 				>
@@ -142,23 +122,17 @@ export function FilterDropMenu({
 					{/* i dont have enough time for this */}
 					<DropdownMenuItem>
 						<label className="text-neutral-400 text-sm">Select year of release</label>
-						<span className="flex relative items-center">
-							<RangeInput
-								className={errors[INPUT_NAMES.MIN_RELEASE_YEAR] && 'border-red-400!'}
-								placeholder={String(default_vals.min_release_year)}
-								disableChild
-								fieldName={INPUT_NAMES.MIN_RELEASE_YEAR}
-								register={register(INPUT_NAMES.MIN_RELEASE_YEAR)}
-							/>
-							<div className="w-4 h-px mx-1 rounded-xl translate-y-0.5 bg-neutral-400" />
-							<RangeInput
-								className={errors[INPUT_NAMES.MAX_RELEASE_YEAR] && 'border-red-400!'}
-								placeholder={String(default_vals.max_release_year)}
-								disableChild
-								fieldName={INPUT_NAMES.MAX_RELEASE_YEAR}
-								register={register(INPUT_NAMES.MAX_RELEASE_YEAR)}
-							/>
-						</span>
+
+						<GCInput
+							register={register(INPUT_NAMES.RELEASE_YEAR)}
+							placeholder={'e.x.: 2025'}
+							formFieldName={INPUT_NAMES.RELEASE_YEAR}
+							type="text"
+							className="relative text-sm flex! items-center!"
+							classInput={`w-full! h-8!`}
+							disableSvgPlaceholder
+							isRequired={false}
+						/>
 					</DropdownMenuItem>
 
 					<DropdownMenu.Separator className="bg-neutral-500 w-full! h-px rounded-xl! translate-y-full" />
@@ -170,6 +144,9 @@ export function FilterDropMenu({
 								color="red"
 								variant="soft"
 								className="text-red-500! bg-red-700/20! cursor-pointer! hover:brightness-110!"
+								onClick={() => {
+									setCatalogGames(getPrevGames.current)
+								}}
 							>
 								Clear All
 							</Button>
