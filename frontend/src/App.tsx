@@ -46,7 +46,7 @@ export const App = function App() {
 					)}
 				/>
 
-				<Route path="/admin/dashboard" component={DashboardPage} />
+				<Route path="/admin/dashboard" component={() => <AsideBarWrapper children={<DashboardPage />} />} />
 
 				<Route component={() => <>404</>} />
 			</Switch>

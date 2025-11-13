@@ -1,5 +1,5 @@
 export * from './generalInfo/InfoCard'
-export * from './categoryInfo/CategoryInfo'
+export * from './categoryInfo/GenreInfo'
 export * from './bestSellingGames/BestSellingGamesChart'
 export * from './listInfo/LatestGamesAdded'
 export * from './generalInfo/GeneralInfo'

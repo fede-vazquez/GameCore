@@ -4,7 +4,6 @@ import { Link } from 'wouter'
 import { GCButton } from '@/components/GCgenerics'
 import { useQuery } from '@tanstack/react-query'
 import { makeApiCall } from '@/services/apiCall'
-import type { AllGameRoutes } from '@/services/apiCall/routes'
 import type { GetGameDTO } from '@/models'
 
 interface GameListProps {
