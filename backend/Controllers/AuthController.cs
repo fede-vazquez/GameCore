@@ -80,28 +80,28 @@ public class AuthController : ControllerBase
             );
         }
     }
-
-    [HttpPost("logout")]
-    [Authorize]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
-    async public Task<ActionResult> Logout()
-    {
-        try
+    /*
+        [HttpPost("logout")]
+        [Authorize]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
+        async public Task<ActionResult> Logout()
         {
-            await _authServices.LogoutAsync(HttpContext);
-            return Ok();
+            try
+            {
+                await _authServices.LogoutAsync(HttpContext);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new HttpMessage(ex.Message)
+                );
+            }
         }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                (int)HttpStatusCode.InternalServerError,
-                new HttpMessage(ex.Message)
-            );
-        }
-    }
-
+    */
     [HttpGet("health")]
     [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]

@@ -1,7 +1,7 @@
 using GameCore.Config;
 using Microsoft.EntityFrameworkCore;
 using GameCore.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies;
+// using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -105,17 +105,10 @@ var key = Encoding.UTF8.GetBytes(secret);
 
 builder.Services.AddAuthentication(options =>
 {
+    // Usa JWT como el esquema predeterminado para Autenticación y Desafío
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    // Establece JWT como el esquema a usar cuando una acción falla por falta de credenciales (Challenge)
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    // Establece JWT como el esquema predeterminado general
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    /*
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;*/
 })
 .AddJwtBearer(opts =>
 {
@@ -128,24 +121,38 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false,
         ValidateLifetime = true,
     };
-})
+});
+/*
 .AddCookie(opts =>
 {
     opts.Cookie.HttpOnly = true;
     opts.Cookie.SameSite = SameSiteMode.None;
     opts.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     opts.ExpireTimeSpan = TimeSpan.FromDays(1);
+});*/
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MiPoliticaCORS",
+        builder =>
+        {
+            builder.WithOrigins("https://gamecore.pages.dev")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
 });
 
-
+// Agrega servicios al contenedor (ej. Controllers)
+builder.Services.AddControllers();
 
 var app = builder.Build();
-app.UseCors(opts =>
-{
-    opts.AllowAnyMethod();
-    opts.AllowAnyHeader();
-    opts.AllowAnyOrigin();
-});
+// app.UseCors(opts =>
+// {
+//     opts.AllowAnyMethod();
+//     opts.AllowAnyHeader();
+//     opts.AllowAnyOrigin();
+// });
+app.UseCors("MiPoliticaCORS");
 app.UseSwagger();
 app.UseSwaggerUI();
 // Configure the HTTP request pipeline.

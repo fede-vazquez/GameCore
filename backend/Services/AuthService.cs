@@ -12,7 +12,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+// using Microsoft.AspNetCore.Authentication.Cookies;
 using GameCore.Enums;
 using GameCore.Models.Rol;
 
@@ -72,7 +72,7 @@ public class AuthServices
             throw new HttpResponseError(HttpStatusCode.BadRequest, "Invalid credentials");
         }
 
-        await SetCookieAsync(user, context);
+        //await SetCookieAsync(user, context);
 
         string token = await GenerateJwt(user);
 
@@ -82,40 +82,40 @@ public class AuthServices
             User = _mapper.Map<UserWithoutPassDTO>(user)
         };
     }
-
-    async public Task LogoutAsync(HttpContext context)
-    {
-        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    }
-
-    async public Task SetCookieAsync(User user, HttpContext context)
-    {
-        var claims = new List<Claim>
-            {
-                new Claim("id", user.Id.ToString())
-            };
-
-        if (user.Rol != null)
+    /*
+        async public Task LogoutAsync(HttpContext context)
         {
-
-            var claim = new Claim(ClaimTypes.Role, user.Rol.Name);
-            claims.Add(claim);
+            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
-
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-
-        await context.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            principal,
-            new AuthenticationProperties
+        /*
+            async public Task SetCookieAsync(User user, HttpContext context)
             {
-                IsPersistent = true,
-                ExpiresUtc = DateTime.UtcNow.AddDays(1),
-            }
-        );
-    }
+                var claims = new List<Claim>
+                    {
+                        new Claim("id", user.Id.ToString())
+                    };
 
+                if (user.Rol != null)
+                {
+
+                    var claim = new Claim(ClaimTypes.Role, user.Rol.Name);
+                    claims.Add(claim);
+                }
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await context.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.UtcNow.AddDays(1),
+                    }
+                );
+            }
+        */
     async public Task<string> GenerateJwt(User user)
     {
         var key = Encoding.UTF8.GetBytes(_secret);
