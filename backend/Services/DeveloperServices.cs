@@ -49,6 +49,16 @@ public class DeveloperServices
 
     async public Task<GetDeveloperDTO> CreateOneAsync(CreateDeveloperDTO createDTO)
     {
+        //si el nombre es vacio tira error
+        if (createDTO.Name == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El nombre no puede estar vacio");
+        }
+        //si ya existe dev con ese nombre tira error
+        if (await _repo.GetOneAsync(x => x.Name == createDTO.Name) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un developer con ese nombre");
+        }
         var dev = _mapper.Map<Developer>(createDTO);
 
         await _repo.CreateOneAsync(dev);
@@ -58,6 +68,16 @@ public class DeveloperServices
 
     async public Task<GetDeveloperDTO> UpdateOneByIdAsync(int id, UpdateDeveloperDTO updateDTO)
     {
+        //si el nombre es vacio tira error
+        if (updateDTO.Name == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El nombre no puede estar vacio");
+        }
+        //si ya existe dev con ese nombre tira error
+        if (await _repo.GetOneAsync(x => x.Name == updateDTO.Name) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un developer con ese nombre");
+        }
         var dev = await GetOneEntityByIdOrExceptionAsync(id);
         dev.Name = updateDTO.Name;
         await _repo.UpdateOneAsync(dev);

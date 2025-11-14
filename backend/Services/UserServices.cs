@@ -74,6 +74,21 @@ public class UserServices
 
     async public Task<UserWithoutPassDTO> CreateOneAsync(RegisterDTO register)
     {
+        //el username no puede ser vacio
+        if (register.Username == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El username no puede estar vacio");
+        }
+        //el mail no puede ser vacio
+        if (register.Email == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El email no puede estar vacio");
+        }
+        //la contraseña no puede ser vacia
+        if (register.Password == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "La contraseña no puede estar vacia");
+        }
         if (register.ConfirmPassword != register.Password)
         {
             throw new HttpResponseError(HttpStatusCode.BadRequest, "Las contraseñas no coinciden");

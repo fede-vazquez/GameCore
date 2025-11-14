@@ -67,6 +67,39 @@ public class GameServices
 
     async public Task<GetGameDTO> CreateOneAsync(CreateGameDTO createGameDTO)
     {
+        //el titulo del juego no puede ser vacio
+        if (createGameDTO.Title == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El titulo no puede estar vacio");
+        }
+        //si ya existe juego con ese title tira error
+        if (await _repo.GetOneAsync(x => x.Title == createGameDTO.Title) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un juego con ese titulo");
+        }
+        //el precio no puede ser negativo
+        if (createGameDTO.Price < 0)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El precio no puede ser negativo");
+        }
+        //el precio debe ser mayor a 0.50
+        if (createGameDTO.Price < (decimal)0.50)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El precio debe ser mayor a 0.50");
+        }
+        //el metacriticScore debe estar entre 0 y 100
+        if (createGameDTO.MetacriticScore < 0 || createGameDTO.MetacriticScore > 100)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El metacriticScore debe estar entre 0 y 100");
+        }
+        //debe ser obligatorio agregar un developer
+        if (createGameDTO.DeveloperId == 0)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Debes agregar un desarrollador");
+        }
+        //el desarrollador debe existir
+        var developer = await _developerServices.GetOneByIdAsync(createGameDTO.DeveloperId);
+
         //creamos un juego a partir del dto
         var game = _mapper.Map<Game>(createGameDTO);
         //agregamos la lista de generos
@@ -85,6 +118,38 @@ public class GameServices
 
     async public Task<GetGameDTO> UpdateOneById(int id, UpdateGameDTO updateDTO)
     {
+        //el titulo del juego no puede ser vacio
+        if (updateDTO.Title == null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El titulo no puede estar vacio");
+        }
+        //verificamos que no exista un juego con ese title
+        if (await _repo.GetOneAsync(x => x.Title == updateDTO.Title && x.Id != id) != null)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Ya existe un juego con ese titulo");
+        }
+        //el precio no puede ser negativo
+        if (updateDTO.Price < 0)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El precio no puede ser negativo");
+        }
+        //el precio debe ser mayor a 0.50
+        if (updateDTO.Price < (decimal)0.50)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El precio debe ser mayor a 0.50");
+        }
+        //el metacriticScore debe estar entre 0 y 100
+        if (updateDTO.MetacriticScore < 0 || updateDTO.MetacriticScore > 100)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "El metacriticScore debe estar entre 0 y 100");
+        }
+        //debe ser obligatorio agregar un developer
+        if (updateDTO.DeveloperId == 0)
+        {
+            throw new HttpResponseError(HttpStatusCode.BadRequest, "Debes agregar un desarrollador");
+        }
+        //el desarrollador debe existir
+        var developer = await _developerServices.GetOneByIdAsync(updateDTO.DeveloperId);
         var game = await GetOneByIdOrException(id);
         //actualizamos el juego a partir del dto
         _mapper.Map(updateDTO, game);
