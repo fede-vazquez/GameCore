@@ -54,7 +54,10 @@ export const App = function App() {
 						path="/admin/games/new"
 						component={() => (clientUser?.rol === 'Admin' ? <CreateGamePage /> : <Redirect href="/auth" />)}
 					/>
-					<Route path="/admin/games/edit/:id" component={() => <EditGamePage />} />
+					<Route
+						path="/admin/games/edit/:id"
+						component={() => (clientUser?.rol === 'Admin' ? <EditGamePage /> : <Redirect href="/auth" />)}
+					/>
 
 					<Route
 						path="/library"

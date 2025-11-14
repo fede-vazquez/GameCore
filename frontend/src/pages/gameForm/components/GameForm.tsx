@@ -8,6 +8,7 @@ import { CalendarSVG } from '@/assets/calendarSvg'
 import { DollarSVG } from '@/assets/dollarSvg'
 import { gameFormSchema, FIELDS_FORM, SVG_CLASS, type GameFormData } from './GameFormTypes'
 import { SelectDeveloper } from './selectDeveloper'
+import { navigate } from 'wouter/use-browser-location'
 
 interface GameFormProps {
 	defaultValues?: GameFormData
@@ -144,11 +145,19 @@ export function GameForm({
 				)}
 			</Form.Field>
 
-			<Form.Submit asChild className="mt-3">
-				<GCButton theme="primary" disabled={isSubmitting}>
-					{submitButtonText}
-				</GCButton>
-			</Form.Submit>
+			<div className="flex justify-between mt-3 gap-6">
+				<div className="w-1/2 ">
+					<GCButton theme="ghost" className="w-full text-red-500" onClick={() => navigate('/games')}>
+						Cancelar
+					</GCButton>
+				</div>
+
+				<Form.Submit asChild className="w-1/2">
+					<GCButton theme="primary" disabled={isSubmitting}>
+						{submitButtonText}
+					</GCButton>
+				</Form.Submit>
+			</div>
 		</Form.Root>
 	)
 }
