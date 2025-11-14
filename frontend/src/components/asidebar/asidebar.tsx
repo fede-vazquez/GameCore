@@ -107,25 +107,16 @@ export function AsideBar() {
 								Log In
 							</GCButton>
 						) : (
-							<span className="flex flex-row w-fit gap-x-2 items-center">
-								<GCButton
-									theme="primary"
-									className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
-									onClick={() => void 0}
-								>
-									Profile
-								</GCButton>
-								<GCButton
-									theme="ghost"
-									className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
-									onClick={() => {
-										localStorage.clear()
-										navigate(location, { replace: true })
-									}}
-								>
-									Log Out
-								</GCButton>
-							</span>
+							<GCButton
+								theme="ghost"
+								className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
+								onClick={() => {
+									localStorage.clear()
+									navigate(location, { replace: true })
+								}}
+							>
+								Log Out
+							</GCButton>
 						)}
 					</Link>
 				</footer>

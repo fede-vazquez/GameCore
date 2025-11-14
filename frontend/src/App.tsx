@@ -82,7 +82,7 @@ export const App = function App() {
 						)}
 					/>
 
-					<Route component={() => <Redirect href="/auth" />} />
+					<Route component={() => (clientUser?.id ? <Redirect href="/library" /> : <Redirect href="/auth" />)} />
 				</Switch>
 			</Suspense>
 		</main>
