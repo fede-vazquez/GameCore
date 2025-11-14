@@ -9,9 +9,10 @@ interface GCSelectProps {
 	placeholder: string
 	control: any
 	register: UseFormRegisterReturn<any>
+	label?: string
 }
 
-export function GCSelect({ options, control, placeholder, className, register }: GCSelectProps) {
+export function GCSelect({ options, control, placeholder, className, register, label }: GCSelectProps) {
 	return (
 		<Controller
 			control={control}
@@ -37,6 +38,7 @@ export function GCSelect({ options, control, placeholder, className, register }:
 
 							<Select.Viewport>
 								<Select.Group>
+									{label && <Select.Label className="block text-sm font-medium text-white mb-1">{label}</Select.Label>}
 									{options.map(({ id, name }) => (
 										<Select.Item
 											value={String(id)}

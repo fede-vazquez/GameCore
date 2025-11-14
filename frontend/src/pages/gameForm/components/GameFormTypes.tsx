@@ -27,6 +27,7 @@ export const gameFormSchema = z.object({
 		.min(0, { message: 'El puntaje debe ser al menos 0' })
 		.max(100, { message: 'El puntaje no puede ser mayor a 100' }),
 	releaseDate: z.date('La fecha de lanzamiento es requerida'),
+	developerId: z.string().nonempty('El desarrollador es requerido'),
 	imageUrl: z
 		.instanceof(FileList)
 		.refine((files) => files.length > 0, { message: 'Debe seleccionar una imagen' })

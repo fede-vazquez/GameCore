@@ -21,10 +21,7 @@ export interface GameUpdateDTO {
 export function EditGamePage() {
 	const { id } = useParams<{ id: string }>()
 
-	const {
-		data: gameData,
-		isLoading
-	} = useQuery<GetGameDTO>({
+	const { data: gameData, isLoading } = useQuery<GetGameDTO>({
 		queryKey: ['game', id],
 		queryFn: async () => {
 			try {
@@ -56,21 +53,14 @@ export function EditGamePage() {
 			const apiData: Partial<GameUpdateDTO> = {}
 
 			apiData.title = formData.title
-
 			apiData.description = formData.description
-
 			apiData.price = formData.price
-
 			apiData.releaseDate = formData.releaseDate.toISOString()
-
 			const newImageUrl = formData.imageUrl?.[0]?.name
 			apiData.imageUrl = newImageUrl
-
 			apiData.genreIds = formData.genreIds
-
 			apiData.metacriticScore = formData.metacriticScore
-
-			apiData.developerId = 1
+			apiData.developerId = Number(formData.developerId)
 			apiData.isActive = true
 
 			return await makeApiCall<GameUpdateDTO>({
@@ -105,14 +95,15 @@ export function EditGamePage() {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<GameForm
-				key={gameData.id} // Add key to force re-render when gameData changes
+				key={gameData.id}
 				defaultValues={{
 					title: gameData.title,
 					description: gameData.description,
 					price: gameData.price,
 					metacriticScore: gameData.metacriticScore ?? 0,
 					releaseDate: new Date(gameData.releaseDate.toString()),
-					genreIds: Array.isArray(gameData.genres) ? gameData.genres.map((g: any) => g.id) : []
+					genreIds: Array.isArray(gameData.genres) ? gameData.genres.map((g: any) => g.id) : [],
+					developerId: String(gameData.developer.id)
 				}}
 				onSubmit={handleSubmit}
 				isSubmitting={isSubmitting}

@@ -7,6 +7,7 @@ import { GCButton, GCInput } from '@/components/GCgenerics'
 import { CalendarSVG } from '@/assets/calendarSvg'
 import { DollarSVG } from '@/assets/dollarSvg'
 import { gameFormSchema, FIELDS_FORM, SVG_CLASS, type GameFormData } from './GameFormTypes'
+import { SelectDeveloper } from './selectDeveloper'
 
 interface GameFormProps {
 	defaultValues?: GameFormData
@@ -27,13 +28,14 @@ export function GameForm({
 	isSuccess,
 	error,
 	submitButtonText = 'Guardar',
-	title = 'JUEGO'
+	title
 }: GameFormProps) {
 	const {
 		register,
 		handleSubmit,
 		watch,
 		setValue,
+		control,
 		formState: { errors }
 	} = useForm<GameFormData>({
 		resolver: zodResolver(gameFormSchema),
@@ -41,6 +43,7 @@ export function GameForm({
 			title: '',
 			description: '',
 			genreIds: [],
+			developerId: '',
 			...defaultValues
 		}
 	})
@@ -60,6 +63,13 @@ export function GameForm({
 				label="Título"
 				type="text"
 				disableSvgPlaceholder={true}
+			/>
+
+			<SelectDeveloper
+				label="Desarrollador"
+				error={errors[FIELDS_FORM.DEVELOPER_ID]}
+				register={register(FIELDS_FORM.DEVELOPER_ID)}
+				control={control}
 			/>
 
 			<GCInput

@@ -29,7 +29,7 @@ export function CreateGamePage() {
 				description: formData.description,
 				price: formData.price,
 				releaseDate: formData.releaseDate.toISOString(),
-				developerId: 1,
+				developerId: Number(formData.developerId),
 				imageUrl: typeof formData.imageUrl === 'string' ? formData.imageUrl : formData.imageUrl?.[0]?.name || '',
 				isActive: true,
 				genreIds: formData.genreIds,
