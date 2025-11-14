@@ -1,6 +1,6 @@
 import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
-import { ElementSlider, GCDivider, GCSkeleton } from '@/components/GCgenerics'
+import { ElementSlider, GCButton, GCDivider, GCSkeleton } from '@/components/GCgenerics'
 import type { CustomError } from '@/errors'
 import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
@@ -9,6 +9,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Redirect, useParams } from 'wouter'
 import { ModalPlata } from './components/modalPlata'
+import { useGlobalContext } from '@/context'
+import { navigate } from 'wouter/use-browser-location'
 
 export function GamePage() {
 	const { id } = useParams()
@@ -109,12 +111,25 @@ export function GamePage() {
 						)}
 
 						<section className="flex flex-col-reverse gap-y-2 justify-between gap-x-5 items-center w-full md:flex-row">
-							<ModalPlata
-								game={data}
-								id={data?.id ?? 0}
-								setErrorBuy={setBuyError}
-								idDiscount={data?.discount?.id ?? 0}
-							/>
+							<div className="flex flex-row gap-x-2">
+								<ModalPlata
+									game={data}
+									id={data?.id ?? 0}
+									setErrorBuy={setBuyError}
+									idDiscount={data?.discount?.id ?? 0}
+								/>
+								{useGlobalContext().clientUser?.rol === 'Admin' && (
+									<GCButton
+										theme="primary"
+										className="flex justify-center w-fit"
+										onClick={() => {
+											navigate(`/admin/games/edit/${id}`)
+										}}
+									>
+										Edit
+									</GCButton>
+								)}
+							</div>
 
 							<span className="flex flex-row gap-x-2 md:flex-col items-center text-neutral-400">
 								<h5 className="text-neutral-400 text-sm md:text-base">{FormatDateISO(data?.releaseDate ?? '')}</h5>
