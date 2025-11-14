@@ -223,31 +223,7 @@ namespace GameCore.Controllers
                 );
             }
         }
-        //Crear un developer
-        [HttpPost("developers")]
-        [ProducesResponseType(typeof(GetDeveloperDTO), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(HttpMessage), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<GetDeveloperDTO>> CreateDeveloper([FromBody] CreateDeveloperDTO createDeveloperDTO)
-        {
-            try
-            {
-                var res = await _devServices.CreateOneAsync(createDeveloperDTO);
-                return Created("CreateDeveloper", res);
-            }
-            catch (HttpResponseError ex)
-            {
-                return StatusCode(
-                    (int)ex.StatusCode,
-                    new HttpMessage(ex.Message)
-                );
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(
-                    (int)HttpStatusCode.InternalServerError,
-                    new HttpMessage(ex.Message));
-            }
-        }
+
         // creamos un descuento a un juego
         [HttpPost("games/{gameId}/discounts")]
         [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]

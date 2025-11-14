@@ -241,29 +241,4 @@ public class GamesController : ControllerBase
             );
         }
     }
-    //obtener lista de desarrolladores
-    [HttpGet("developers")]
-    [ProducesResponseType(typeof(List<GetDeveloperDTO>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<GetDeveloperDTO>>> GetDevelopers()
-    {
-        try
-        {
-            var res = await _devServices.GetAllAsync();
-            return Ok(res);
-        }
-        catch (HttpResponseError ex)
-        {
-            return StatusCode(
-                (int)ex.StatusCode,
-                new HttpMessage(ex.Message)
-            );
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                (int)HttpStatusCode.InternalServerError,
-                new HttpMessage(ex.Message)
-            );
-        }
-    }
 }
