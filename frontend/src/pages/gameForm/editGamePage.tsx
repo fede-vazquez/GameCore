@@ -7,6 +7,7 @@ import type { GetGameDTO } from '@/models'
 import { PopUp } from '@/components/PopUp'
 import { GCButton } from '@/components/GCgenerics'
 import { navigate } from 'wouter/use-browser-location'
+import { ThrobberSVG } from '@/assets'
 
 export interface GameUpdateDTO {
 	id: string
@@ -85,7 +86,9 @@ export function EditGamePage() {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			{isSubmitting && <PopUp>Actualizando juego...</PopUp>}
+			{isSubmitting && (
+				<ThrobberSVG className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
+			)}
 			{gameData ? (
 				<GameForm
 					key={gameData.id}

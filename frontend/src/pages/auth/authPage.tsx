@@ -2,16 +2,22 @@ import { FUN_FACTS_STRINGS } from '@/utils'
 import { Tabs } from 'radix-ui'
 import { LogInForm, RegisterForm, TABS_PAGES, type ALL_TABS_PAGES } from './components'
 import { useAuthContext } from './context'
+import { PopUp } from '@/components/PopUp'
+import { ThrobberSVG } from '@/assets'
 
 const tabsClass = 'border-b-2 px-1 border-b-neutral-300'
 const SVG_CLASS = 'absolute left-1.5 top-2 *:text-zinc-500'
 
 export function AuthPage() {
 	//todo: there's a isPending prop, use it as a spinner/throbber
-	const { setActiveTab, activeTab, error } = useAuthContext()
+	const { setActiveTab, activeTab, error, isPending } = useAuthContext()
 
 	return (
 		<section className="w-screen h-screen flex justify-center items-center gap-5 p-10 overflow-hidden">
+			{isPending && (
+				<ThrobberSVG className="z-10 absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
+			)}
+
 			<Tabs.Root
 				onValueChange={(val) => setActiveTab(val as ALL_TABS_PAGES)}
 				value={activeTab}

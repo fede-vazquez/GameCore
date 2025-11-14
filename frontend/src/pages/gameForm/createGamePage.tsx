@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { makeApiCall } from '@/services/apiCall'
 import { GameForm } from './components'
 import type { GameFormData } from './components/GameFormTypes'
+import { ThrobberSVG } from '@/assets'
 
 export interface GameCreateDTO {
 	title: string
@@ -57,6 +58,9 @@ export function CreateGamePage() {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
+			{isSubmitting && (
+				<ThrobberSVG className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
+			)}
 			<GameForm
 				onSubmit={handleSubmit}
 				isSubmitting={isSubmitting}
