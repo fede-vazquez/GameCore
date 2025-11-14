@@ -6,10 +6,12 @@ import {
 	AUTH_URLENDPOINTS,
 	GAMES_URLENDPOINTS,
 	LIBRARY_URLENDPOINTS,
+	DEVELOPERS_URLENDPOINTS,
 	type AllAdminRoutes,
 	type AllAuthRoutes,
 	type AllGameRoutes,
-	type AllLibraryRoutes
+	type AllLibraryRoutes,
+	type AllDevelopersRoutes
 } from './routes'
 import type { Versioning } from './types'
 
@@ -17,7 +19,7 @@ export const queryClient = new QueryClient()
 
 interface ApiCallParams {
 	httpMethod?: HTTPMethods
-	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllLibraryRoutes
+	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllLibraryRoutes | AllDevelopersRoutes
 
 	body?: Record<string, Array<unknown> | string | number | boolean> | null
 	opts?: {
@@ -31,7 +33,8 @@ const MATCH_ROUTES_TO_OBJECT = {
 	'/Library': LIBRARY_URLENDPOINTS,
 	'/Admin': ADMIN_URLENDPOINTS,
 	'/auth': AUTH_URLENDPOINTS, // for some reason, in lower case
-	'/Games': GAMES_URLENDPOINTS
+	'/Games': GAMES_URLENDPOINTS,
+	'/Developer': DEVELOPERS_URLENDPOINTS
 } as const
 
 export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null, opts }: ApiCallParams) {
