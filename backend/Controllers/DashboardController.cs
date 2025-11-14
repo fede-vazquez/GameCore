@@ -11,7 +11,7 @@ using System.Net;
 namespace GameCore.Controllers
 {
     [ApiController]
-    [Route("api/admin/dashboard")]
+    [Route("api/Admin/dashboard")]
     [Authorize(Roles = $" {ROLE.ADMIN}")]
     public class DashboardController : ControllerBase
     {
