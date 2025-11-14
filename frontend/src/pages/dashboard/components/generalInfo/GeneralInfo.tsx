@@ -43,9 +43,9 @@ export function GeneralInfo() {
 			<h2 className="text-4xl">Información general</h2>
 
 			<Grid columns={{ initial: '1', md: '2', lg: '3' }} gap="4" width="auto">
-				<InfoCard title="Ventas totales" value={data.totalSales.toString()} bgColor="#000000" />
+				<InfoCard title="Ventas totales" value={data.totalSales.toString()} bgColor="#333333" />
 				<InfoCard title="Usuarios totales" value={data.totalUsers.toString()} bgColor="#125634" />
-				<InfoCard title="Juegos totales" value={data.totalGames.toString()} bgColor="#ff66aa" />
+				<InfoCard title="Juegos totales" value={data.totalGames.toString()} bgColor="#3366aa" />
 			</Grid>
 		</div>
 	)

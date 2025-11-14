@@ -70,7 +70,7 @@ export function AsideBar() {
 						<ListElement href="/library" svg={<ControllerSVG />} name="Library" currentLocation={location} />
 
 						{clientUser?.rol === 'Admin' && (
-							<ListElement href="/dashboard" svg={<ConsoleSVG />} name="Admin" currentLocation={location} />
+							<ListElement href="/admin/dashboard" svg={<ConsoleSVG />} name="Admin" currentLocation={location} />
 						)}
 					</ul>
 

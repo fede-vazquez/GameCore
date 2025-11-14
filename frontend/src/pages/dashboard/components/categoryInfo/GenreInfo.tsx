@@ -25,7 +25,7 @@ export function GenreInfo() {
 			<div className="p-3">
 				<label className="text-2xl">
 					Información del género:
-					<select className="ml-3" value={genre} onChange={(e) => handleChangeGenre(e.target.value)}>
+					<select className="ml-3 bg-black" value={genre} onChange={(e) => handleChangeGenre(e.target.value)}>
 						{genres.map((genre) => (
 							<option key={genre} value={genre}>
 								{genre}
