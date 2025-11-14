@@ -2,7 +2,6 @@ import { FUN_FACTS_STRINGS } from '@/utils'
 import { Tabs } from 'radix-ui'
 import { LogInForm, RegisterForm, TABS_PAGES, type ALL_TABS_PAGES } from './components'
 import { useAuthContext } from './context'
-import { PopUp } from '@/components/PopUp'
 import { ThrobberSVG } from '@/assets'
 
 const tabsClass = 'border-b-2 px-1 border-b-neutral-300'
