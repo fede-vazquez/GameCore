@@ -1,44 +1,20 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using GameCore.Models.Enum;
+using System;
 
+namespace GameCore.Models.User;
 
-namespace GameCore.Models
+using GameCore.Models.Rol;
+using GameCore.Models.GameUser;
+using GameCore.Models.Order;
+public class User
 {
-
-    [Index(nameof(Username), IsUnique = true)]
-    [Index(nameof(Email), IsUnique = true)]
-    public class User
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        [MinLength(3)]
-        [MaxLength(16)]
-        public string Username { get; set; } = null!;
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = null!;
-
-        [Required]
-        [MinLength(5)]
-        [MaxLength(32)]
-        public string Password { get; set; } = null!;
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime DeletedAt { get; set; }
-
-
-
-        [ForeignKey("Rol")]
-        public int RolId { get; set; }
-        public Roles Rol { get; set; }
-
-    }
+    public int Id { get; set; }
+    public string Username { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsActive { get; set; } = false;
+    public int RolId { get; set; }
+    public Rol Rol { get; set; } = null!;
+    public ICollection<GameUser> GameUsers { get; set; } = new List<GameUser>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

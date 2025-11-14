@@ -1,0 +1,25 @@
+using System;
+
+namespace GameCore.Models.Game.DTO;
+
+public class GameListParametersDTO
+{
+    //filtros
+    public int? GenreId { get; set; }
+    public string? Name { get; set; }
+    public int? DeveloperId { get; set; }
+    public int? PercentageId { get; set; }
+    public int? Year { get; set; }
+    public int? MinPrice { get; set; } = 0;
+    public int? MaxPrice { get; set; }
+    public int? MinMetacriticScore { get; set; }
+
+    //ordenar por
+    public string? SortBy { get; set; }
+    public bool Ascending { get; set; } = true;
+
+    //Paginacion
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+
+}

@@ -1,19 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-using Microsoft.EntityFrameworkCore;
+using System;
 
-namespace GameCore.Models
+namespace GameCore.Models.Developer;
+
+using GameCore.Models.Game;
+public class Developer
 {
-
-    [Index(nameof(Name), IsUnique = true)]
-    public class Developer
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        public string Name { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public ICollection<Game> Games { get; set; } = new List<Game>();
 }
