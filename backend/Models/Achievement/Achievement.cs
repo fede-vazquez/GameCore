@@ -1,26 +1,13 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-using Microsoft.AspNetCore.Routing.Constraints;
+using System;
 
-namespace GameCore.Models
+namespace GameCore.Models.Achievement;
+
+using GameCore.Models.Game;
+public class Achievement
 {
-    public class Achievement
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        [MinLength(3)]
-        [MaxLength(20)]
-        public string Name { get; set; } = null!;
-
-        [MaxLength(50)]
-        public string Description { get; set; } = null!;
-
-        [ForeignKey("Game")]
-        public int GameId { get; set; }
-        public Game Game { get; set; } 
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public int GameId { get; set; }
+    public Game Game { get; set; } = null!;
 }

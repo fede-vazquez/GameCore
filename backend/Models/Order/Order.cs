@@ -1,35 +1,20 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using GameCore.Models.Enum;
+using System;
 
-namespace GameCore.Models
+namespace GameCore.Models.Order;
+
+using GameCore.Models.User;
+using GameCore.Models.PaymentMethod;
+using GameCore.Models.Game;
+public class Order
 {
-    public class Order
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        public decimal BasePrice { get; set; }
-
-        [Required]
-        [ForeignKey("Discount")]
-        public int DiscountId { get; set; } 
-        public Discount Discount { get; set; } 
-
-        [Required]
-        [ForeignKey("PaymentMethod")]
-        public int PaymentMethodId { get; set; } 
-        public PaymentMethods PaymentMethod { get; set; } 
-
-        [Required]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public User User { get; set; }
-
-        [Required]
-        [ForeignKey("Game")]
-        public int GameId { get; set; }
-        public Game Game { get; set; }
-    }
+    public int Id { get; set; }
+    public int GameId { get; set; }
+    public Game Game { get; set; } = null!;
+    public int UserId { get; set; }
+    public User User { get; set; } = null!;
+    public int PaymentMethodId { get; set; }
+    public PaymentMethod PaymentMethod { get; set; } = null!;
+    public decimal BasePrice { get; set; } = 0;
+    public decimal DiscountApplied { get; set; } = 0;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -1,26 +1,16 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
 
-namespace GameCore.Models
+namespace GameCore.Models.Discount;
+
+using GameCore.Models.Game;
+using GameCore.Models.Percentage;
+public class Discount
 {
-    public class Discount
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        public decimal Percentage { get; set; } = 0; //100% means free?
-
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime StartDate { get; set; }
-        
-        [Required]
-        public DateTime EndDate { get; set; }
-        
-        [ForeignKey("Game")]
-        public int GameId { get; set; }
-
-        public Game Game { get; set; }
-    }
+    public int Id { get; set; }
+    public int GameId { get; set; }
+    public Game Game { get; set; } = null!;
+    public int PercentageId { get; set; }
+    public Percentage Percentage { get; set; } = null!;
+    public DateTime StartDate { get; set; } = DateTime.UtcNow;
+    public DateTime EndDate { get; set; }
 }
