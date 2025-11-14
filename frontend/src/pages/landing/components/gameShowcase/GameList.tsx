@@ -18,7 +18,7 @@ export default function GameList({ filters, queryName }: GameListProps) {
 	const [games, setGames] = useState<GameListResponse['items']>(prevRes.current)
 
 	const [enabled, setEnabled] = useState(true)
-	const { data, isPending, error } = useQuery({
+	const { data, error } = useQuery({
 		queryKey: [queryName],
 		queryFn: async () => {
 			try {
