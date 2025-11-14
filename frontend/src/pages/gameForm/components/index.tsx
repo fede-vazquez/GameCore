@@ -1,2 +1,1 @@
-export * from './createForm'
-export * from './editForm'
+export * from './GameForm'

@@ -5,6 +5,7 @@ import { GCHeader } from './components/GCgenerics'
 import { useGlobalContext } from './context'
 import { AuthContextProvider } from './pages/auth/context'
 import { CatalogContextProvider } from './pages/catalog/context'
+import { EditGamePage } from './pages/gameForm/editGamePage'
 
 // Lazy load all page components with named exports
 const LandingPage = lazy(() =>
@@ -53,6 +54,7 @@ export const App = function App() {
 						path="/admin/games/new"
 						component={() => (clientUser?.rol === 'Admin' ? <CreateGamePage /> : <Redirect href="/auth" />)}
 					/>
+					<Route path="/admin/games/edit/:id" component={() => <EditGamePage />} />
 
 					<Route
 						path="/library"
