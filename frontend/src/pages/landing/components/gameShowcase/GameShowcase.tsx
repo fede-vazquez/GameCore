@@ -27,7 +27,7 @@ export function GameShowcase() {
 					<TabButton value={TABS.NEW} content="Nuevos lanzamientos" selected={selectedTab === TABS.NEW} />
 					<TabButton value={TABS.DISCOUNT} content="En descuentos" selected={selectedTab === TABS.DISCOUNT} />
 				</Tabs.List>
-				<Box className="transition-all duration-300 min-h-[60vh]">
+				<Box className="transition-all duration-300 min-h-[60vh] bg-neutral-900 border border-neutral-700">
 					<Tabs.Content value={TABS.BEST_RATED}>
 						<GameList queryName="best_rated" filters={{ Ascending: false, sortBy: 'metacriticScore' }} />
 					</Tabs.Content>
