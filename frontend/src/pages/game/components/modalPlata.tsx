@@ -118,7 +118,7 @@ export function ModalPlata({ id, setErrorBuy, idDiscount, game }: ModalPlataProp
 							<GCButton
 								theme="primary"
 								className="flex justify-center w-fit"
-								disabled={!pays.length || !!findGame}
+								disabled={!selected || !pays.length || !!findGame}
 								onClick={async () => {
 									try {
 										if (game === undefined) return

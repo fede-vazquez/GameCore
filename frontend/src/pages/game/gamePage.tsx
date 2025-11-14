@@ -1,6 +1,7 @@
 import { GameSideCard } from '@/components/game'
 import { DiscountBanner } from '@/components/game/discount'
 import { ElementSlider, GCDivider, GCSkeleton } from '@/components/GCgenerics'
+import { useLibraryContext } from '@/context'
 import type { CustomError } from '@/errors'
 import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
@@ -12,6 +13,7 @@ import { ModalPlata } from './components/modalPlata'
 
 export function GamePage() {
 	const { id } = useParams()
+	const { libraryGames } = useLibraryContext()
 	if (!id) return <Redirect href="/library" />
 
 	const [buyError, setBuyError] = useState<CustomError | null>(null)
@@ -146,7 +148,15 @@ export function GamePage() {
 				</section>
 			</article>
 			<ElementSlider
-				elements={recData}
+				elements={
+					recData?.length
+						? recData?.filter(({ id: gId }) => {
+								return !libraryGames.find(({ id: lId }) => {
+									return gId === lId || gId == data?.id
+								})
+							})
+						: []
+				}
 				titleName="Recommendations"
 				className="2xl:hidden mt-5! pb-20!"
 				classImg="w-[120px] max-w-[120px]!"

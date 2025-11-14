@@ -78,7 +78,7 @@ export function AsideBar() {
 						{/* or just use css... */}
 						<div className="flex items-center">
 							<div className="grow border-t border-neutral-800"></div>
-							<h4 className="shrink mx-1 font-semibold">Installed Games</h4>
+							<h4 className="shrink mx-1 font-semibold">Your games</h4>
 							<div className="grow border-t border-neutral-800"></div>
 						</div>
 
