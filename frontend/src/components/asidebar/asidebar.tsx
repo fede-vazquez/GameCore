@@ -1,6 +1,6 @@
 import { ConsoleSVG, ControllerSVG, StoreSVG, ThrobberSVG, UserSVG } from '@/assets'
 import { useGlobalContext, useLibraryContext, useMenuContext } from '@/context'
-import type { GameListResponse } from '@/models'
+import type { GameListResponse, UserModel } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
 import { QUERY_KEYS } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +10,7 @@ import { GameSideCard } from '../game'
 import { GCButton } from '../GCgenerics'
 
 export function AsideBar() {
-	const { clientUser } = useGlobalContext()
+	const { clientUser, setClientUser } = useGlobalContext()
 	const { libraryGames, setLibraryGames } = useLibraryContext()
 	const { isMenuActive, setIsMenuActive, enabled, setEnabled } = useMenuContext()
 
@@ -112,6 +112,7 @@ export function AsideBar() {
 								className="flex gap-0.5 max-w-[100px]! text-nowrap! px-2! py-1!"
 								onClick={() => {
 									localStorage.clear()
+									setClientUser({} as UserModel)
 									navigate(location, { replace: true })
 								}}
 							>
