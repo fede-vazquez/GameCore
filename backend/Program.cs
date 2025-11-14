@@ -100,7 +100,7 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
-/*
+
 var secretKey = builder.Configuration["JWT_SECRET"];
 // Configuración de JWT
 if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32)
@@ -128,7 +128,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false,
         ValidateLifetime = true,
     };
-});*/
+});
+/*
 //JWT
 // Configuración de JWT
 var secret = builder.Configuration.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
@@ -152,7 +153,7 @@ builder.Services.AddAuthentication(options =>
     /*
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;*/
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(opts =>
 {
@@ -165,7 +166,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false,
         ValidateLifetime = true,
     };
-});
+}); */
 /*
 .AddCookie(opts =>
 {

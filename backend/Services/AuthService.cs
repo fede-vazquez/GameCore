@@ -34,7 +34,13 @@ public class AuthServices
         _rolServices = rolServices;
         _encoderServices = encoderServices;
         _config = config;
-        _secret = _config.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
+        //_secret = _config.GetSection("Secrets:JWT")?.Value?.ToString() ?? string.Empty;
+        _secret = _config["JWT_SECRET"] ?? string.Empty;
+
+        if (string.IsNullOrEmpty(_secret))
+        {
+            throw new InvalidOperationException("La clave 'JWT_SECRET' no se encontró en la configuración.");
+        }
         _mapper = mapper;
     }
 
