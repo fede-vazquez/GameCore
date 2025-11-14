@@ -58,7 +58,16 @@ if (string.IsNullOrEmpty(connectionStringValue))
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionStringValue);
+    options.UseSqlServer(
+        connectionStringValue,
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null
+            );
+        });
 });
 //registro de servicios
 // Services
