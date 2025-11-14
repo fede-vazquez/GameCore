@@ -113,6 +113,7 @@ export function AsideBar() {
 								onClick={() => {
 									localStorage.clear()
 									setClientUser({} as UserModel)
+									setLibraryGames([])
 									navigate(location, { replace: true })
 								}}
 							>

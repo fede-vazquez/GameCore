@@ -45,7 +45,9 @@ export function HorizontalCard({ className, game: g, discountPercentage, isPendi
 					<GCButton theme="primary" className="px-2! py-1!" onClick={() => navigate(`/games/${g.id}`)}>
 						View
 					</GCButton>
-					<DiscountBanner price={g.price} dsPer={discountPercentage} />
+					<span className="flex flex-row gap-x-2 items-center">
+						<DiscountBanner price={g.price} dsPer={discountPercentage} removeOldPrice />
+					</span>
 				</div>
 			</span>
 		</section>

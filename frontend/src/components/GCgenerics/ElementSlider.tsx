@@ -96,6 +96,7 @@ export function ElementSlider({
 								classImg={classImg}
 								classPrice={classPrice}
 								removeOldPrice={removeOldPrice}
+								discountPercentage={game?.discount?.percentageValue}
 							/>
 						)
 					})

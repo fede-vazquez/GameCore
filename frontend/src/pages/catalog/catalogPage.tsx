@@ -109,7 +109,7 @@ export function CatalogPage() {
 						<ThrobberSVG className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
 					) : catalogGames?.length ? (
 						catalogGames.map((g) => {
-							return <HorizontalCard game={g} key={g.id} />
+							return <HorizontalCard game={g} key={g.id} discountPercentage={g.discount?.percentageValue} />
 						})
 					) : (
 						<p className="w-full text-center absolute top-1/2 -translate-y-1/2 font-semibold text-xl text-red-400">

@@ -19,7 +19,7 @@ export function LibraryPage() {
 				return (
 					await makeApiCall<GameListResponse>({
 						endpoint: '/Games?',
-						opts: { filters: { SortBy: 'discount', Ascending: 'true' } }
+						opts: { filters: { SortBy: 'discountPercentage', Ascending: 'true' } }
 					})
 				)?.items
 			} catch {

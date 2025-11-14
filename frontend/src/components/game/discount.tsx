@@ -16,8 +16,8 @@ export function DiscountBanner({ dsPer, price, removeOldPrice = false }: Discoun
 
 	return (
 		<>
-			<p className="text-center bg-neutral-100 text-neutral-900 px-0.5 py-px text-sm rounded-md font-semibold">
-				{dsPer}%
+			<p className="text-center bg-neutral-100 w-fit text-neutral-900 px-0.5 py-px text-sm rounded-md font-semibold">
+				{dsPer * 100}%
 			</p>
 			<div className="flex gap-x-1.5 text-center w-full">
 				{!removeOldPrice && <p className="text-zinc-500 line-through">${price}</p>}

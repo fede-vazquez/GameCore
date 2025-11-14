@@ -1,10 +1,8 @@
 import { GCList } from '@/components/GCgenerics'
-import type { GameModel } from '@/models'
-import { useQuery } from '@tanstack/react-query'
-import { AdminRoutes } from '@/services/apiCall/routes'
-import { SERVER_URL } from '@/utils'
 import type { GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
+import { AdminRoutes } from '@/services/apiCall/routes'
+import { useQuery } from '@tanstack/react-query'
 
 interface LatestGamesAddedResponse {
 	lastGamesAdded: GetGameDTO[]

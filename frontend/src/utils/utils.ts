@@ -1,6 +1,6 @@
 // o otro idioma
 export const numberParser = (numb: number, discount?: number): string => {
-	const realPrice = discount ? numb - numb * (discount / 100) : numb
+	const realPrice = discount ? numb - numb * discount : numb
 
 	return new Intl.NumberFormat('en-US', {
 		style: 'currency',
