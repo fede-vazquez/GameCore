@@ -3,7 +3,7 @@ import { Link } from 'wouter'
 
 export default function CallToAction() {
 	return (
-		<section className="bg-[url('/call_to_action.png')] bg-cover bg-no-repeat bg-top h-screen md:bg-auto md:bg-right md:h-[70vh]">
+		<section className="bg-[url('/call_to_action.png')] bg-cover bg-no-repeat bg-top h-screen max-h-[400px] lg:max-h-screen md:bg-auto md:bg-right md:h-[70vh] shadow-lg shadow-neutral-800">
 			<div
 				className="w-full md:max-w-xl flex flex-col justify-end md:justify-center h-full p-4 md:p-10 gap-5 bg-linear-to-t from-black
 			via-black/70 md:via-black/90 to-transparent md:bg-linear md:bg-linear-to-r"

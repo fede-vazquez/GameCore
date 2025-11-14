@@ -57,19 +57,19 @@ export default function GameList({ filters, queryName }: GameListProps) {
 							...game,
 							discountPercentage: game?.discount ? game.discount.percentageValue * 100 : 0
 						}))}
-						className="mt-4"
+						className="mt-4 place-items-center w-full"
 						mode="horizontal"
 						type="grid"
 						fnMap={(game) => <HorizontalCard key={game.id} game={game} discountPercentage={game.discountPercentage} />}
 					/>
 					<Link href="/games" className="flex justify-center">
 						<GCButton theme="primary" className="w-full m-4 max-w-2xl">
-							... Ver más
+							Ver más...
 						</GCButton>
 					</Link>
 				</section>
 			) : (
-				<span className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+				<span className="grid grid-cols-1 place-items-center sm:grid-cols-2 w-full md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-4">
 					{new Array(10).fill(null).map((_, i) => {
 						return <HorizontalCard key={i} game={{} as GetGameDTO} discountPercentage={0} isPending={true} />
 					})}
