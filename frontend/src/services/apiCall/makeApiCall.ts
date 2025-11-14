@@ -86,7 +86,7 @@ export async function makeApiCall<T>({ httpMethod = 'GET', endpoint, body = null
 		// Añadir parámetros de consulta si existen
 		if (hasFilter && urlSearchParams.length > 0) {
 			const queryString = new URLSearchParams(urlSearchParams).toString()
-			finalUrl += `?${queryString}`
+			finalUrl += `${queryString}`
 		}
 
 		const data = await fetch(finalUrl, {

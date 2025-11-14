@@ -1,39 +1,48 @@
 import { HorizontalCard } from '@/components/game'
-import { GCList } from '../GCList'
-import { Link } from 'wouter'
 import { GCButton } from '@/components/GCgenerics'
-import { useQuery } from '@tanstack/react-query'
+import type { GameListResponse, GetGameDTO } from '@/models'
 import { makeApiCall } from '@/services/apiCall'
-import type { GetGameDTO } from '@/models'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'wouter'
+import { GCList } from '../GCList'
 
 interface GameListProps {
 	queryName: string
 	filters?: any
 }
 
-interface GameListResponse {
-	items: GetGameDTO[]
-	isLoading: boolean
-	error: any
-}
-
 export default function GameList({ filters, queryName }: GameListProps) {
-	const { data, isLoading, error } = useQuery<GameListResponse>({
+	//again, needs context
+	const prevRes = useRef<GameListResponse['items']>([])
+	const [games, setGames] = useState<GameListResponse['items']>(prevRes.current)
+
+	const [enabled, setEnabled] = useState(true)
+	const { data, isPending, error } = useQuery({
 		queryKey: [queryName],
 		queryFn: async () => {
-			const response = await makeApiCall<GameListResponse>({
-				endpoint: '/Games?',
-				opts: {
-					filters: filters
-				}
-			})
-			return response
-		}
+			try {
+				return (
+					await makeApiCall<GameListResponse>({
+						endpoint: '/Games?',
+						opts: {
+							filters: filters
+						}
+					})
+				)?.items
+			} catch {
+				return []
+			}
+		},
+		enabled: enabled
 	})
 
-	if (isLoading) {
-		return <div>Cargando juegos...</div>
-	}
+	useEffect(() => {
+		if (!data || !data?.length) return
+		setEnabled(false)
+		setGames(data)
+		prevRes.current = data
+	}, [data])
 
 	if (error) {
 		return <div>Error al cargar los juegos </div>
@@ -41,13 +50,14 @@ export default function GameList({ filters, queryName }: GameListProps) {
 
 	return (
 		<>
-			{data?.items && (
-				<>
+			{games?.length ? (
+				<section className="flex! flex-col! justify-center!">
 					<GCList
-						dataList={data.items.map((game) => ({
+						dataList={games.map((game) => ({
 							...game,
 							discountPercentage: game?.discount ? game.discount.percentageValue * 100 : 0
 						}))}
+						className="mt-4"
 						mode="horizontal"
 						type="grid"
 						fnMap={(game) => <HorizontalCard key={game.id} game={game} discountPercentage={game.discountPercentage} />}
@@ -57,7 +67,13 @@ export default function GameList({ filters, queryName }: GameListProps) {
 							... Ver más
 						</GCButton>
 					</Link>
-				</>
+				</section>
+			) : (
+				<span className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+					{new Array(10).fill(null).map((_, i) => {
+						return <HorizontalCard key={i} game={{} as GetGameDTO} discountPercentage={0} isPending={true} />
+					})}
+				</span>
 			)}
 		</>
 	)

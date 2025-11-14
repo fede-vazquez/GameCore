@@ -1,12 +1,11 @@
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
-import type { NameType, ValueType, Payload } from 'recharts/types/component/DefaultTooltipContent'
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import type { NameType, Payload, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 interface PieChardComponentProps {
 	data: { name: string; value: number; color: string }[]
 }
 
 export function PieChardComponent({ data }: PieChardComponentProps) {
-	console.log(data)
 	const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<Payload<ValueType, NameType>> }) => {
 		if (active && payload && payload.length) {
 			return (

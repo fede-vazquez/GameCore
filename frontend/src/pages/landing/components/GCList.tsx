@@ -1,28 +1,26 @@
 import { Tabs } from 'radix-ui'
 import type { JSX } from 'react'
 
-interface whitId {
-	id: string | number
-}
-
-export function GCList<T extends whitId>({
+export function GCList<T extends { id: string | number }>({
 	dataList,
 	fnMap,
 	mode = 'horizontal',
-	type = 'list'
+	type = 'list',
+	className
 }: {
 	dataList: T[]
 	fnMap: (item: T) => JSX.Element
 	mode?: 'horizontal' | 'vertical'
 	type?: 'list' | 'grid'
+	className?: string
 }) {
 	return (
-		<Tabs.Root asChild orientation={mode}>
+		<Tabs.Root asChild orientation={mode} className="z-10">
 			<Tabs.List asChild>
 				<ul
-					className={
-						'p-2 ' + (type === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5' : 'flex flex-col gap-5')
-					}
+					className={`
+						${'p-2 ' + (type === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5' : 'flex flex-col gap-5')} w-full ${className}
+					`}
 				>
 					{dataList.map((item) => {
 						return (

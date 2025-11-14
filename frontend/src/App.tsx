@@ -31,7 +31,7 @@ const LoadingFallback = () => (
 
 export const App = function App() {
 	const { clientUser } = useGlobalContext()
-	console.log(clientUser, clientUser?.rol === 'Admin')
+
 	return (
 		<main className="w-screen h-screen overflow-x-hidden text-primaryWhite bg-darkBG">
 			<Suspense fallback={<LoadingFallback />}>

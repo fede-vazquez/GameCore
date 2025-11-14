@@ -1,8 +1,7 @@
-import type { whitId } from '@/types'
 import { Tabs } from 'radix-ui'
 import type { JSX } from 'react'
 
-export function GCList<T extends whitId>({
+export function GCList<T extends { id: string | number }>({
 	dataList,
 	fnMap,
 	controlDirection = 'vertical',

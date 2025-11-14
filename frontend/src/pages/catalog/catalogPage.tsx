@@ -94,7 +94,7 @@ export function CatalogPage() {
 				</span>
 				<GCDivider className="translate-y-2! bottom-0!" />
 			</section>
-			<article className="relative bg-neutral-900 rounded-xl p-2 min-h-[200px] flex flex-wrap gap-3 lg:gap-5">
+			<article className="justify-evenly xl:justify-start w-full relative bg-neutral-900 rounded-xl p-2 min-h-[200px] flex flex-wrap gap-3 lg:gap-5">
 				{isPending ? (
 					<ThrobberSVG className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 animate-spin h-12 w-fit flex grow" />
 				) : catalogGames?.length ? (

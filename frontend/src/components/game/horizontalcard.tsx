@@ -1,6 +1,6 @@
 import type { GetGameDTO } from '@/models'
 import { useLocation } from 'wouter'
-import { GCButton } from '../GCgenerics'
+import { GCButton, GCSkeleton } from '../GCgenerics'
 import { DiscountBanner } from './discount'
 
 interface HorizontalCardProps {
@@ -8,12 +8,16 @@ interface HorizontalCardProps {
 
 	discountPercentage?: number
 	className?: string
+	isPending?: boolean
 }
 
-export function HorizontalCard({ className, game: g, discountPercentage }: HorizontalCardProps) {
+export function HorizontalCard({ className, game: g, discountPercentage, isPending = false }: HorizontalCardProps) {
 	const [_, navigate] = useLocation()
+
+	if (isPending) return <GCSkeleton className="max-w-[225px] w-[200px] h-[230px]" />
+
 	return (
-		<section className={`rounded-md bg-neutral-900 ${className} border border-neutral-700`}>
+		<section className={`rounded-md bg-neutral-900 ${className} border border-neutral-700 w-fit`}>
 			<div className="aspect-video max-w-[225px] min-w-[200px] rounded-t-lg overflow-hidden select-none">
 				<img
 					draggable={false}
@@ -39,7 +43,7 @@ export function HorizontalCard({ className, game: g, discountPercentage }: Horiz
 				</div>
 				<div className="px-2 flex items-center justify-between">
 					<GCButton theme="primary" className="px-2! py-1!" onClick={() => navigate(`/games/${g.id}`)}>
-						More details
+						View
 					</GCButton>
 					<DiscountBanner price={g.price} dsPer={discountPercentage} />
 				</div>
