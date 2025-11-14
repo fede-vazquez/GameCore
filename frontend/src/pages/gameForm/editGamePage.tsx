@@ -4,6 +4,9 @@ import { GameForm } from './components'
 import type { GameFormData } from './components/GameFormTypes'
 import { useParams } from 'wouter'
 import type { GetGameDTO } from '@/models'
+import { PopUp } from '@/components/PopUp'
+import { GCButton } from '@/components/GCgenerics'
+import { navigate } from 'wouter/use-browser-location'
 
 export interface GameUpdateDTO {
 	id: string
@@ -71,12 +74,6 @@ export function EditGamePage() {
 				},
 				body: apiData
 			})
-		},
-		onSuccess: (data) => {
-			console.log('Game updated successfully: ', data)
-		},
-		onError: (error) => {
-			console.error('Error updating game:', error)
 		}
 	})
 
@@ -84,35 +81,40 @@ export function EditGamePage() {
 		updateGame(formData)
 	}
 
-	if (isLoading) {
-		return <div className="text-center p-8">Cargando juego...</div>
-	}
-
-	if (!gameData) {
-		return <div className="text-center p-8">Juego no encontrado</div>
-	}
+	if (isLoading) return <PopUp>Cargando juego...</PopUp>
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<GameForm
-				key={gameData.id}
-				defaultValues={{
-					title: gameData.title,
-					description: gameData.description,
-					price: gameData.price,
-					metacriticScore: gameData.metacriticScore ?? 0,
-					releaseDate: new Date(gameData.releaseDate.toString()),
-					genreIds: Array.isArray(gameData.genres) ? gameData.genres.map((g: any) => g.id) : [],
-					developerId: String(gameData.developer.id)
-				}}
-				onSubmit={handleSubmit}
-				isSubmitting={isSubmitting}
-				isError={isError}
-				isSuccess={isSuccess}
-				error={mutationError}
-				title="Editar juego"
-				submitButtonText="Actualizar juego"
-			/>
+			{isSubmitting && <PopUp>Actualizando juego...</PopUp>}
+			{gameData ? (
+				<GameForm
+					key={gameData.id}
+					defaultValues={{
+						title: gameData.title,
+						description: gameData.description,
+						price: gameData.price,
+						metacriticScore: gameData.metacriticScore ?? 0,
+						releaseDate: new Date(gameData.releaseDate.toString()),
+						genreIds: Array.isArray(gameData.genres) ? gameData.genres.map((g: any) => g.id) : [],
+						developerId: String(gameData.developer.id)
+					}}
+					onSubmit={handleSubmit}
+					isSubmitting={isSubmitting}
+					isError={isError}
+					isSuccess={isSuccess}
+					error={mutationError}
+					title="Editar juego"
+					submitButtonText="Actualizar juego"
+				/>
+			) : (
+				<PopUp>
+					<h2 className="text-center">Juego no encontrado</h2>
+					<p className="text-red-500">{mutationError?.message}</p>
+					<GCButton theme="primary" onClick={() => navigate('/games')}>
+						Volver al catalogo
+					</GCButton>
+				</PopUp>
+			)}
 		</div>
 	)
 }

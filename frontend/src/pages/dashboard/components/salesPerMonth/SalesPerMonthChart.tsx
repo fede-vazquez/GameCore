@@ -1,5 +1,6 @@
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import type { SalesMonthData } from '@/models/dashboard'
+import { numberParser } from '@/utils'
 
 interface SalesPerMonthProps {
 	data: SalesMonthData[]
@@ -18,12 +19,7 @@ export function SalesPerMonthChart({ data }: SalesPerMonthProps) {
 				<YAxis
 					width="auto"
 					domain={[0, (dataMax: number) => dataMax * 1.2]}
-					tickFormatter={(value) =>
-						new Intl.NumberFormat('es-AR', {
-							maximumFractionDigits: 0,
-							trailingZeroDisplay: 'stripIfInteger'
-						}).format(value)
-					}
+					tickFormatter={(value) => numberParser(value)}
 				/>
 				<Tooltip
 					contentStyle={{

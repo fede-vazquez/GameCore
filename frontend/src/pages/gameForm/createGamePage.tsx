@@ -56,7 +56,7 @@ export function CreateGamePage() {
 	}
 
 	return (
-		<main className="container mx-auto px-4 py-8">
+		<div className="container mx-auto px-4 py-8">
 			<GameForm
 				onSubmit={handleSubmit}
 				isSubmitting={isSubmitting}
@@ -66,6 +66,6 @@ export function CreateGamePage() {
 				submitButtonText="Crear Juego"
 				title="NUEVO JUEGO"
 			/>
-		</main>
+		</div>
 	)
 }

@@ -9,6 +9,8 @@ import { DollarSVG } from '@/assets/dollarSvg'
 import { gameFormSchema, FIELDS_FORM, SVG_CLASS, type GameFormData } from './GameFormTypes'
 import { SelectDeveloper } from './selectDeveloper'
 import { navigate } from 'wouter/use-browser-location'
+import { PopUp } from '@/components/PopUp'
+import { Spinner } from '@radix-ui/themes'
 
 interface GameFormProps {
 	defaultValues?: GameFormData
@@ -51,10 +53,6 @@ export function GameForm({
 
 	return (
 		<Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-2 max-w-2xl mx-auto p-6 bg-black rounded-lg shadow">
-			{isSubmitting && <p className="text-yellow-500">Cargando...</p>}
-			{isError && <p className="text-red-500">Error: {error?.message}</p>}
-			{isSuccess && <p className="text-green-500">Operación exitosa</p>}
-
 			<h2 className="text-2xl font-bold text-white text-center">{title}</h2>
 
 			<GCInput
@@ -145,6 +143,20 @@ export function GameForm({
 				)}
 			</Form.Field>
 
+			{isSubmitting && (
+				<PopUp>
+					<Spinner />
+				</PopUp>
+			)}
+			{isError && <p className="text-red-500">Error: {error?.message}</p>}
+			{isSuccess && (
+				<PopUp>
+					<p className="text-green-500 text-center mb-5">Operación exitosa</p>
+					<GCButton theme="primary" onClick={() => navigate('/games')}>
+						Volver al catalogo
+					</GCButton>
+				</PopUp>
+			)}
 			<div className="flex justify-between mt-3 gap-6">
 				<div className="w-1/2 ">
 					<GCButton theme="ghost" className="w-full text-red-500" onClick={() => navigate('/games')}>
