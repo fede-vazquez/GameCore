@@ -47,7 +47,7 @@ export function LibraryPage() {
 	}, [data])
 
 	return (
-		<main className="flex flex-col gap-y-10">
+		<main className="flex flex-col gap-y-10 pb-10!">
 			<Carrousel data={data} />
 
 			<span className="flex flex-col gap-y-10">
