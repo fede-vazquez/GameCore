@@ -19,7 +19,7 @@ interface ApiCallParams {
 	httpMethod?: HTTPMethods
 	endpoint: AllAdminRoutes | AllAuthRoutes | AllGameRoutes | AllLibraryRoutes
 
-	body?: Record<string, Array<unknown> | string | number> | null
+	body?: Record<string, Array<unknown> | string | number | boolean> | null
 	opts?: {
 		filters?: Record<string, string | number>
 		version?: Versioning

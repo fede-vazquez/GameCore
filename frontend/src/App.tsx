@@ -21,6 +21,9 @@ const LibraryPage = lazy(() =>
 const DashboardPage = lazy(() =>
 	import('./pages/dashboard/dashboardPage').then((module) => ({ default: module.DashboardPage }))
 )
+const CreateGamePage = lazy(() =>
+	import('./pages/gameForm/createGamePage').then((module) => ({ default: module.CreateGamePage }))
+)
 
 // Fallback component for Suspense
 const LoadingFallback = () => (
@@ -44,6 +47,11 @@ export const App = function App() {
 								<AuthPage />
 							</AuthContextProvider>
 						)}
+					/>
+
+					<Route
+						path="/admin/games/new"
+						component={() => (clientUser?.rol === 'Admin' ? <CreateGamePage /> : <Redirect href="/auth" />)}
 					/>
 
 					<Route
